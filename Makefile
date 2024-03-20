@@ -25,7 +25,7 @@ MLX = MLX42/build/libmlx42.a
 SRC = src/*.c
 OBJ = $(SRC:.c=.o)
 
-FLAG = -Wall -Wextra -Werror
+FLAG = -Wall -Wextra -Werror -ldl -lglfw -lm
 
 all: lib $(NAME)
 
