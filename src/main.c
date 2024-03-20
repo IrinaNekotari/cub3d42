@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <MLX/MLX42.h>
+#include "../MLX42/include/MLX42/MLX42.h"
 
 #define WIDTH 1900
 #define HEIGHT 1000
@@ -34,7 +34,7 @@ typedef struct s_player
 	int up_down;
 } t_player;
 
-typedef strcut s_ray
+typedef struct s_ray
 {
 	double ray_angle;
 	double distance;

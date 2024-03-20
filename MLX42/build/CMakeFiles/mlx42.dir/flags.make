@@ -6,5 +6,5 @@ C_FLAGS = -fPIC   -D LODEPNG_NO_COMPILE_ENCODER -D LODEPNG_NO_COMPILE_ANCILLARY_
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/nmascrie/Documents/cub3d/MLX42/include 
+C_INCLUDES = -I/home/mjuette/Documents/Commun/Cube3dPerso/MLX42/include 
 
