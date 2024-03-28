@@ -58,7 +58,7 @@ typedef struct s_mlx
         mlx_t           *mlx_p;
         t_ray   *ray;
         t_data  *data;
-        t_player        player;
+        t_player       *player;
 } t_mlx;
 
 void	ft_exit(t_mlx *mlx);

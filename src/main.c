@@ -46,10 +46,10 @@ void loop(void *ml)
 
 void	init_player(t_mlx mlx)
 {
-	mlx.player.player_x = mlx.data->player_x * TILE_SIZE + TILE_SIZE / 2;
-	mlx.player.player_y = mlx.data->player_y * TILE_SIZE + TILE_SIZE / 2;
-	mlx.player.fov = (FOV * M_PI) / 180;
-	mlx.player.angle = M_PI;
+	mlx.player->player_x = mlx.data->player_x * TILE_SIZE + TILE_SIZE / 2;
+	mlx.player->player_y = mlx.data->player_y * TILE_SIZE + TILE_SIZE / 2;
+	mlx.player->fov = (FOV * M_PI) / 180;
+	mlx.player->angle = M_PI;
 }
 
 void start(t_data *data)

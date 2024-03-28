@@ -6,7 +6,7 @@
 /*   By: mjuette <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 09:51:58 by mjuette           #+#    #+#             */
-/*   Updated: 2024/03/28 12:59:31 by mjuette          ###   ########.fr       */
+/*   Updated: 2024/03/28 13:48:51 by mjuette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	raycasting(t_mlx *mlx)
 	int	i;
 
 	i = 0;
-	mlx->ray->ray_angle = mlx->player.angle - (mlx->player.fov / 2);
+	mlx->ray->ray_angle = mlx->player->angle - (mlx->player->fov / 2);
 	while (i < WIDTH)
 	{
 		mlx->ray->flag = 0;
@@ -34,7 +34,7 @@ void	raycasting(t_mlx *mlx)
 		}
 		//render_wall(mlx, i);
 		i++;
-		mlx->ray->ray_angle += (mlx->player.fov / WIDTH);
+		mlx->ray->ray_angle += (mlx->player->fov / WIDTH);
 	}
 }
 
@@ -48,9 +48,9 @@ float	get_v_inter(t_mlx *mlx, float angle)
 
 	x_step = TILE_SIZE;
 	y_step = TILE_SIZE *  tan(angle);
-	v_x = floor(mlx->player.player_x / TILE_SIZE) * TILE_SIZE;
+	v_x = floor(mlx->player->player_x / TILE_SIZE) * TILE_SIZE;
 	pixel = inter_check(angle, &v_x, &x_step, 0);
-	v_y = mlx->player.player_y + (v_x - mlx->player.player_x) * tan(angle);
+	v_y = mlx->player->player_y + (v_x - mlx->player->player_x) * tan(angle);
 	if ((unit_circle(angle, 'x') && y_step < 0) || (!unit_circle(angle, 'x') && y_step > 0))
 		y_step *= -1;
 	while (wall_hit(v_x - pixel, v_y, mlx))
@@ -58,7 +58,7 @@ float	get_v_inter(t_mlx *mlx, float angle)
 		v_x += x_step;
 		v_y += y_step;
 	}
-	return (sqrt(pow(v_x - mlx->player.player_x, 2) + pow(v_y - mlx->player.player_y, 2)));
+	return (sqrt(pow(v_x - mlx->player->player_x, 2) + pow(v_y - mlx->player->player_y, 2)));
 }
 
 float   get_h_inter(t_mlx *mlx, float angle)
@@ -71,9 +71,9 @@ float   get_h_inter(t_mlx *mlx, float angle)
 
         x_step = TILE_SIZE;
         y_step = TILE_SIZE / tan(angle);
-        h_y = floor(mlx->player.player_y / TILE_SIZE) * TILE_SIZE;
+        h_y = floor(mlx->player->player_y / TILE_SIZE) * TILE_SIZE;
         pixel = inter_check(angle, &h_y, &y_step, 1);
-        h_x = mlx->player.player_x + (h_y - mlx->player.player_y) * tan(angle);
+        h_x = mlx->player->player_x + (h_y - mlx->player->player_y) * tan(angle);
         if ((unit_circle(angle, 'y') && x_step > 0) || (!unit_circle(angle, 'y') && x_step < 0))
                 x_step *= -1;
         while (wall_hit(h_x, h_y - pixel, mlx))
@@ -81,7 +81,7 @@ float   get_h_inter(t_mlx *mlx, float angle)
                 h_x += x_step;
                 h_y += y_step;
         }
-        return (sqrt(pow(h_x - mlx->player.player_x, 2) + pow(h_y - mlx->player.player_y, 2)));
+        return (sqrt(pow(h_x - mlx->player->player_x, 2) + pow(h_y - mlx->player->player_y, 2)));
 }
 
 int wall_hit(float x, float y, t_mlx *mlx)
