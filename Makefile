@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = cube3D
+NAME = cub3D
 
 LIBFT_PATH	= ./libft/
 
@@ -22,10 +22,15 @@ MLX42 = MLX42
 
 MLX = MLX42/build/libmlx42.a
 
-SRC = src/*.c
+SRC = src/main.c \
+	src/raycasting.c
+	
+INC	= ./include/
 OBJ = $(SRC:.c=.o)
 
-FLAG = -Wall -Wextra -Werror -ldl -lglfw -lm
+FLAG = -Wall -Wextra -Werror
+
+FLAGLIB = -ldl -lglfw -lm
 
 all: lib $(NAME)
 
@@ -36,7 +41,7 @@ lib:
 
 
 $(NAME): $(OBJ)
-	cc $(OBJ) $(FLAG) $(LIBFT_LIB) $(MLX) -o $(NAME) -g3
+	cc $(OBJ) $(FLAG) $(FLAGLIB) $(LIBFT_LIB) $(MLX) -o $(NAME) -g3
 
 .c.o:
 	cc -c $(FLAG) $< -o ${<:.c=.o} -g3
