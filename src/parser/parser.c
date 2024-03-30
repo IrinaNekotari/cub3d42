@@ -1,0 +1,275 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmascrie <nmascrie@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/29 00:52:41 by nmascrie          #+#    #+#             */
+/*   Updated: 2024/03/29 00:52:44 by nmascrie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parser.h"
+
+/**
+ * Retourne la taille d'un tableau splitté
+*/
+int split_len(char **a)
+{  
+    int     i;
+
+    i = 0;
+    while (a[i])
+        i++;
+    return (i);
+}
+
+//TODO : wtf il est cursed
+void    free_split(char **a)
+{
+    int i;
+
+    if (!a)
+        return ;
+    while (a[i])
+    {
+        free(a[i]);
+        i++;
+    }
+    free(a);
+}
+
+/**
+ * Remplis l'imgset en fonction des premières lignes de la map
+ * Retourne -1 si l'une des entêtes n'est pas reconnue
+ * Retourne -2 si l'entête possède trop de valeurs
+ * Retourne -3 si l'entête possède pas assez de valeurs
+ * Retourne -4 si une valeur RGB est invalide
+ * Retourne 0 sinon
+*/
+int generate_imgset(t_chain *c, t_imgset *img)
+{
+    int     i;
+    char    **li;
+
+    i = 0;
+    while (i < NB_ELEMENTS)
+    {
+        li = ft_split(c->line, ' ');
+        if (split_len(li) > 2)
+        {
+            free_split(li);
+            return (-2);
+        }
+        else if (split_len(li) < 2)
+        {
+            free_split(li);
+            return (-3);
+        }
+        if (ft_equals(li[0], "NO"))
+            img->no = ft_strdup(li[1]);
+        else if (ft_equals(li[0], "SO"))
+            img->so = ft_strdup(li[1]);
+        else if (ft_equals(li[0], "EA"))
+            img->ea = ft_strdup(li[1]);
+        else if (ft_equals(li[0], "WE"))
+            img->we = ft_strdup(li[1]);
+        else if (ft_equals(li[0], "C") && is_rgb(li[1]))
+        {
+            img->ceiling_img = NULL;
+            img->ceiling_color = get_rgb(li[1]);
+            if (img->ceiling_color == -1)
+            {
+                free_split(li);
+                return (-4);
+            }
+        }
+        else if (ft_equals(li[0], "C") && !is_rgb(li[1]))
+        {
+            img->ceiling_img = ft_strdup(li[1]);;
+            img->ceiling_color = 0;
+        }
+        else if (ft_equals(li[0], "F") && is_rgb(li[1]))
+        {
+            img->floor_img = NULL;
+            img->floor_color = get_rgb(li[1]);
+            if (img->floor_color == -1)
+            {
+                free_split(li);
+                return (-4);
+            }
+        }
+        else if (ft_equals(li[0], "F") && !is_rgb(li[1]))
+        {
+            img->floor_img = ft_strdup(li[1]);
+            img->floor_color = 0;
+        }
+        else
+        {
+            free_split(li);
+            return (-1);
+        }
+        free_split(li);
+        i++;
+        c = c->next;
+    }
+    return (0);
+}
+
+/**
+ * Coupe l'élément courant de la chaine.
+*/
+void    cut_ligne(t_chain **c)
+{
+    t_chain *bck;
+    
+    bck = (*c);
+    if (!bck)
+        return ;
+    if (bck->line)
+        free(bck->line);
+    if (bck->next)
+    {
+        (*c) = (*c)->next;
+        if (bck->previous)
+        {
+            (*c)->previous = bck->previous;
+            bck->previous->next = bck->next;
+        }
+        else
+            (*c)->previous = NULL;
+    }
+    else if (bck->previous)
+    {
+        (*c) = (*c)->previous;
+        (*c)->next = NULL;
+    }
+    free(bck);
+}
+
+/**
+ * Renvoie 1 si le char est un élément de map correct (1, 0, N, S, E, W)
+ * Renvoie 0 sinon
+ * Possibilité d'ajouts de charactères, genre un ennemi ou des pièces
+*/
+int is_map_element(char c)
+{
+    if (c == '1' || c == '0')
+        return (1);
+    if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+        return (1);
+    return (0);
+}
+
+/**
+ * Retourne 1 si la map est une map de ligne, c'est a dire qu'elle ne possède que
+ * des caractères de map (0, 1, N, S, E, W), des whitespaces ou un retour a la ligne
+ * Retourne 0 sinon
+*/
+int is_line_map(char *l)
+{
+    int     i;
+
+    i = 0;
+    while (l[i])
+    {
+        if (!is_map_element(l[i]) && !is_whitespace(l[i]) && l[i] != '\n')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+/**
+ * Retire toutes les lignes vides a la fin de la chaine
+*/
+void    remove_tail(t_chain *c)
+{
+    while (c->next)
+    {
+        c = c->next;
+    }
+    if (emptyline(c->line))
+    {    
+        cut_ligne(&c);
+        remove_tail(c);
+    }
+    else 
+        return ;
+}
+
+/**
+ * Inspecte la liste chainée. Note 0 les éléments qui sont de l'en-tête
+ * note 1 les éléments de la map
+ * Retire les lignes vides
+ * retourne -1 s'il n'y a pas assez d'en têtes
+ * retourne -3 s'il y en a trop (attendu : 6, définis par NB_ELEMENTS)
+ * retourne -2 s'il y a une ligne vide dans la map
+ * retourne -4 s'il y a une ligne d'en tête dans la map
+ * retourne 0 sinon
+*/
+int epure(t_chain *c)
+{
+    int nb_tete;
+    int in_map;
+
+    in_map = 0;
+    nb_tete = 0;
+    while (c)
+    {
+        if (emptyline(c->line))
+        {
+            if (in_map)
+                return (-2);
+            cut_ligne(&c); 
+        }
+        else if (!is_line_map(c->line))
+        {
+            if (in_map)
+                return (-4);
+            nb_tete++;
+        }
+        else 
+            in_map = 1;
+        c = c->next;
+    }
+    if (nb_tete > NB_ELEMENTS)
+        return (-3);
+    if (nb_tete < NB_ELEMENTS)
+        return (-1);
+    return (0);
+}
+
+/**
+ * Convertis un fichier ouvert en liste chainée
+*/
+t_chain *to_chain(char *path)
+{
+    int     fd;
+    char    *tmp;
+    t_chain *a;
+    t_chain *b;
+
+    fd = open(path, O_RDONLY);
+    if (fd == -1)
+        return (ft_errmsg("File does not exist !"));
+    tmp = get_next_line(fd);
+    if (!tmp)
+        return (ft_errmsg("Empty file !"));
+    a = ft_calloc(1, sizeof(t_chain));
+    a->previous = NULL;
+    b = a;
+    while (tmp)
+    {
+        a->line = tmp;
+        a->next = ft_calloc(1, sizeof(t_chain));
+        a->next->previous = a;
+        a = a->next;
+        tmp = get_next_line(fd);
+    }
+    a->next = NULL;
+    cut_ligne(&a);
+    close (fd);
+    return (b);
+}
