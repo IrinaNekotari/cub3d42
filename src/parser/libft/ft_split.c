@@ -80,7 +80,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	tab = (char **)malloc(sizeof(char *) * (get_nb_words(s, c) + 1));
+	tab = ft_calloc((get_nb_words(s, c) + 1) * 100, sizeof(char *));
 	if (!tab)
 		return (NULL);
 	i = 0;
@@ -89,7 +89,7 @@ char	**ft_split(char const *s, char c)
 	while (i < get_nb_words(s, c))
 	{
 		get_next_word(&next_word, &next_word_len, c);
-		tab[i] = (char *)malloc(sizeof(char) * (next_word_len + 1));
+		tab[i] = ft_calloc((next_word_len + 10), sizeof(char));
 		if (!(tab[i]))
 			return (ft_free_tab(tab));
 		ft_strlcpy(tab[i++], next_word, next_word_len + 1);

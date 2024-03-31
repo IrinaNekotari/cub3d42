@@ -37,7 +37,7 @@ int is_rgb(char *a)
     count = 0;
     while (a[i])
     {
-        if (a[i] == ',')
+        if (a[i] == ',' && a[i + 1] && a[i + 1] != ',')
             count++;
         i++;
     }

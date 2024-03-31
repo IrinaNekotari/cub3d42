@@ -30,6 +30,7 @@ void    free_split(char **a)
 {
     int i;
 
+    i = 0;
     if (!a)
         return ;
     while (a[i])
@@ -38,6 +39,37 @@ void    free_split(char **a)
         i++;
     }
     free(a);
+}
+
+/**
+ * Coupe l'élément courant de la chaine.
+*/
+void    cut_ligne(t_chain **c)
+{
+    t_chain *bck;
+    
+    bck = (*c);
+    if (!bck)
+        return ;
+    if (bck->line)
+        free(bck->line);
+    if (bck->next)
+    {
+        (*c) = (*c)->next;
+        if (bck->previous)
+        {
+            (*c)->previous = bck->previous;
+            bck->previous->next = bck->next;
+        }
+        else
+            (*c)->previous = NULL;
+    }
+    else if (bck->previous)
+    {
+        (*c) = (*c)->previous;
+        (*c)->next = NULL;
+    }
+    free(bck);
 }
 
 /**
@@ -54,6 +86,7 @@ int generate_imgset(t_chain *c, t_imgset *img)
     char    **li;
 
     i = 0;
+    li = NULL;
     while (i < NB_ELEMENTS)
     {
         li = ft_split(c->line, ' ');
@@ -118,48 +151,78 @@ int generate_imgset(t_chain *c, t_imgset *img)
 }
 
 /**
- * Coupe l'élément courant de la chaine.
+ * Renvoie le nombre de lignes de la map.
 */
-void    cut_ligne(t_chain **c)
+int map_lines(t_chain *c)
 {
-    t_chain *bck;
-    
-    bck = (*c);
-    if (!bck)
-        return ;
-    if (bck->line)
-        free(bck->line);
-    if (bck->next)
+    int i;
+    int lines;
+
+    i = 0;
+    lines = 0;
+    while (i < NB_ELEMENTS)
     {
-        (*c) = (*c)->next;
-        if (bck->previous)
-        {
-            (*c)->previous = bck->previous;
-            bck->previous->next = bck->next;
-        }
-        else
-            (*c)->previous = NULL;
+        c = c->next;
+        i++;
     }
-    else if (bck->previous)
+    while (c)
     {
-        (*c) = (*c)->previous;
-        (*c)->next = NULL;
+        c = c->next;
+        lines++;
     }
-    free(bck);
+    return (lines);
 }
 
 /**
- * Renvoie 1 si le char est un élément de map correct (1, 0, N, S, E, W)
- * Renvoie 0 sinon
- * Possibilité d'ajouts de charactères, genre un ennemi ou des pièces
+ * Renvoie la plus grande longeur possible d'une ligne de la map
+ * Incluant le \n
 */
-int is_map_element(char c)
+int map_length(t_chain *c)
 {
-    if (c == '1' || c == '0')
-        return (1);
-    if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-        return (1);
-    return (0);
+    int i;
+    int len;
+
+    i = 0;
+    len = 0;
+    while (i < NB_ELEMENTS)
+    {
+        c = c->next;
+        i++;
+    }
+    while (c)
+    {
+        if ((int)ft_strlen(c->line) > len)
+            len = (int)ft_strlen(c->line);
+        c = c->next;
+    }
+    return (len);
+}
+
+/**
+ * Récupère la map sous un format char**
+ * Supprime les \n a la fin de chaque ligne
+*/
+char    **generate_map(t_chain *c, int x, int y)
+{
+    int     i;
+    char    **ret;
+
+    i = 0;
+    while (i < NB_ELEMENTS)
+    {
+        c = c->next;
+        i++;
+    }
+    ret = ft_calloc(x * (y + 1), sizeof(char));
+    i = 0;
+    while (i < y)
+    {
+        ret[i] = ft_strdup(c->line);
+        ret[i][ft_strlen(c->line) - 1] = 0;
+        c = c->next;
+        i++;
+    }
+    return (ret);
 }
 
 /**
@@ -272,4 +335,57 @@ t_chain *to_chain(char *path)
     cut_ligne(&a);
     close (fd);
     return (b);
+}
+
+/**
+ * Libère la mémoire associée a la structure de donnée.
+*/
+void    free_data(t_data *d)
+{
+    free_split(d->map);
+    free_imgset(d->img);
+    free(d);
+}
+
+/**
+ * Génère une structure utilisable par le jeu.
+ * Renvoie la structure générée.
+*/
+t_data  *generate_data(char *path)
+{
+    t_data *data;
+    t_chain *values;
+    int         code;
+
+    values = to_chain(path);
+    if (!values)
+        return (NULL);
+    data = ft_calloc(1, sizeof(t_data));
+    if (!data)
+        return (NULL);
+    remove_tail(values);
+    code = epure(values);
+    if (code)
+    {
+        //message ici
+        free_data(data);
+    }
+    data->img = ft_calloc(1, sizeof(t_imgset));
+    code = generate_imgset(values, data->img);
+    if (code)
+    {
+        //message ici
+        free_data(data);
+    }
+    data->map_height = map_lines(values);
+    data->map_width = map_length(values);
+    data->map = generate_map(values, data->map_width, data->map_height);
+    code = check_map(data);
+    if (code)
+    {
+        //message ici
+        free_data(data);
+    }
+    free_chain(values);
+    return (data);
 }

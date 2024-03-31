@@ -46,9 +46,10 @@ typedef struct s_data
         char **map;
         int player_x;
         int player_y;
+        char player_orientation;
         int map_width;
         int map_height;
-        t_imgset img;
+        t_imgset *img;
 } t_data;
 
 //Utilisé par le parser; tu peux laisser ça dedans
@@ -77,4 +78,11 @@ int     emptyline(char *c);
 int epure(t_chain *c);
 void    remove_tail(t_chain *c);
 void 		free_imgset(t_imgset *t);
+int map_length(t_chain *c);
+int map_lines(t_chain *c);
+t_data  *generate_data(char *path);
+void    free_data(t_data *d);
+int is_map_element(char c);
+int check_map(t_data *d);
+
 #endif

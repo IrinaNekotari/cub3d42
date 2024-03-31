@@ -14,7 +14,7 @@
 
 #include "parser.h"
 
-static void printchain(t_chain *e)
+void printchain(t_chain *e)
 {
     if (!e)
         ft_printf("NULLLL\n");
@@ -40,28 +40,37 @@ static void readimgset(t_imgset t)
     ft_printf("C (rgb) = %d\n", t.ceiling_color);
 }
 
+static void print_map(char **m)
+{
+    int i = 0;
+    while (m[i])
+    {
+        ft_printf("## %s\n", m[i]);
+        i++;
+    }
+}
+
+static void print_data(t_data *d)
+{
+    ft_printf("## IMGSET DATA ##\n");
+    readimgset(*(d->img));
+    ft_printf("##SIZE OF MAP : %dx%d ##\n", d->map_height, d->map_width);
+    ft_printf("## PLAYER DATA : START AT %dx%d, orientation %c ##", d->player_x, d->player_y, d->player_orientation);
+    ft_printf("## MAP ##\n");
+    print_map(d->map);
+}
+
 int main(int args, char *argv[])
 {
-    t_chain *e;
-    t_imgset *t;
+    t_data *d;
 
-    t = ft_calloc(1, sizeof(t_imgset));
     if (args != 2)
         return (255);
     else 
     {
-        e = to_chain(argv[1]);
-        printchain(e);
-        remove_tail(e);
-        int i = epure(e);
-        //TODO:Gestion d'erreurs
-        ft_printf("Retour : %d\n", i);
-        printchain(e);
-        i = generate_imgset(e, t);
-        ft_printf("Retour : %d\n", i);
-        readimgset(*t);
-        free_chain(e);
-        free_imgset(t);
+        d = generate_data(argv[1]);
+        print_data(d);
+        free_data(d);
     }
     return (0);
 }
