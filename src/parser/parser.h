@@ -23,6 +23,19 @@
 
 # define NB_ELEMENTS 6
 
+# define ERR_NOT_ENOUGH_HEADERS -1
+# define ERR_TOO_MUCH_HEADERS -2
+# define ERR_EMPTY_LINE_IN_MAP -3
+# define ERR_HEADER_IN_MAP -4
+# define ERR_UNKNOWN_HEADER -5
+# define ERR_HEADER_TOO_LARGE -6
+# define ERR_HEADER_TOO_THIN -7
+# define ERR_INVALID_RGB -8
+# define ERR_UNKNOWN_CHARS -9
+# define ERR_INVALID_ENTRIES -10
+# define ERR_UNCLOSED_MAP -11
+# define ERR_FILE_NOT_FOUND 404
+
 //DATA; REMPLACE CELUI DU PROJET PAR CELLE LA
 //J'AI AJOUT LES IMAGES
 //TODO : remplacer les char* en images de mlx
@@ -81,8 +94,9 @@ void 		free_imgset(t_imgset *t);
 int map_length(t_chain *c);
 int map_lines(t_chain *c);
 t_data  *generate_data(char *path);
-void    free_data(t_data *d);
+void    free_data(t_data *d, t_chain *c);
 int is_map_element(char c);
 int check_map(t_data *d);
+t_data *data_error(int code, t_data *data, t_chain *values);
 
 #endif

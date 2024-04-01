@@ -25,7 +25,9 @@ int split_len(char **a)
     return (i);
 }
 
-//TODO : wtf il est cursed
+/**
+ * Libere la zone mémoire associée a une liste de char *.
+*/
 void    free_split(char **a)
 {
     int i;
@@ -74,7 +76,7 @@ void    cut_ligne(t_chain **c)
 
 /**
  * Remplis l'imgset en fonction des premières lignes de la map
- * Retourne -1 si l'une des entêtes n'est pas reconnue
+ * Retourne ERR_UNKNOWN_HEADER si l'une des entêtes n'est pas reconnue
  * Retourne -2 si l'entête possède trop de valeurs
  * Retourne -3 si l'entête possède pas assez de valeurs
  * Retourne -4 si une valeur RGB est invalide
@@ -93,12 +95,12 @@ int generate_imgset(t_chain *c, t_imgset *img)
         if (split_len(li) > 2)
         {
             free_split(li);
-            return (-2);
+            return (ERR_HEADER_TOO_LARGE);
         }
         else if (split_len(li) < 2)
         {
             free_split(li);
-            return (-3);
+            return (ERR_HEADER_TOO_THIN);
         }
         if (ft_equals(li[0], "NO"))
             img->no = ft_strdup(li[1]);
@@ -115,13 +117,18 @@ int generate_imgset(t_chain *c, t_imgset *img)
             if (img->ceiling_color == -1)
             {
                 free_split(li);
-                return (-4);
+                return (ERR_INVALID_RGB);
             }
         }
         else if (ft_equals(li[0], "C") && !is_rgb(li[1]))
         {
             img->ceiling_img = ft_strdup(li[1]);;
             img->ceiling_color = 0;
+            if (ft_strchr(img->ceiling_img, ','))
+            {
+                free_split(li);
+                return (ERR_INVALID_RGB);
+            }
         }
         else if (ft_equals(li[0], "F") && is_rgb(li[1]))
         {
@@ -130,18 +137,23 @@ int generate_imgset(t_chain *c, t_imgset *img)
             if (img->floor_color == -1)
             {
                 free_split(li);
-                return (-4);
+                return (ERR_INVALID_RGB);
             }
         }
         else if (ft_equals(li[0], "F") && !is_rgb(li[1]))
         {
             img->floor_img = ft_strdup(li[1]);
             img->floor_color = 0;
+            if (ft_strchr(img->floor_img, ','))
+            {
+                free_split(li);
+                return (ERR_INVALID_RGB);
+            }
         }
         else
         {
             free_split(li);
-            return (-1);
+            return (ERR_UNKNOWN_HEADER);
         }
         free_split(li);
         i++;
@@ -200,7 +212,6 @@ int map_length(t_chain *c)
 
 /**
  * Récupère la map sous un format char**
- * Supprime les \n a la fin de chaque ligne
 */
 char    **generate_map(t_chain *c, int x, int y)
 {
@@ -218,7 +229,6 @@ char    **generate_map(t_chain *c, int x, int y)
     while (i < y)
     {
         ret[i] = ft_strdup(c->line);
-        ret[i][ft_strlen(c->line) - 1] = 0;
         c = c->next;
         i++;
     }
@@ -229,15 +239,18 @@ char    **generate_map(t_chain *c, int x, int y)
  * Retourne 1 si la map est une map de ligne, c'est a dire qu'elle ne possède que
  * des caractères de map (0, 1, N, S, E, W), des whitespaces ou un retour a la ligne
  * Retourne 0 sinon
+ * Cas croustillant extra particulier : 
 */
 int is_line_map(char *l)
 {
     int     i;
 
     i = 0;
+    if (is_whitespace(l[0]) || (is_map_element(l[0]) && is_map_element(l[1])))
+        return (1);
     while (l[i])
     {
-        if (!is_map_element(l[i]) && !is_whitespace(l[i]) && l[i] != '\n')
+        if (!is_map_element(l[i]) && !is_whitespace(l[i]) && l[i] != '\n' && l[i] != 0)
             return (0);
         i++;
     }
@@ -266,10 +279,10 @@ void    remove_tail(t_chain *c)
  * Inspecte la liste chainée. Note 0 les éléments qui sont de l'en-tête
  * note 1 les éléments de la map
  * Retire les lignes vides
- * retourne -1 s'il n'y a pas assez d'en têtes
- * retourne -3 s'il y en a trop (attendu : 6, définis par NB_ELEMENTS)
- * retourne -2 s'il y a une ligne vide dans la map
- * retourne -4 s'il y a une ligne d'en tête dans la map
+ * retourne ERR_NOT_ENOUGH_HEADERS s'il n'y a pas assez d'en têtes
+ * retourne ERR_TOO_MUCH_HEADERS s'il y en a trop (attendu : 6, définis par NB_ELEMENTS)
+ * retourne ERR_EMPTY_LINE_IN_MAP s'il y a une ligne vide dans la map
+ * retourne ERR_HEADER_IN_MAP s'il y a une ligne d'en tête dans la map
  * retourne 0 sinon
 */
 int epure(t_chain *c)
@@ -284,13 +297,15 @@ int epure(t_chain *c)
         if (emptyline(c->line))
         {
             if (in_map)
-                return (-2);
-            cut_ligne(&c); 
+                return (ERR_EMPTY_LINE_IN_MAP);
+            cut_ligne(&c);
+            if (c->previous)
+                c = c->previous;
         }
-        else if (!is_line_map(c->line))
+        else if ((c->line[0] == 'W') || !is_line_map(c->line))
         {
             if (in_map)
-                return (-4);
+                return (ERR_HEADER_IN_MAP);
             nb_tete++;
         }
         else 
@@ -298,14 +313,15 @@ int epure(t_chain *c)
         c = c->next;
     }
     if (nb_tete > NB_ELEMENTS)
-        return (-3);
+        return (ERR_TOO_MUCH_HEADERS);
     if (nb_tete < NB_ELEMENTS)
-        return (-1);
+        return (ERR_NOT_ENOUGH_HEADERS);
     return (0);
 }
 
 /**
  * Convertis un fichier ouvert en liste chainée
+ * Supprime les \n a la fin de chaque ligne
 */
 t_chain *to_chain(char *path)
 {
@@ -326,6 +342,7 @@ t_chain *to_chain(char *path)
     while (tmp)
     {
         a->line = tmp;
+        tmp[ft_strlen(tmp) - 1] = 0;
         a->next = ft_calloc(1, sizeof(t_chain));
         a->next->previous = a;
         a = a->next;
@@ -340,8 +357,12 @@ t_chain *to_chain(char *path)
 /**
  * Libère la mémoire associée a la structure de donnée.
 */
-void    free_data(t_data *d)
+void    free_data(t_data *d, t_chain *c)
 {
+    if (c)
+        free_chain(c);
+    if (!d)
+        return ;
     free_split(d->map);
     free_imgset(d->img);
     free(d);
@@ -361,31 +382,24 @@ t_data  *generate_data(char *path)
     if (!values)
         return (NULL);
     data = ft_calloc(1, sizeof(t_data));
-    if (!data)
-        return (NULL);
     remove_tail(values);
+    while (emptyline(values->line))
+        values = values->next;
     code = epure(values);
     if (code)
-    {
-        //message ici
-        free_data(data);
-    }
+        return (data_error(code, data, values));
     data->img = ft_calloc(1, sizeof(t_imgset));
     code = generate_imgset(values, data->img);
     if (code)
-    {
-        //message ici
-        free_data(data);
-    }
+        return (data_error(code, data, values));
     data->map_height = map_lines(values);
     data->map_width = map_length(values);
     data->map = generate_map(values, data->map_width, data->map_height);
     code = check_map(data);
     if (code)
-    {
-        //message ici
-        free_data(data);
-    }
+        return (data_error(code, data, values));
+    while (values->previous)
+        values = values->previous;
     free_chain(values);
     return (data);
 }

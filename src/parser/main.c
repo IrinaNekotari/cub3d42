@@ -69,8 +69,10 @@ int main(int args, char *argv[])
     else 
     {
         d = generate_data(argv[1]);
+        if (!d)
+            return (1);
         print_data(d);
-        free_data(d);
+        free_data(d, NULL);
     }
     return (0);
 }

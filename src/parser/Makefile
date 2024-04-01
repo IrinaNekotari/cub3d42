@@ -2,7 +2,7 @@ NAME 	= parser
 AUTHOR	= nmascrier
 FLAG	= -Wall -Wextra -Werror
 
-SRC	= color.c checks.c parser.c utils.c main.c
+SRC	= errors.c color.c checks.c parser.c utils.c main.c
 
 OBJ  = $(SRC:c=o)
 

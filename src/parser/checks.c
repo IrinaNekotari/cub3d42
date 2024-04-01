@@ -143,18 +143,18 @@ void get_positions(t_data *data)
 /**
  * Effectue les vérifications sur la carte, et génére le point de départ.
  * Retourne 0 si tout va bien.
- * Retourne -1 si la map a des caractères inconus.
- * Retourne -2 si le joueur a plusieurs points d'entrée ou aucun.
- * Retourne -3 si la map n'est pas fermée.
+ * Retourne ERR_UNKNOWN_CHARS si la map a des caractères inconus.
+ * Retourne ERR_INVALID_ENTRIES si le joueur a plusieurs points d'entrée ou aucun.
+ * Retourne ERR_UNCLOSED_MAP si la map n'est pas fermée.
 */
 int check_map(t_data *d)
 {
     if (map_has_unknown(d->map))
-        return (-1);
+        return (ERR_UNKNOWN_CHARS);
     if (map_has_players(d->map))
-        return (-2);
+        return (ERR_INVALID_ENTRIES);
     if (map_isnt_close(d->map))
-        return (-3);
+        return (ERR_UNCLOSED_MAP);
     get_positions(d);
     return (0);
 }

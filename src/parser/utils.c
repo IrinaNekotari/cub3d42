@@ -82,7 +82,7 @@ int     emptyline(char *c)
         return (1);
     while (c[i])
     {
-        if (!is_whitespace(c[i]))
+        if (!is_whitespace(c[i]) || c[i] != '\n')
             return (0);
         i++;
     }
