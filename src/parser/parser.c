@@ -389,12 +389,18 @@ int check_exists(t_imgset *img)
     fd = open(img->we, O_RDONLY);
     if (fd == -1)
         return (ERR_FILE_NOT_FOUND);
-    fd = open(img->ceiling_img, O_RDONLY);
-    if (img->ceiling_img && fd == -1)
-        return (ERR_FILE_NOT_FOUND);
-    fd = open(img->floor_img, O_RDONLY);
-    if (img->floor_img && fd == -1)
-        return (ERR_FILE_NOT_FOUND);
+    if (img->ceiling_img)
+    {
+        fd = open(img->ceiling_img, O_RDONLY);
+        if (fd == -1)
+            return (ERR_FILE_NOT_FOUND);
+    }
+    if (img->floor_img)
+    {
+        fd = open(img->floor_img, O_RDONLY);
+        if (fd == -1)
+            return (ERR_FILE_NOT_FOUND);
+    }
     close(fd);
     return (0);
 }
