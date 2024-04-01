@@ -369,6 +369,37 @@ void    free_data(t_data *d, t_chain *c)
 }
 
 /**
+ * Verifie si les fichiers spécifiées existes.
+ * Renvoie 0 s'ils existent
+ * Renvoie ERR_FILE_NOT_FOUND sinon
+*/
+int check_exists(t_imgset *img)
+{
+    int fd;
+
+    fd = open(img->no, O_RDONLY);
+    if (fd == -1)
+        return (ERR_FILE_NOT_FOUND);
+    fd = open(img->so, O_RDONLY);
+    if (fd == -1)
+        return (ERR_FILE_NOT_FOUND);
+    fd = open(img->ea, O_RDONLY);
+    if (fd == -1)
+        return (ERR_FILE_NOT_FOUND);
+    fd = open(img->we, O_RDONLY);
+    if (fd == -1)
+        return (ERR_FILE_NOT_FOUND);
+    fd = open(img->ceiling_img, O_RDONLY);
+    if (img->ceiling_img && fd == -1)
+        return (ERR_FILE_NOT_FOUND);
+    fd = open(img->floor_img, O_RDONLY);
+    if (img->floor_img && fd == -1)
+        return (ERR_FILE_NOT_FOUND);
+    close(fd);
+    return (0);
+}
+
+/**
  * Génère une structure utilisable par le jeu.
  * Renvoie la structure générée.
 */
@@ -396,6 +427,9 @@ t_data  *generate_data(char *path)
     data->map_width = map_length(values);
     data->map = generate_map(values, data->map_width, data->map_height);
     code = check_map(data);
+    if (code)
+        return (data_error(code, data, values));
+    code = check_exists(data->img);
     if (code)
         return (data_error(code, data, values));
     while (values->previous)

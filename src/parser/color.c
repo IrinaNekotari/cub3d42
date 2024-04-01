@@ -12,8 +12,23 @@
 
 #include "parser.h"
 
-/*
-* A réecrire avec les >> 16
+static int is_valid_num(char *s)
+{
+    int     i;
+
+    i = 0;
+    while (s[i])
+    {
+        if (s[i] < '0' || s[i] > '9')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+/**
+ * Retourne une valeur hexa en fonction des trois valeurs de rouge, vert et bleus
+ * Retourne -1 si l'une des valeurs entrées est invalide
 */
 int	colorpicker(int r, int g, int b)
 {
@@ -53,11 +68,13 @@ int get_rgb(char *a)
     char **split;
 
     split = ft_split(a, ',');
+    if (!is_valid_num(split[0]) || !is_valid_num(split[1]) || !is_valid_num(split[2]))
+    {
+        free_split(split);
+        return (-1);
+    }
     color = colorpicker(ft_atoi(split[0]), ft_atoi(split[1]), ft_atoi(split[2])
     );
-    free(split[0]);
-    free(split[1]);
-    free(split[2]);
-    free(split);
+    free_split(split);
     return (color);
 }

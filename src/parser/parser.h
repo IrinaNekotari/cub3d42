@@ -98,5 +98,6 @@ void    free_data(t_data *d, t_chain *c);
 int is_map_element(char c);
 int check_map(t_data *d);
 t_data *data_error(int code, t_data *data, t_chain *values);
+void    free_split(char **a);
 
 #endif
