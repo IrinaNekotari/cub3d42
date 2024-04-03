@@ -19,10 +19,19 @@ void	free_chain(t_chain *chain)
 {
 	if (!chain)
 		return ;
+	while (chain->previous)
+		chain = chain->previous;
+	while (chain)
+	{
+		if (chain->line)
+			free(chain->line);
+		if (!chain->next)
+			break ;
+		chain = chain->next;
+		free(chain->previous);
+	}
 	if (chain->line)
 		free(chain->line);
-	if (chain->next)
-		free_chain(chain->next);
 	free(chain);
 }
 

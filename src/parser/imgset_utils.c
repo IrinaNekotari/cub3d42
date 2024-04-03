@@ -16,7 +16,7 @@
  * Ces 4 fonctions sont des sous-divions de generate_imgset
 */
 
-int	part_one(t_imgset **img, char **li)
+int	part_one_img(t_imgset **img, char **li)
 {
 	if (ft_equals(li[0], "NO"))
 	{
@@ -35,7 +35,7 @@ int	part_one(t_imgset **img, char **li)
 	return (0);
 }
 
-int	part_two(t_imgset **img, char **li)
+int	part_two_img(t_imgset **img, char **li)
 {
 	if (ft_equals(li[0], "EA"))
 	{
@@ -54,7 +54,7 @@ int	part_two(t_imgset **img, char **li)
 	return (0);
 }
 
-int	part_three(t_imgset **img, char **li)
+int	part_three_img(t_imgset **img, char **li)
 {
 	if (ft_equals(li[0], "C") && is_rgb(li[1]))
 	{
@@ -75,7 +75,7 @@ int	part_three(t_imgset **img, char **li)
 	return (-1);
 }
 
-int	part_four(t_imgset **img, char **li)
+int	part_four_img(t_imgset **img, char **li)
 {
 	if (ft_equals(li[0], "F") && is_rgb(li[1]))
 	{

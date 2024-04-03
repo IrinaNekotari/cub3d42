@@ -89,10 +89,10 @@ int		check_exists(t_imgset *img);
 int		epure(t_chain *c);
 int		generate_imgset(t_chain *c, t_imgset *img);
 int		has_null_values(t_imgset *img);
-int		part_one(t_imgset **img, char **li);
-int		part_two(t_imgset **img, char **li);
-int		part_three(t_imgset **img, char **li);
-int		part_four(t_imgset **img, char **li);
+int		part_one_img(t_imgset **img, char **li);
+int		part_two_img(t_imgset **img, char **li);
+int		part_three_img(t_imgset **img, char **li);
+int		part_four_img(t_imgset **img, char **li);
 
 void	get_positions(t_data *data);
 void	remove_tail(t_chain *c);

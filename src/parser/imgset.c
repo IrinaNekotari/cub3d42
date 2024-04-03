@@ -12,6 +12,32 @@
 
 #include "parser.h"
 
+int	truc(int code, char ***li)
+{
+	free_split(*li);
+	return (code);
+}
+
+void	move_up(char ***li, int *i, t_chain **c)
+{
+	free_split(*li);
+	*i += 1;
+	(*c) = (*c)->next;
+}
+
+int	samere(t_imgset **img, char ***li)
+{
+	if (part_one_img(img, *li))
+		return (1);
+	if (part_two_img(img, *li))
+		return (1);
+	if (part_three_img(img, *li) == 1)
+		return (1);
+	if (part_four_img(img, *li) == 1)
+		return (1);
+	return (0);
+}
+
 /**
  * Remplis l'imgset en fonction des premières lignes de la map
  * Retourne ERR_UNKNOWN_HEADER si l'une des entêtes n'est pas reconnue
@@ -31,41 +57,17 @@ int	generate_imgset(t_chain *c, t_imgset *img)
 	while (i < NB_ELEMENTS)
 	{
 		li = ft_split(c->line, ' ');
-		if (split_len(li) != 2)
+		if (split_len(li) > 2)
+			return (truc(ERR_HEADER_TOO_LARGE, &li));
+		else if (split_len(li) < 2)
+			return (truc(ERR_HEADER_TOO_THIN, &li));
+		if (!samere(&img, &li))
 		{
-			free_split(li);
-			if (split_len(li) > 2)
-				return (ERR_HEADER_TOO_LARGE);
-			else
-				return (ERR_HEADER_TOO_THIN);
+			if (!part_three_img(&img, li) || !part_four_img(&img, li))
+				return (truc(ERR_INVALID_RGB, &li));
+			return (truc(ERR_UNKNOWN_HEADER, &li));
 		}
-		if (part_one(&img, li) || part_two(&img, li))
-		{
-			free_split(li);
-			i++;
-			c = c->next;
-			continue ;
-		}
-		else if (part_three(&img, li) == 1 || part_four(&img, li) == 1)
-		{
-			free_split(li);
-			i++;
-			c = c->next;
-			continue ;
-		}
-		else if (!part_three(&img, li) || !part_four(&img, li))
-		{
-			free_split(li);
-			return (ERR_INVALID_RGB);
-		}
-		else
-		{
-			free_split(li);
-			return (ERR_UNKNOWN_HEADER);
-		}
-		free_split(li);
-		i++;
-		c = c->next;
+		move_up(&li, &i, &c);
 	}
 	if (has_null_values(img))
 		return (ERR_NON_UNIQUE_HEADER);
