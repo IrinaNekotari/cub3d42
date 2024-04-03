@@ -78,16 +78,21 @@ t_data	*init_map()
 	data->player_y = 3;
 	data->player_x = 14;
 	data->map_width = 25;
-	data->map_height = 9;
+	data->map_height = 9;     
 	return (data);
 }
 
-
-
-int main()
+int main(int argc, char *argv[])
 {
-	t_data *data;
-	data = init_map();
-	start(data);
+	t_data	*data;
+
+	if (argc == 2)
+	{
+		data = generate_data(argv[1]);
+		if (!data)
+			return (0);
+		start(data);
+		free_data(data, NULL);
+	}
 	return 0;
 }

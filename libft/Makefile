@@ -23,13 +23,14 @@ CLEANCMD = rm -rf *.o
 FCLEANCMD = rm -f *.a
 
 #Cree la lib, et garde les fichiers .o generes
-all:$(NAME) clean
+all:$(NAME)
 
 $(NAME):$(OBJ)
 	@ar rc $(NAME) $(OBJ)
 
 #compile un unique fichier .c en .o
 %.o: %.c
+	@printf "\033[0;33mCompilation de %-33.33s\r" $@
 	@gcc $(FLAG) -c $< -o $@
 
 clean:
@@ -41,3 +42,5 @@ fclean: clean
 	@echo "$(NAME) deleted"
 
 re: fclean all
+
+.PHONY: all clean fclean re

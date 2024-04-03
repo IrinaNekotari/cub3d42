@@ -22,8 +22,9 @@ MLX42 = MLX42
 
 MLX = MLX42/build/libmlx42.a
 
-SRC = src/main.c \
-	src/raycasting.c
+SRC = src/raycasting.c \
+	src/parse_memory.c src/get_position.c src/errors.c src/color.c src/checks.c src/parser.c src/utils.c \
+	src/size_utils.c src/list.c src/file_open.c src/map.c src/imgset.c src/imgset_utils.c src/main.c
 	
 INC	= ./include/
 OBJ = $(SRC:.c=.o)
@@ -63,3 +64,5 @@ fclean: clean
 	@make fclean -C $(LIBFT_PATH)
 	rm -f $(NAME)
 re: fclean all
+
+.PHONY: all clean fclean re
