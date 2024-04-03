@@ -64,12 +64,21 @@ typedef struct s_player
 
 typedef struct s_ray
 {
+	int	rayon;
         double ray_angle;
         double distance;
         int flag;
         int horiz_x;
         int vert_y;
 } t_ray;
+
+typedef struct s_texset
+{
+	mlx_texture_t	*no;
+	mlx_texture_t	*so;
+	mlx_texture_t	*we;
+	mlx_texture_t	*ea;
+}	t_texset;
 
 typedef struct s_imgset
 {
@@ -92,6 +101,7 @@ typedef struct s_data
 	char		player_orientation;
 	char		**map;
 	t_imgset	*img;
+	t_texset	*tex;
 }	t_data;
 
 
@@ -125,11 +135,11 @@ int	wall_hit(float x, float y, t_mlx *mlx);
 int     inter_check(float angle, float *inter, float *step, int is_border_wall);
 int     unit_circle(float angle, char c);
 float	normalize_angle(float angle);
-void	mlx_pixel_put_screen(t_mlx, int x, int y, int color);
+void	mlx_put_pixel_screen(t_mlx *mlx, int x, int y, int color);
 int	get_rgba(int r, int g, int b, int a);
 void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel);
 mlx_texture_t	*get_texture(t_mlx *mlx, int flag);
-double get_x_wall(mlx_texture_t	*texture, tmlx *mlx);
+double get_x_wall(mlx_texture_t	*texture, t_mlx *mlx);
 int	reverse_bytes(int c);
 void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height);
 void	render_wall(t_mlx *mlx, int ray);

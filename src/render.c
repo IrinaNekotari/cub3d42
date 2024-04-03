@@ -12,7 +12,7 @@
 
 #include "../include/cube3d.h"
 
-void	mlx_pixel_put_screen(t_mlx, int x, int y, int color)
+void	mlx_put_pixel_screen(t_mlx *mlx, int x, int y, int color)
 {
 	if (x < 0)
 		return ;
@@ -22,7 +22,7 @@ void	mlx_pixel_put_screen(t_mlx, int x, int y, int color)
 		return ;
 	else if (y >= HEIGHT)
 		return ;
-	mlx_pixel_put(mlx->img, x , y, color);
+	mlx_put_pixel(mlx->img, x , y, color);
 }
 
 int	get_rgba(int r, int g, int b, int a)
@@ -36,10 +36,10 @@ void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 	int	c;
 
 	i = bottom_pixel;
-	c = get_rgba(ft_atoi(mlx->data->couleur_plafond[0]), ft_atoi(mlx->data->couleur_plafond[1]), ft_atoi(mlx->data->couleur_plafond[2]), 255);
+	c = mlx->data->img->ceiling_color;
 	while (i < HEIGHT)
 		mlx_put_pixel_screen(mlx, ray, i++, c);
-	c = get_rgba(ft_atoi(mlx->data->couleur_sol[0]), ft_atoi(mlx_data->couleur_sol[1]), ft_atoi(mlx->data->couleur_sol[2]), 255);
+	c = mlx->data->img->floor_color;
 	i = 0;
 	while (i < top_pixel)
 		mlx_put_pixel_screen(mlx, ray, i++, c);
@@ -48,23 +48,23 @@ void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
 {
 	mlx->ray->ray_angle = normalize_angle(mlx->ray->ray_angle);
-	if (flag = 0)
+	if (flag == 0)
 	{
 		if (mlx->ray->ray_angle > M_PI / 2 && mlx->ray->ray_angle < 3 * (M_PI / 2))
-			return (EA);
+			return (mlx->data->tex->ea);
 		else
-			return (WE);
+			return (mlx->data->tex->we);
 	}
 	else
 	{
-		if (mlx->ray->ray_ngl > 0 && mlx->ray->ray_ngl < M_PI)
-			return (SO);
+		if (mlx->ray->ray_angle > 0 && mlx->ray->ray_angle < M_PI)
+			return (mlx->data->tex->so);
 		else
-			return (NO);
+			return (mlx->data->tex->no);
 	}
 }
 
-double get_x_wall(mlx_texture_t	*texture, tmlx *mlx)
+double get_x_wall(mlx_texture_t	*texture, t_mlx *mlx)
 {
 	double	x_wall;
 	
@@ -91,18 +91,19 @@ void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 {
 	double	x_wall;
 	double	y_wall;
+	uint32_t	*color;
 	mlx_texture_t	*texture;
 	
 	texture = get_texture(mlx, mlx->ray->flag);
-	
+	color = (uint32_t *)texture->pixels;
 	x_wall = get_x_wall(texture, mlx);
-	y_wall = (texture->height / wall_height) * (top_pixel - (HEIGHT / 2) + (wall_height / 2))
+	y_wall = (texture->height / wall_height) * (top_pixel - (HEIGHT / 2) + (wall_height / 2));
 	if (y_wall < 0)
 		y_wall = 0;
 	while (top_pixel < bottom_pixel)
 	{
-		mlx_pixel_put_screen(mlx, mlx->ray->index, top_pixel, reverse_bytes(arr[(int)y_wall * texture->width + (int)x_wall]));
-		y_wall += factor;
+		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]));
+		y_wall += (texture->height / wall_height);
 		top_pixel++;
 	}
 }
@@ -115,14 +116,14 @@ void	render_wall(t_mlx *mlx, int ray)
 	double	top_pixel;	
 	
 	mlx->ray->distance *= cos(normalize_angle(mlx->ray->ray_angle - mlx->player->angle));
-	wall_height = (TILE_SIZE / mlx->ray->distance) * ((WDITH / 2) / tan(mlx->player->fov / 2));
-	bottom_pixel = (S_H / 2) + (wall_height / 2);
-	top_pixel = (S_H / 2) - (wall_height / 2);
+	wall_height = (TILE_SIZE / mlx->ray->distance) * ((WIDTH / 2) / tan(mlx->player->fov / 2));
+	bottom_pixel = (HEIGHT / 2) + (wall_height / 2);
+	top_pixel = (HEIGHT / 2) - (wall_height / 2);
 	if (bottom_pixel > HEIGHT)
 		bottom_pixel = HEIGHT;
 	if (top_pixel < 0)
 		top_pixel = 0;
-	mlx->ray->index = ray;
-	draw_wall(mlx, top_pix, bottom_pix, wall_height);
+	mlx->ray->rayon = ray;
+	draw_wall(mlx, top_pixel, bottom_pixel, wall_height);
 	draw_floor_ceiling(mlx, ray, top_pixel, bottom_pixel);
 }

@@ -16,11 +16,11 @@ void	raycasting(t_mlx *mlx)
 {
 	double	h_inter;
 	double	v_inter;
-	int	i;
+	int	rayon;
 
-	i = 0;
+	rayon = 0;
 	mlx->ray->ray_angle = mlx->player->angle - (mlx->player->fov / 2);
-	while (i < WIDTH)
+	while (rayon < WIDTH)
 	{
 		mlx->ray->flag = 0;
 		h_inter = get_h_inter(mlx, normalize_angle(mlx->ray->ray_angle));
@@ -32,8 +32,8 @@ void	raycasting(t_mlx *mlx)
 			mlx->ray->distance = h_inter;
 			mlx->ray->flag = 1;
 		}
-		//render_wall(mlx, i);
-		i++;
+		render_wall(mlx, rayon);
+		rayon++;
 		mlx->ray->ray_angle += (mlx->player->fov / WIDTH);
 	}
 }
