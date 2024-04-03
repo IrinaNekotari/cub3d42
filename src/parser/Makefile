@@ -2,7 +2,8 @@ NAME 	= parser
 AUTHOR	= nmascrier
 FLAG	= -Wall -Wextra -Werror
 
-SRC	= errors.c color.c checks.c parser.c utils.c main.c
+SRC	= parse_memory.c get_position.c errors.c color.c checks.c parser.c utils.c \
+	size_utils.c list.c file_open.c map.c imgset.c imgset_utils.c main.c
 
 OBJ  = $(SRC:c=o)
 

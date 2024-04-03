@@ -13,49 +13,44 @@
 #include "parser.h"
 
 /**
- * Renvoie 1 si le char est un élément de map correct (1, 0, N, S, E, W)
- * Renvoie 0 sinon
- * Possibilité d'ajouts de charactères, genre un ennemi ou des pièces
+ * Initialise toutes les valeurs de l'imgset a NULL ou 0.
 */
-int is_map_element(char c)
+void	null_values(t_imgset **img)
 {
-    if (c == '1' || c == '0')
-        return (1);
-    if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-        return (1);
-    return (0);
+	(*img)->no = NULL;
+	(*img)->so = NULL;
+	(*img)->we = NULL;
+	(*img)->ea = NULL;
+	(*img)->floor_img = NULL;
+	(*img)->ceiling_img = NULL;
+	(*img)->floor_color = 0;
+	(*img)->ceiling_color = 0;
 }
 
-void        free_chain(t_chain *chain)
+/**
+ * Verifie si des valeurs de l'imgset n'ont pas
+ * ete initialisees.
+*/
+int	has_null_values(t_imgset *img)
 {
-    if (!chain)
-        return ;
-    if (chain->line)
-        free(chain->line);
-    if (chain->next)
-        free_chain(chain->next);
-    free(chain);
+	if (!img->no)
+		return (1);
+	if (!img->so)
+		return (1);
+	if (!img->we)
+		return (1);
+	if (!img->ea)
+		return (1);
+	if (!img->floor_img && !img->floor_color)
+		return (1);
+	if (!img->ceiling_img && !img->ceiling_color)
+		return (1);
+	return (0);
 }
 
-void 		free_imgset(t_imgset *t)
-{
-	if (!t)
-		return ;
-	if (t->ceiling_img)
-		free(t->ceiling_img);
-	if (t->floor_img)
-		free(t->floor_img);
-	if (t->no)
-		free(t->no);
-	if (t->so)
-		free(t->so);
-	if (t->ea)
-		free(t->ea);
-	if (t->we)
-		free(t->we);
-	free(t);
-}
-
+/**
+ * Retourne vrai si le charactere est un whitespace.
+*/
 int	is_whitespace(char c)
 {
 	if (c == ' ')
@@ -73,28 +68,29 @@ int	is_whitespace(char c)
 	return (0);
 }
 
-int     emptyline(char *c)
+/**
+ * Retourne vrai si la ligne est consideree vide par les
+ * standards de cube 3D
+*/
+int	emptyline(char *c)
 {
-    int     i;
+	int	i;
 
-    i = 0;
-    if (!c)
-        return (1);
-    while (c[i])
-    {
-        if (!is_whitespace(c[i]) || c[i] != '\n')
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	if (!c)
+		return (1);
+	while (c[i])
+	{
+		if (!is_whitespace(c[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-t_chain     *ft_errmsg(char *msg)
-{
-    ft_printf("[\x1b[31mERROR\x1b[37m] %s\n", msg);
-    return (NULL);
-}
-
+/**
+ * Retourne vrai si les deux char* sont identiques.
+*/
 int	ft_equals(char *s1, char *s2)
 {
 	int	i;
