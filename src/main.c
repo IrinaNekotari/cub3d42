@@ -37,8 +37,8 @@ void loop(void *ml)
 	//hook(mlx, 0, 0);
 	raycasting(mlx);
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
-	usleep(1000);
-	mlx->player->angle += ROTATION_SPEED;
+	//usleep(1000);
+	//mlx->player->angle += ROTATION_SPEED;
 }
 
 void	init_player(t_mlx mlx)
