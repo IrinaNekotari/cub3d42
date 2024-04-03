@@ -29,7 +29,7 @@
 #define TILE_SIZE 500
 #define FOV 60
 #define ROTATION_SPEED 0.2
-#define PLAYER_SPEED 4
+#define PLAYER_SPEED 1
 #define WE 0xB5B5B5FF
 #define NS 0xF5F5F5FF
 

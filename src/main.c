@@ -78,6 +78,25 @@ void press(mlx_key_data_t keydata, void *ml)
 		mlx->player->is_moving_sides = -1;
 	release(keydata, mlx);
 }
+void move_dude(t_mlx *mlx, double move_x, double move_y)
+{
+	int		map_grid_y;
+	int		map_grid_x;
+	int		new_x;
+	int		new_y;
+
+	new_x = roundf(mlx->player->player_x + move_x);
+	new_y = roundf(mlx->player->player_y + move_y);
+	map_grid_x = (new_x / TILE_SIZE);
+	map_grid_y = (new_y / TILE_SIZE);
+	if (mlx->data->map[map_grid_y][map_grid_x] != '1' && 
+	(mlx->data->map[map_grid_y][mlx->player->player_x / TILE_SIZE] != '1' &&
+	mlx->data->map[mlx->player->player_y / TILE_SIZE][map_grid_x] != '1'))
+	{
+		mlx->player->player_x = new_x;
+		mlx->player->player_y = new_y;
+	}
+}
 
 void move(t_mlx *mlx, double move_x, double move_y)
 {
@@ -85,16 +104,27 @@ void move(t_mlx *mlx, double move_x, double move_y)
 		rotato(mlx, 1);
 	if (mlx->player->is_rotating == -1)
 		rotato(mlx, 0);
-	if (mlx->player->is_moving_forward == 1)
-		mlx->player->player_x++;
-	if (mlx->player->is_moving_forward == -1)
-		mlx->player->player_x--;
-	if (mlx->player->is_moving_sides == 1)
-		mlx->player->player_y++;
 	if (mlx->player->is_moving_sides == -1)
-		mlx->player->player_y--;
-	(void)move_x;
-	(void)move_y;
+	{
+		move_x = -sin(mlx->player->angle) * PLAYER_SPEED;
+		move_y = cos(mlx->player->angle) * PLAYER_SPEED;
+	}
+	if (mlx->player->is_moving_sides == 1)
+	{
+		move_x = sin(mlx->player->angle) * PLAYER_SPEED;
+		move_y = -cos(mlx->player->angle) * PLAYER_SPEED;
+	}
+	if (mlx->player->is_moving_forward == -1)
+	{
+		move_x = cos(mlx->player->angle) * PLAYER_SPEED;
+		move_y = sin(mlx->player->angle) * PLAYER_SPEED;
+	}
+	if (mlx->player->is_moving_forward == 1)
+	{
+		move_x = -cos(mlx->player->angle) * PLAYER_SPEED;
+		move_y = -sin(mlx->player->angle) * PLAYER_SPEED;
+	}
+	move_dude(mlx, move_x, move_y);
 }
 
 void loop(void *ml)
@@ -107,9 +137,6 @@ void loop(void *ml)
 	move(mlx, 0, 0);
 	raycasting(mlx);
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
-	//usleep(1000);
-	//mlx->player->angle += ROTATION_SPEED;
-
 }
 
 void	init_player(t_mlx mlx)
