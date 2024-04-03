@@ -27,6 +27,77 @@ void	ft_exit(t_mlx *mlx)
 	exit(0);
 }
 
+void rotato(t_mlx *mlx, int i)
+{
+	if (i == 1)
+	{
+		mlx->player->angle += ROTATION_SPEED / 10;
+		if (mlx->player->angle > 2 * M_PI)
+			mlx->player->angle -= 2 * M_PI;
+	}
+	else
+	{
+		mlx->player->angle -= ROTATION_SPEED / 10;
+		if (mlx->player->angle < 0)
+			mlx->player->angle += 2 * M_PI;
+	}
+}
+
+void release(mlx_key_data_t keydata, t_mlx *mlx)
+{
+	if (keydata.key == MLX_KEY_LEFT && keydata.action == MLX_RELEASE)
+		mlx->player->is_rotating = 0;
+	if (keydata.key == MLX_KEY_RIGHT && keydata.action == MLX_RELEASE)
+		mlx->player->is_rotating = 0;
+	if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
+		mlx->player->is_moving_forward = 0;
+	if (keydata.key == MLX_KEY_S && keydata.action == MLX_RELEASE)
+		mlx->player->is_moving_forward = 0;
+	if (keydata.key == MLX_KEY_A && keydata.action == MLX_RELEASE)
+		mlx->player->is_moving_sides = 0;
+	if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
+		mlx->player->is_moving_sides = 0;
+}
+
+void press(mlx_key_data_t keydata, void *ml)
+{
+	t_mlx *mlx;
+
+	mlx = ml;
+	ft_printf("Pootis %d\n", keydata.key);
+	if (keydata.key == MLX_KEY_LEFT && keydata.action == MLX_PRESS)
+		mlx->player->is_rotating = -1;
+	if (keydata.key == MLX_KEY_RIGHT && keydata.action == MLX_PRESS)
+		mlx->player->is_rotating = 1;
+	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
+		mlx->player->is_moving_forward = -1;
+	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
+		mlx->player->is_moving_forward = 1;
+	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
+		mlx->player->is_moving_sides = 1;
+	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
+		mlx->player->is_moving_sides = -1;
+	release(keydata, mlx);
+}
+
+void move(t_mlx *mlx, double move_x, double move_y)
+{
+	if (mlx->player->is_rotating == 1)
+		rotato(mlx, 1);
+	if (mlx->player->is_rotating == -1)
+		rotato(mlx, 0);
+	if (mlx->player->is_moving_forward == 1)
+		mlx->player->player_x++;
+	if (mlx->player->is_moving_forward == -1)
+		mlx->player->player_x--;
+	if (mlx->player->is_moving_sides == 1)
+		mlx->player->player_y++;
+	if (mlx->player->is_moving_sides == -1)
+		mlx->player->player_y--;
+	(void)move_x;
+	(void)move_y;
+}
+
 void loop(void *ml)
 {
 	t_mlx *mlx;
@@ -34,11 +105,9 @@ void loop(void *ml)
 	mlx = ml;
 	mlx_delete_image(mlx->mlx_p, mlx->img);
 	mlx->img = mlx_new_image(mlx->mlx_p, WIDTH, HEIGHT);
-	//hook(mlx, 0, 0);
+	move(mlx, 0, 0);
 	raycasting(mlx);
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
-	usleep(1000);
-	mlx->player->angle += ROTATION_SPEED;
 }
 
 void	init_player(t_mlx mlx)
@@ -63,6 +132,9 @@ void	super_mega_init(t_mlx *mlx)
         mlx->player->player_y = mlx->data->player_y;
         mlx->player->angle = 0;
         mlx->player->fov = 60;
+		mlx->player->is_rotating = 0;
+		mlx->player->is_moving_sides = 0;
+		mlx->player->is_moving_forward = 0;
         mlx->player->rotation = 0;
         mlx->player->left_right = 0;
         mlx->player->up_down = 0;
@@ -83,8 +155,8 @@ void start(t_data *data)
 	super_mega_init(&mlx);
 	mlx.mlx_p = mlx_init(WIDTH, HEIGHT, "Cube3D", 0);
 	init_player(mlx);
+	mlx_key_hook(mlx.mlx_p, &press, &mlx);
 	mlx_loop_hook(mlx.mlx_p, &loop, &mlx);
-	//mlx_key_hook(mlx.mlx_p, &mlx_key, &mlx);
 	mlx_loop(mlx.mlx_p);
 	ft_exit(&mlx);
 }

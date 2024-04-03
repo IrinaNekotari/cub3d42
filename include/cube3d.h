@@ -60,6 +60,9 @@ typedef struct s_player
         int rotation;
         int left_right;
         int up_down;
+		int is_rotating;
+		int is_moving_forward;
+		int is_moving_sides;
 } t_player;
 
 typedef struct s_ray
