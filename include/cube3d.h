@@ -26,7 +26,7 @@
 
 #define WIDTH 1900
 #define HEIGHT 1000
-#define TILE_SIZE 30
+#define TILE_SIZE 500
 #define FOV 60
 #define ROTATION_SPEED 0.2
 #define PLAYER_SPEED 4
@@ -60,6 +60,9 @@ typedef struct s_player
         int rotation;
         int left_right;
         int up_down;
+		int is_rotating;
+		int is_moving_forward;
+		int is_moving_sides;
 } t_player;
 
 typedef struct s_ray
@@ -69,6 +72,8 @@ typedef struct s_ray
         double distance;
         int flag;
         int horiz_x;
+        int horiz_y;
+        int vert_x;
         int vert_y;
 } t_ray;
 

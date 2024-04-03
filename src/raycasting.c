@@ -47,7 +47,7 @@ float	get_v_inter(t_mlx *mlx, float angle)
 	int	pixel;
 
 	x_step = TILE_SIZE;
-	y_step = TILE_SIZE *  tan(angle);
+	y_step = TILE_SIZE * tan(angle);
 	v_x = floor(mlx->player->player_x / TILE_SIZE) * TILE_SIZE;
 	pixel = inter_check(angle, &v_x, &x_step, 0);
 	v_y = mlx->player->player_y + (v_x - mlx->player->player_x) * tan(angle);
@@ -58,6 +58,8 @@ float	get_v_inter(t_mlx *mlx, float angle)
 		v_x += x_step;
 		v_y += y_step;
 	}
+	mlx->ray->vert_x = v_x;
+	mlx->ray->vert_y = v_y;
 	return (sqrt(pow(v_x - mlx->player->player_x, 2) + pow(v_y - mlx->player->player_y, 2)));
 }
 
@@ -81,6 +83,8 @@ float   get_h_inter(t_mlx *mlx, float angle)
                 h_x += x_step;
                 h_y += y_step;
         }
+        mlx->ray->horiz_x = h_x;
+	mlx->ray->horiz_y = h_y;
         return (sqrt(pow(h_x - mlx->player->player_x, 2) + pow(h_y - mlx->player->player_y, 2)));
 }
 
