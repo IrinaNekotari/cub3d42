@@ -69,11 +69,11 @@ float   get_h_inter(t_mlx *mlx, float angle)
         float   y_step;
         int     pixel;
 
-        x_step = TILE_SIZE;
-        y_step = TILE_SIZE / tan(angle);
+        y_step = TILE_SIZE;
+        x_step = TILE_SIZE / tan(angle);
         h_y = floor(mlx->player->player_y / TILE_SIZE) * TILE_SIZE;
         pixel = inter_check(angle, &h_y, &y_step, 1);
-        h_x = mlx->player->player_x + (h_y - mlx->player->player_y) * tan(angle);
+        h_x = mlx->player->player_x + (h_y - mlx->player->player_y) / tan(angle);
         if ((unit_circle(angle, 'y') && x_step > 0) || (!unit_circle(angle, 'y') && x_step < 0))
                 x_step *= -1;
         while (wall_hit(h_x, h_y - pixel, mlx))

@@ -35,8 +35,10 @@ void loop(void *ml)
 	mlx_delete_image(mlx->mlx_p, mlx->img);
 	mlx->img = mlx_new_image(mlx->mlx_p, WIDTH, HEIGHT);
 	//hook(mlx, 0, 0);
-	//cast_rays(mlx);
+	raycasting(mlx);
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
+	usleep(1000);
+	mlx->player->angle += ROTATION_SPEED;
 }
 
 void	init_player(t_mlx mlx)
@@ -47,39 +49,44 @@ void	init_player(t_mlx mlx)
 	mlx.player->angle = M_PI;
 }
 
+void	load_img(t_data *data)
+{
+	data->tex->no = mlx_load_png(data->img->no);
+	data->tex->so = mlx_load_png(data->img->so);
+	data->tex->ea = mlx_load_png(data->img->ea);
+	data->tex->we = mlx_load_png(data->img->we);
+}
+
+void	super_mega_init(t_mlx *mlx)
+{
+	mlx->player->player_x = mlx->data->player_x;
+        mlx->player->player_y = mlx->data->player_y;
+        mlx->player->angle = 0;
+        mlx->player->fov = 60;
+        mlx->player->rotation = 0;
+        mlx->player->left_right = 0;
+        mlx->player->up_down = 0;
+        mlx->ray->rayon = 0;
+        mlx->ray->ray_angle = 0;
+        mlx->ray->distance = 0;
+        mlx->ray->flag = 0;
+        mlx->ray->horiz_x = 0;
+        mlx->ray->vert_y = 0;
+}
+
 void start(t_data *data)
 {
 	t_mlx mlx;
 	mlx.data = data;
-	mlx.mlx_p = calloc(1, sizeof(t_player));
-	mlx.ray = calloc(1, sizeof(t_ray));
+	mlx.player = ft_calloc(1, sizeof(t_player));
+	mlx.ray = ft_calloc(1, sizeof(t_ray));
+	super_mega_init(&mlx);
 	mlx.mlx_p = mlx_init(WIDTH, HEIGHT, "Cube3D", 0);
 	init_player(mlx);
 	mlx_loop_hook(mlx.mlx_p, &loop, &mlx);
 	//mlx_key_hook(mlx.mlx_p, &mlx_key, &mlx);
 	mlx_loop(mlx.mlx_p);
 	ft_exit(&mlx);
-}
-
-t_data	*init_map()
-{
-	t_data *data = calloc(1, sizeof(t_data));
-	data->map = calloc(10, sizeof(char *));
-	data->map[0] = strdup("1111111111111111111111111");
-	data->map[1] = strdup("1000000000000000000100001");
-	data->map[2] = strdup("1001000000000P00000000001");
-	data->map[3] = strdup("1001000000000000001000001");
-	data->map[4] = strdup("1001000000000000001000001");
-	data->map[5] = strdup("1001000000100000001000001");
-	data->map[6] = strdup("1001000000000000001000001");
-	data->map[7] = strdup("1001000000001000001000001");
-	data->map[8] = strdup("1111111111111111111111111");
-	data->map[9] = NULL;
-	data->player_y = 3;
-	data->player_x = 14;
-	data->map_width = 25;
-	data->map_height = 9;     
-	return (data);
 }
 
 int main(int argc, char *argv[])
@@ -91,6 +98,8 @@ int main(int argc, char *argv[])
 		data = generate_data(argv[1]);
 		if (!data)
 			return (0);
+		data->tex = ft_calloc(1, sizeof(t_texset));
+		load_img(data);
 		start(data);
 		free_data(data, NULL);
 	}

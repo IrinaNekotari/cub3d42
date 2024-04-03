@@ -28,7 +28,7 @@
 #define HEIGHT 1000
 #define TILE_SIZE 30
 #define FOV 60
-#define ROTATION_SPEED 0.045
+#define ROTATION_SPEED 0.2
 #define PLAYER_SPEED 4
 #define WE 0xB5B5B5FF
 #define NS 0xF5F5F5FF
@@ -126,7 +126,6 @@ void	ft_exit(t_mlx *mlx);
 void	loop(void *ml);
 void	init_player(t_mlx mlx);
 void	start(t_data *data);
-t_data	*init_map();
 int	main();
 void	raycasting(t_mlx *mlx);
 float   get_v_inter(t_mlx *mlx, float angle);
