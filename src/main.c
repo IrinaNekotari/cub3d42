@@ -10,12 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
 #include "../include/cube3d.h"
-#include "../MLX42/include/MLX42/MLX42.h"
 
 void	ft_exit(t_mlx *mlx)
 {

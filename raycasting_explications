@@ -1,0 +1,6 @@
+On utilise le Cercle trigonometrique mais inverse
+entre 0 et PI -> x
+entre PI/2 et 3PI/2 -> y
+Tout doit etre compris dans la largeur et la hauteur de l'ecran 9WIDTH et HEIGHT)
+On cast le premier rayon -> il depend de l'angle du joueur (rotation) et du Field of View
+
