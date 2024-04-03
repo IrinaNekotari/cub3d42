@@ -87,15 +87,12 @@ t_data	*init_map()
 	return (data);
 }
 
-
-
 int main(int argc, char *argv[])
 {
 	t_data	*data;
 
 	if (argc == 2)
 	{
-		ft_printf("Opening : %s\n", argv[1]);
 		data = generate_data(argv[1]);
 		if (!data)
 			return (0);
