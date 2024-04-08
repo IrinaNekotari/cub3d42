@@ -26,12 +26,10 @@
 
 #define WIDTH 1900
 #define HEIGHT 1000
-#define TILE_SIZE 500
-#define FOV 60
-#define ROTATION_SPEED 0.2
-#define PLAYER_SPEED 1
-#define WE 0xB5B5B5FF
-#define NS 0xF5F5F5FF
+#define TILE_SIZE 400
+#define FOV 75
+#define ROTATION_SPEED 0.5
+#define PLAYER_SPEED 50
 
 # define NB_ELEMENTS 6
 

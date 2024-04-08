@@ -37,6 +37,7 @@ void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 
 	i = bottom_pixel;
 	c = mlx->data->img->ceiling_color;
+	ft_printf("Color : %x\n", c);
 	while (i < HEIGHT)
 		mlx_put_pixel_screen(mlx, ray, i++, c);
 	c = mlx->data->img->floor_color;

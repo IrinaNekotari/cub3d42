@@ -23,9 +23,9 @@ int	colorpicker(int r, int g, int b)
 	color = 0;
 	if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
 		return (-1);
-	color = color | (r << 16);
-	color = color | (g << 8);
 	color = color | (b << 0);
+	color = color | (g << 8);
+	color = color | (r << 16);
 	return (color);
 }
 
@@ -90,5 +90,6 @@ int	get_rgb(char *a)
 	color = colorpicker(ft_atoi(split[0]),
 			ft_atoi(split[1]), ft_atoi(split[2]));
 	free_split(split);
+	ft_printf("Found color : %x\n", color);
 	return (color);
 }
