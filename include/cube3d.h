@@ -20,16 +20,20 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "libft.h"
-# include "../MLX42/include/MLX42/MLX42.h"
+# include "../MLX42/MLX42.h"
 # include "parser.h"
 # include "libft.h"
 
 #define WIDTH 1900
 #define HEIGHT 1000
-#define TILE_SIZE 400
+#define TILE_SIZE 64
 #define FOV 75
 #define ROTATION_SPEED 0.5
-#define PLAYER_SPEED 50
+#define PLAYER_SPEED 10
+# define DRAW_DISTANCE 120
+# define MINIMAP_SIZE 8
+# define MINIMAP_MAX_X 12
+# define MINIMAP_MAX_Y 8
 
 # define NB_ELEMENTS 6
 
@@ -129,7 +133,6 @@ void	ft_exit(t_mlx *mlx);
 void	loop(void *ml);
 void	init_player(t_mlx mlx);
 void	start(t_data *data);
-int	main();
 void	raycasting(t_mlx *mlx);
 float   get_v_inter(t_mlx *mlx, float angle);
 float   get_h_inter(t_mlx *mlx, float angle);
@@ -145,6 +148,10 @@ double get_x_wall(mlx_texture_t	*texture, t_mlx *mlx);
 int	reverse_bytes(int c);
 void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height);
 void	render_wall(t_mlx *mlx, int ray);
+void move(t_mlx *mlx, double move_x, double move_y);
+void	draw_minimap(t_mlx *mlx);
+int	reverse_bytes(int c);
+void minimap_background(t_mlx *mlx);
 
 int		ft_equals(char *s1, char *s2);
 int		is_whitespace(char c);

@@ -23,9 +23,10 @@ int	colorpicker(int r, int g, int b)
 	color = 0;
 	if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
 		return (-1);
-	color = color | (b << 0);
-	color = color | (g << 8);
-	color = color | (r << 16);
+	color = color | (255 << 0);
+	color = color | (b << 8);
+	color = color | (g << 16);
+	color = color | (r << 24);
 	return (color);
 }
 

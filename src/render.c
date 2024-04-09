@@ -30,6 +30,120 @@ int	get_rgba(int r, int g, int b, int a)
 	return (r << 24 | g << 16 | b << 8 | a << 0);
 }
 
+void	draw_square(t_mlx *mlx, int x, int y, int c)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < MINIMAP_SIZE)
+	{
+		j = 0;
+		while (j < MINIMAP_SIZE)
+		{
+			mlx_put_pixel_screen(mlx, j + x + MINIMAP_SIZE, i + y + MINIMAP_SIZE, c);
+			j++;
+		}
+		i++;
+	}
+}
+
+void minimap_background(t_mlx *mlx)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < MINIMAP_MAX_Y + 2)
+	{
+		j = 0;
+		while (j < MINIMAP_MAX_X + 2)
+		{
+			draw_square(mlx, j, i, 0x9e5624FF);
+			j++;
+		}
+		i++;
+	}
+}
+
+void minimap_draw_square(t_mlx *mlx, int *i, int *j, int x, int y)
+{
+	if (y == mlx->player->player_y / TILE_SIZE && x == mlx->player->player_x / TILE_SIZE )
+		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0x940007FF);
+	else if (mlx->data->map[y][x] == '1')
+		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xc5885cFF);
+	else if (is_whitespace(mlx->data->map[y][x]))
+		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xf0c082FF);
+	else 
+		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xe4ab68FF);
+	*j += 1;
+}
+
+void	draw_minimap(t_mlx *mlx)
+{
+	int	i;
+	int j;
+	int x;
+	int y;
+
+	i = 0;
+	y = 0;
+	while (mlx->data->map[i])
+	{
+		j = 0;
+		x = 0;
+		if (mlx->player->player_y / TILE_SIZE < MINIMAP_MAX_Y)
+		{
+			if (abs(i - mlx->player->player_y / TILE_SIZE) > MINIMAP_MAX_Y * 2 - mlx->player->player_y / TILE_SIZE)
+			{
+				i++;
+				continue ;
+			}
+		}
+		else if (mlx->player->player_y / TILE_SIZE + MINIMAP_MAX_Y > mlx->data->map_height)
+		{
+			if (abs(i - mlx->player->player_y / TILE_SIZE) > MINIMAP_MAX_Y * 2 - abs(mlx->data->map_height - mlx->player->player_y / TILE_SIZE))
+			{
+				i++;
+				continue ;
+			}
+		}
+		else if (abs(i - mlx->player->player_y / TILE_SIZE) > MINIMAP_MAX_Y)
+			{
+				i++;
+				continue ;
+			}
+		while (mlx->data->map[i][j])
+		{
+			if (mlx->player->player_x / TILE_SIZE < MINIMAP_MAX_X)
+			{
+				if (abs(j - mlx->player->player_x / TILE_SIZE) > MINIMAP_MAX_X * 2 - mlx->player->player_x / TILE_SIZE)
+				{
+					j++;
+					continue ;
+				}
+			}
+			else if (mlx->player->player_x / TILE_SIZE + MINIMAP_MAX_X > mlx->data->map_width)
+			{
+				if (abs(j - mlx->player->player_x / TILE_SIZE) > MINIMAP_MAX_X * 2 - abs(mlx->data->map_width - mlx->player->player_x / TILE_SIZE))
+				{
+					j++;
+					continue ;
+				}
+			}
+			else if (abs(j - mlx->player->player_x / TILE_SIZE) > MINIMAP_MAX_X)
+				{
+					j++;
+					continue ;
+				}
+			minimap_draw_square(mlx, &y, &x, j, i);
+			j++;
+		}
+		y++;
+		i++;
+	}
+}
+
 void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 {
 	int	i;
@@ -37,13 +151,22 @@ void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 
 	i = bottom_pixel;
 	c = mlx->data->img->ceiling_color;
-	ft_printf("Color : %x\n", c);
 	while (i < HEIGHT)
-		mlx_put_pixel_screen(mlx, ray, i++, c);
+	{
+		if (i > DRAW_DISTANCE * 6)
+			mlx_put_pixel_screen(mlx, ray, i++, c);
+		else 
+			mlx_put_pixel_screen(mlx, ray, i++, 0x000000FF);
+	}
 	c = mlx->data->img->floor_color;
 	i = 0;
 	while (i < top_pixel)
-		mlx_put_pixel_screen(mlx, ray, i++, c);
+	{
+		if (i < DRAW_DISTANCE * 1.5)
+			mlx_put_pixel_screen(mlx, ray, i++, c);
+		else 
+			mlx_put_pixel_screen(mlx, ray, i++, 0x000000FF);
+	}	
 }
 
 mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
@@ -103,13 +226,18 @@ void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 		y_wall = 0;
 	while (top_pixel < bottom_pixel)
 	{
-		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]));
+		if (mlx->ray->distance < DRAW_DISTANCE)
+			mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]));
+		else
+			mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, 0x000000FF);
 		y_wall +=(texture->height / wall_height);
 		top_pixel++;
 	}
 }
 
-
+//La ligne qui faisait planter etait la
+//La distance pouvait etre 0
+//Et comme on divisait par cette derniere ...
 void	render_wall(t_mlx *mlx, int ray)
 {
 	int	wall_height;
@@ -117,6 +245,8 @@ void	render_wall(t_mlx *mlx, int ray)
 	double	top_pixel;	
 	
 	mlx->ray->distance *= cos(normalize_angle(mlx->ray->ray_angle - mlx->player->angle));
+	if (mlx->ray->distance == 0)
+		mlx->ray->distance = 0.001;
 	wall_height = (TILE_SIZE / mlx->ray->distance) * ((WIDTH / 2) / tan(mlx->player->fov / 2));
 	bottom_pixel = (HEIGHT / 2) + (wall_height / 2);
 	top_pixel = (HEIGHT / 2) - (wall_height / 2);

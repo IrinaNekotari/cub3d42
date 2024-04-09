@@ -64,6 +64,8 @@ void press(mlx_key_data_t keydata, void *ml)
 	t_mlx *mlx;
 
 	mlx = ml;
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+		ft_exit(mlx);
 	if (keydata.key == MLX_KEY_LEFT && keydata.action == MLX_PRESS)
 		mlx->player->is_rotating = -1;
 	if (keydata.key == MLX_KEY_RIGHT && keydata.action == MLX_PRESS)
@@ -137,6 +139,8 @@ void loop(void *ml)
 	move(mlx, 0, 0);
 	raycasting(mlx);
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
+	minimap_background(mlx);
+	draw_minimap(mlx);
 }
 
 void	init_player(t_mlx mlx)
