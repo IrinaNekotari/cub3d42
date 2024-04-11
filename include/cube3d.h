@@ -96,6 +96,7 @@ typedef struct s_imgset
 	char	*so;
 	char	*we;
 	char	*ea;
+	char	*door_img;
 	char	*floor_img;
 	char	*ceiling_img;
 	int		floor_color;
@@ -155,6 +156,10 @@ void move(t_mlx *mlx, double move_x, double move_y);
 void	draw_minimap(t_mlx *mlx);
 int	reverse_bytes(int c);
 void minimap_background(t_mlx *mlx);
+//void	draw_door(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height);
+//int	touch_wall_x(t_mlx *mlx);
+//int	touch_wall_y(t_mlx *mlx);
+//int	choose_display(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height);
 
 int		ft_equals(char *s1, char *s2);
 int		is_whitespace(char c);

@@ -209,9 +209,13 @@ int main(int argc, char *argv[])
 		if (!data)
 			return (0);
 		data->tex = ft_calloc(1, sizeof(t_texset));
-		//load_img(data);
+		//load_img(data->mlx);
 		start(data);
 		free_data(data, NULL);
 	}
-	return 0;
+	else 
+	{
+		printf("La carte !\n");
+		return 0;
+	}
 }

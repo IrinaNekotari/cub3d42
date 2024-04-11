@@ -271,6 +271,30 @@ void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 	}
 }
 
+/*void	draw_door(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
+{
+	double	x_wall;
+	double	y_wall;
+	uint32_t	*color;
+	mlx_texture_t	*texture;
+
+	texture = mlx->data->img->door_img;
+	color = (uint32_t *)texture->pixels;
+	x_wall = get_x_wall(texture, mlx);
+	y_wall = (texture->height / wall_height) * (top_pixel - (HEIGHT / 2) + (wall_height / 2));
+	if (y_wall < 0)
+		y_wall = 0;
+	while (top_pixel < bottom_pixel)
+	{
+		if (mlx->ray->distance < DRAW_DISTANCE)
+			mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]));
+		else
+			mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, 0x000000FF);
+		y_wall +=(texture->height / wall_height);
+		top_pixel++;
+	}
+}*/
+
 //La ligne qui faisait planter etait la
 //La distance pouvait etre 0
 //Et comme on divisait par cette derniere ...
@@ -292,5 +316,6 @@ void	render_wall(t_mlx *mlx, int ray)
 		top_pixel = 0;
 	mlx->ray->rayon = ray;
 	draw_wall(mlx, top_pixel, bottom_pixel, wall_height);
+	//choose_display(mlx, top_pixel, bottom_pixel, wall_height);
 	draw_floor_ceiling(mlx, ray, top_pixel, bottom_pixel);
 }

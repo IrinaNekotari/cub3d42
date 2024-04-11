@@ -53,7 +53,7 @@ float	get_v_inter(t_mlx *mlx, float angle)
 	v_y = mlx->player->player_y + (v_x - mlx->player->player_x) * tan(angle);
 	if ((unit_circle(angle, 'x') && y_step < 0) || (!unit_circle(angle, 'x') && y_step > 0))
 		y_step *= -1;
-	while (wall_hit(v_x - pixel, v_y, mlx))
+	while (wall_hit(v_x - pixel, v_y, mlx)/* == 1*/)
 	{
 		v_x += x_step;
 		v_y += y_step;
@@ -78,7 +78,7 @@ float   get_h_inter(t_mlx *mlx, float angle)
         h_x = mlx->player->player_x + (h_y - mlx->player->player_y) / tan(angle);
         if ((unit_circle(angle, 'y') && x_step > 0) || (!unit_circle(angle, 'y') && x_step < 0))
                 x_step *= -1;
-        while (wall_hit(h_x, h_y - pixel, mlx))
+        while (wall_hit(h_x, h_y - pixel, mlx)/* == 1*/)
         {
                 h_x += x_step;
                 h_y += y_step;
@@ -93,7 +93,7 @@ int wall_hit(float x, float y, t_mlx *mlx)
 	int	x_m;
 	int	y_m;
 
-	if (x < 0 || y< 0)
+	if (x < 0 || y < 0)
 		return (0);
 	x_m = floor (x / TILE_SIZE);
 	y_m = floor (y / TILE_SIZE);
@@ -102,6 +102,9 @@ int wall_hit(float x, float y, t_mlx *mlx)
 	if (mlx->data->map[y_m] && x_m <= (int)strlen(mlx->data->map[y_m]))
 		if (mlx->data->map[y_m][x_m] == '1')
 				return (0);
+	/*if (mlx->data->map[y_m] && x_m <= (int)strlen(mlx->data->map[y_m]))
+		if (mlx->data->map[y_m][x_m] == 'D')
+				return (2);*/
 	return (1);
 }
 
@@ -151,5 +154,77 @@ float	normalize_angle(float angle)
 		angle -= (2 * M_PI);
 	return (angle);
 }
+
+/*int	touch_wall_x(t_mlx *mlx)
+{
+	if (cos(mlx->ray->ray_angle) > 0)
+	{
+		if (mlx->data->map[mlx->ray->horiz_y][mlx->ray->horiz_x] == '1')
+			return (1);
+		else if (mlx->data->map[mlx->ray->horiz_y][mlx->ray->horiz_x] == 'D')
+			return (2);
+	}
+	else if (cos(mlx->ray->ray_angle) > 0)
+	{
+		if (mlx->data->map[mlx->ray->horiz_y][mlx->ray->horiz_x] == '1')
+			return (1);
+		else if (mlx->data->map[mlx->ray->horiz_y][mlx->ray->horiz_x] == 'D')
+			return (2);
+	}
+	return (0);
+	
+int	touch_wall_y(t_mlx *mlx)
+{
+	if (sin(mlx->ray->ray_angle) > 0)
+	{
+		if (mlx->data->map[mlx->ray->vert_y][mlx->ray->vert_x] == '1')
+			return (1);
+		else if (mlx->data->map[mlx->ray->vert_y][mlx->ray->vert_x] == 'D')
+			return (2);
+	}
+	else if (sin(mlx->ray->ray_angle) > 0)
+	{
+		if (mlx->data->map[mlx->ray->horiz_y][mlx->ray->vert_x] == '1')
+			return (1);
+		else if (mlx->data->map[mlx->ray->vert_y][mlx->ray->vert_x] == 'D')
+			return (2);
+	}
+	return (0);
+	
+int	choose_display(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
+{
+	if (mlx->ray->distance > 0 && flag == 0)
+	{
+		if (touch_wall_x(mlx) == 1)
+		{
+			draw_wall(mlx, top_pixel, bottom_pixel, wall_height);
+			return (1);
+		}
+		if (touch_wall_x(mlx) == 2)
+		{
+			draw_door(mlx, top_pixel, bottom_pixel, wall_height);
+			return (2);
+		}
+	}
+	else if (mlx->ray->distance > 0 && flag == 1)
+	{
+		if (touch_wall_y(mlx) == 1)
+		{
+			draw_wall(mlx, top_pixel, bottom_pixel, wall_height);
+			return (1);
+		}
+		if (touch_wall_y(mlx) == 2)
+		{
+			draw_door(mlx, top_pixel, bottom_pixel, wall_height);
+			return (2);
+		}
+	}
+	return (0);
+}
+	
+	
+	
+*/
+
 
 
