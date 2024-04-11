@@ -20,7 +20,7 @@ LIBFT_LIB	= $(addprefix $(LIBFT_PATH), $(LIBFT_FILE))
 
 MLX42 = MLX42
 
-MLX = MLX42/build/libmlx42.a
+MLX = MLX42/libmlx42.a
 
 SRC = src/raycasting.c \
 	src/parse_memory.c src/get_position.c src/errors.c src/color.c src/checks.c src/parser.c src/utils.c \

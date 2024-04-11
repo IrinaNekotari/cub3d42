@@ -16,12 +16,20 @@
  * Renvoie 1 si le char est un élément de map correct (1, 0, N, S, E, W)
  * Renvoie 0 sinon
  * Possibilité d'ajouts de charactères, genre un ennemi ou des pièces
+ * ajout des caractères bonus : 
+ * D pour porte (DOOR)
+ * B pour décos (BARREL)
+ * K pour clé (KEY)
+ * X pour sortie (EXIT)
+ * V pour les méchants (EVIL)
 */
 int	is_map_element(char c)
 {
 	if (c == '1' || c == '0')
 		return (1);
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		return (1);
+	if (c == 'D' || c == 'B' || c == 'K' || c == 'X' || c == 'V')
 		return (1);
 	return (0);
 }

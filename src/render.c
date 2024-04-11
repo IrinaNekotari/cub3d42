@@ -82,7 +82,6 @@ int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y)
 
 void minimap_background(t_mlx *mlx)
 {
-	mlx_image_to_window(mlx->mlx_p, mlx->data->tex->mapi, 200, 200);
 	int i;
 	int j;
 
@@ -92,7 +91,7 @@ void minimap_background(t_mlx *mlx)
 		j = 0;
 		while (j < (int)mlx->data->tex->map->width)
 		{
-			draw_square2(mlx, j * 2, i * 2, mlx_get_pixel(mlx->data->tex->mapi, j, i));
+			draw_square2(mlx, j, i, mlx_get_pixel(mlx->data->tex->mapi, j, i));
 			j++;
 		}
 		i++;
@@ -105,6 +104,12 @@ void minimap_draw_square(t_mlx *mlx, int *i, int *j, int x, int y)
 		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0x940007FF);
 	else if (mlx->data->map[y][x] == '1')
 		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xc5885cFF);
+	else if (mlx->data->map[y][x] == 'K')
+		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xffe600FF);
+	else if (mlx->data->map[y][x] == 'D')
+		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0x1c080fFF);
+	else if (mlx->data->map[y][x] == 'X')
+		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0x05a81eFF);
 	else if (is_whitespace(mlx->data->map[y][x]))
 	{
 		*j += 1;
@@ -188,21 +193,11 @@ void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 	i = bottom_pixel;
 	c = mlx->data->img->ceiling_color;
 	while (i < HEIGHT)
-	{
-		if (i > DRAW_DISTANCE * 6)
-			mlx_put_pixel_screen(mlx, ray, i++, c);
-		else 
-			mlx_put_pixel_screen(mlx, ray, i++, 0x000000FF);
-	}
+		mlx_put_pixel_screen(mlx, ray, i++, c);
 	c = mlx->data->img->floor_color;
 	i = 0;
 	while (i < top_pixel)
-	{
-		if (i < DRAW_DISTANCE * 1.5)
-			mlx_put_pixel_screen(mlx, ray, i++, c);
-		else 
-			mlx_put_pixel_screen(mlx, ray, i++, 0x000000FF);
-	}	
+		mlx_put_pixel_screen(mlx, ray, i++, c);
 }
 
 mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
@@ -247,6 +242,19 @@ int	reverse_bytes(int c)
 	return (b);
 }
 
+void	draw_darkness(t_mlx *mlx, int ray)
+{	
+	int i;
+
+	i = 0;
+	while (i < HEIGHT - (mlx->ray->rayon / HEIGHT))
+	{
+		if (mlx->ray->distance > DRAW_DISTANCE)
+			mlx_put_pixel_screen(mlx, ray, i, 0x000000FF);
+		i++;
+	}
+}
+
 void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 {
 	double	x_wall;
@@ -262,10 +270,7 @@ void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 		y_wall = 0;
 	while (top_pixel < bottom_pixel)
 	{
-		if (mlx->ray->distance < DRAW_DISTANCE)
-			mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]));
-		else
-			mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, 0x000000FF);
+		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]));
 		y_wall +=(texture->height / wall_height);
 		top_pixel++;
 	}
@@ -318,4 +323,5 @@ void	render_wall(t_mlx *mlx, int ray)
 	draw_wall(mlx, top_pixel, bottom_pixel, wall_height);
 	//choose_display(mlx, top_pixel, bottom_pixel, wall_height);
 	draw_floor_ceiling(mlx, ray, top_pixel, bottom_pixel);
+	draw_darkness(mlx, ray);
 }

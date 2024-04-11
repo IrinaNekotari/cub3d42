@@ -32,7 +32,7 @@
 #define ROTATION_SPEED 0.5
 #define PLAYER_SPEED 10
 # define DRAW_DISTANCE 120
-# define MINIMAP_SIZE 8
+# define MINIMAP_SIZE 4
 # define MINIMAP_MAX_X 12
 # define MINIMAP_MAX_Y 8
 
@@ -66,6 +66,7 @@ typedef struct s_player
 		int is_rotating;
 		int is_moving_forward;
 		int is_moving_sides;
+		int light_radius;
 } t_player;
 
 typedef struct s_ray
@@ -86,6 +87,11 @@ typedef struct s_texset
 	mlx_texture_t	*so;
 	mlx_texture_t	*we;
 	mlx_texture_t	*ea;
+	mlx_texture_t	*c;
+	mlx_texture_t	*f;
+	mlx_texture_t	*door;
+	mlx_texture_t	*barrel;
+	mlx_texture_t	*evil;
 	mlx_texture_t	*map;
 	mlx_image_t		*mapi;
 }	t_texset;

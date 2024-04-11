@@ -12,17 +12,33 @@
 
 #include "../include/cube3d.h"
 
+void free_texture(t_mlx *mlx)
+{
+	mlx_delete_texture(mlx->data->tex->no);
+	mlx_delete_texture(mlx->data->tex->so);
+	mlx_delete_texture(mlx->data->tex->we);
+	mlx_delete_texture(mlx->data->tex->ea);
+	mlx_delete_texture(mlx->data->tex->door);
+	mlx_delete_texture(mlx->data->tex->barrel);
+	mlx_delete_texture(mlx->data->tex->evil);
+	if (mlx->data->tex->f)
+		mlx_delete_texture(mlx->data->tex->f);
+	if (mlx->data->tex->c)
+		mlx_delete_texture(mlx->data->tex->c);
+	mlx_delete_image(mlx->mlx_p, mlx->data->tex->mapi);
+	mlx_delete_texture(mlx->data->tex->map);
+	free(mlx->data->tex);
+}
+
 void	ft_exit(t_mlx *mlx)
 {
-	int	i = 0;
-	while (mlx->data->map[i])
-		free(mlx->data->map[i++]);
-	free(mlx->data->map);
-	free(mlx->data);
-	free(mlx->mlx_p);
 	free(mlx->ray);
+	free(mlx->player);
 	mlx_delete_image(mlx->mlx_p, mlx->img);
 	mlx_close_window(mlx->mlx_p);
+	free_texture(mlx);
+	free_data(mlx->data, NULL);
+	mlx_terminate(mlx->mlx_p);
 	printf("Closed\n");
 	exit(0);
 }
@@ -140,7 +156,6 @@ void loop(void *ml)
 	raycasting(mlx);
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
 	minimap_background(mlx);
-	//mlx_image_to_window(mlx->mlx_p, mlx->data->tex->mapi, 200, 200);
 	draw_minimap(mlx);
 }
 
@@ -158,7 +173,12 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->so = mlx_load_png(mlx->data->img->so);
 	mlx->data->tex->ea = mlx_load_png(mlx->data->img->ea);
 	mlx->data->tex->we = mlx_load_png(mlx->data->img->we);
+	mlx->data->tex->barrel = mlx_load_png("images/map.png");
+	mlx->data->tex->evil = mlx_load_png("images/map.png");
+	mlx->data->tex->door = mlx_load_png("images/map.png");
 	mlx->data->tex->map = mlx_load_png("images/map.png");
+	mlx->data->tex->c = mlx_load_png("images/map.png");
+	mlx->data->tex->f = mlx_load_png("images/map.png");
 	mlx->data->tex->mapi = mlx_texture_to_image(mlx->mlx_p, mlx->data->tex->map);
 	ft_printf("size : w=%d, h=%d\n", mlx->data->tex->mapi->width, mlx->data->tex->mapi->height);
 }
@@ -167,6 +187,7 @@ void	super_mega_init(t_mlx *mlx)
 {
 	mlx->player->player_x = mlx->data->player_x;
         mlx->player->player_y = mlx->data->player_y;
+	mlx->player->light_radius = DRAW_DISTANCE;
         mlx->player->angle = 0;
         mlx->player->fov = 60;
 		mlx->player->is_rotating = 0;
@@ -191,6 +212,7 @@ void start(t_data *data)
 	mlx.ray = ft_calloc(1, sizeof(t_ray));
 	super_mega_init(&mlx);
 	mlx.mlx_p = mlx_init(WIDTH, HEIGHT, "Cube3D", 0);
+	mlx.img = NULL;
 	load_img(&mlx);
 	init_player(mlx);
 	mlx_key_hook(mlx.mlx_p, &press, &mlx);
@@ -209,7 +231,6 @@ int main(int argc, char *argv[])
 		if (!data)
 			return (0);
 		data->tex = ft_calloc(1, sizeof(t_texset));
-		//load_img(data->mlx);
 		start(data);
 		free_data(data, NULL);
 	}
