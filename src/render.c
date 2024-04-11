@@ -30,6 +30,26 @@ int	get_rgba(int r, int g, int b, int a)
 	return (r << 24 | g << 16 | b << 8 | a << 0);
 }
 
+void	draw_square2(t_mlx *mlx, int x, int y, int c)
+{
+	int i;
+	int j;
+
+	if (!c)
+		return ;
+	i = 0;
+	while (i < 2)
+	{
+		j = 0;
+		while (j < 2)
+		{
+			mlx_put_pixel_screen(mlx, j + x, i + y, c);
+			j++;
+		}
+		i++;
+	}
+}
+
 void	draw_square(t_mlx *mlx, int x, int y, int c)
 {
 	int i;
@@ -39,27 +59,40 @@ void	draw_square(t_mlx *mlx, int x, int y, int c)
 	while (i < MINIMAP_SIZE)
 	{
 		j = 0;
-		while (j < MINIMAP_SIZE)
+		while (j < MINIMAP_SIZE )
 		{
-			mlx_put_pixel_screen(mlx, j + x + MINIMAP_SIZE, i + y + MINIMAP_SIZE, c);
+			mlx_put_pixel_screen(mlx, j + x + 6 * MINIMAP_SIZE + MINIMAP_SIZE / 2, i + y + 4 *MINIMAP_SIZE + MINIMAP_SIZE / 2, c);
 			j++;
 		}
 		i++;
 	}
 }
 
+//Copiée ...
+int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y) 
+{
+  if (x > image->width || y > image->height)
+    return 0xFF000000;
+  uint8_t* pixelstart = image->pixels + (y * image->width + x) * sizeof(int32_t);
+  if (*(pixelstart + 3) == 0)
+	return (0x00000000);
+  return get_rgba(*(pixelstart), *(pixelstart + 1),
+    * (pixelstart + 2), *(pixelstart + 3));
+}
+
 void minimap_background(t_mlx *mlx)
 {
+	mlx_image_to_window(mlx->mlx_p, mlx->data->tex->mapi, 200, 200);
 	int i;
 	int j;
 
 	i = 0;
-	while (i < MINIMAP_MAX_Y + 2)
+	while (i < (int)mlx->data->tex->map->height)
 	{
 		j = 0;
-		while (j < MINIMAP_MAX_X + 2)
+		while (j < (int)mlx->data->tex->map->width)
 		{
-			draw_square(mlx, j, i, 0x9e5624FF);
+			draw_square2(mlx, j * 2, i * 2, mlx_get_pixel(mlx->data->tex->mapi, j, i));
 			j++;
 		}
 		i++;
@@ -73,7 +106,10 @@ void minimap_draw_square(t_mlx *mlx, int *i, int *j, int x, int y)
 	else if (mlx->data->map[y][x] == '1')
 		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xc5885cFF);
 	else if (is_whitespace(mlx->data->map[y][x]))
-		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xf0c082FF);
+	{
+		*j += 1;
+		return ;
+	}
 	else 
 		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xe4ab68FF);
 	*j += 1;

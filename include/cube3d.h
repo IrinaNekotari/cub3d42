@@ -23,9 +23,10 @@
 # include "../MLX42/MLX42.h"
 # include "parser.h"
 # include "libft.h"
+# include <GLFW/glfw3.h>
 
-#define WIDTH 1900
-#define HEIGHT 1000
+#define WIDTH 1400
+#define HEIGHT 800
 #define TILE_SIZE 64
 #define FOV 75
 #define ROTATION_SPEED 0.5
@@ -85,6 +86,8 @@ typedef struct s_texset
 	mlx_texture_t	*so;
 	mlx_texture_t	*we;
 	mlx_texture_t	*ea;
+	mlx_texture_t	*map;
+	mlx_image_t		*mapi;
 }	t_texset;
 
 typedef struct s_imgset

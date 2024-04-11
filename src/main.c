@@ -140,6 +140,7 @@ void loop(void *ml)
 	raycasting(mlx);
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
 	minimap_background(mlx);
+	//mlx_image_to_window(mlx->mlx_p, mlx->data->tex->mapi, 200, 200);
 	draw_minimap(mlx);
 }
 
@@ -151,12 +152,15 @@ void	init_player(t_mlx mlx)
 	mlx.player->angle = M_PI;
 }
 
-void	load_img(t_data *data)
+void	load_img(t_mlx *mlx)
 {
-	data->tex->no = mlx_load_png(data->img->no);
-	data->tex->so = mlx_load_png(data->img->so);
-	data->tex->ea = mlx_load_png(data->img->ea);
-	data->tex->we = mlx_load_png(data->img->we);
+	mlx->data->tex->no = mlx_load_png(mlx->data->img->no);
+	mlx->data->tex->so = mlx_load_png(mlx->data->img->so);
+	mlx->data->tex->ea = mlx_load_png(mlx->data->img->ea);
+	mlx->data->tex->we = mlx_load_png(mlx->data->img->we);
+	mlx->data->tex->map = mlx_load_png("images/map.png");
+	mlx->data->tex->mapi = mlx_texture_to_image(mlx->mlx_p, mlx->data->tex->map);
+	ft_printf("size : w=%d, h=%d\n", mlx->data->tex->mapi->width, mlx->data->tex->mapi->height);
 }
 
 void	super_mega_init(t_mlx *mlx)
@@ -187,6 +191,7 @@ void start(t_data *data)
 	mlx.ray = ft_calloc(1, sizeof(t_ray));
 	super_mega_init(&mlx);
 	mlx.mlx_p = mlx_init(WIDTH, HEIGHT, "Cube3D", 0);
+	load_img(&mlx);
 	init_player(mlx);
 	mlx_key_hook(mlx.mlx_p, &press, &mlx);
 	mlx_loop_hook(mlx.mlx_p, &loop, &mlx);
@@ -204,7 +209,7 @@ int main(int argc, char *argv[])
 		if (!data)
 			return (0);
 		data->tex = ft_calloc(1, sizeof(t_texset));
-		load_img(data);
+		//load_img(data);
 		start(data);
 		free_data(data, NULL);
 	}

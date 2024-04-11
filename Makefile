@@ -31,7 +31,7 @@ OBJ = $(SRC:.c=.o)
 
 FLAG = -Wall -Wextra -Werror
 
-FLAGLIB = -ldl -lglfw -lm
+FLAGLIB = -lglfw -ldl -lm
 
 all: lib $(NAME)
 
@@ -42,7 +42,7 @@ lib:
 
 
 $(NAME): $(OBJ)
-	cc $(OBJ) $(FLAG) $(FLAGLIB) $(LIBFT_LIB) $(MLX) -o $(NAME) -g3
+	cc $(OBJ) $(FLAG) $(LIBFT_LIB) $(MLX) $(FLAGLIB) -o $(NAME) -g3
 
 .c.o:
 	cc -c $(FLAG) $< -o ${<:.c=.o} -g3
