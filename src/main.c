@@ -175,7 +175,7 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->we = mlx_load_png(mlx->data->img->we);
 	mlx->data->tex->barrel = mlx_load_png("images/map.png");
 	mlx->data->tex->evil = mlx_load_png("images/map.png");
-	mlx->data->tex->door = mlx_load_png("images/map.png");
+	mlx->data->tex->door = mlx_load_png("images/DOOR.png");
 	mlx->data->tex->map = mlx_load_png("images/map.png");
 	mlx->data->tex->c = mlx_load_png("images/map.png");
 	mlx->data->tex->f = mlx_load_png("images/map.png");
