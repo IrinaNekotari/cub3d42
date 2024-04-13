@@ -26,7 +26,9 @@ void free_texture(t_mlx *mlx)
 	if (mlx->data->tex->c)
 		mlx_delete_texture(mlx->data->tex->c);
 	mlx_delete_image(mlx->mlx_p, mlx->data->tex->mapi);
+	mlx_delete_image(mlx->mlx_p, mlx->data->tex->lanterni);
 	mlx_delete_texture(mlx->data->tex->map);
+	mlx_delete_texture(mlx->data->tex->lantern);
 	free(mlx->data->tex);
 }
 
@@ -73,6 +75,31 @@ void release(mlx_key_data_t keydata, t_mlx *mlx)
 		mlx->player->is_moving_sides = 0;
 	if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
 		mlx->player->is_moving_sides = 0;
+	if (keydata.key == MLX_KEY_LEFT_SHIFT && keydata.action == MLX_RELEASE)
+		mlx->player->is_sprinting = 0;
+	if (keydata.key == MLX_KEY_1 && keydata.action == MLX_PRESS)
+	{
+		if (mlx->player->held_item == 1)
+		{
+			mlx->player->held_item = 0;
+			mlx->player->light_radius = DRAW_DISTANCE;
+		}
+		else
+		{
+			mlx->player->held_item = 1;
+			mlx->player->light_radius = DRAW_DISTANCE * 2;
+		}
+	}
+	if (keydata.key == MLX_KEY_2 && keydata.action == MLX_PRESS)
+	{
+		if (mlx->player->held_item == 2)
+			mlx->player->held_item = 0;
+		else 
+		{
+			mlx->player->held_item = 2;
+			mlx->player->light_radius = DRAW_DISTANCE;
+		}
+	}
 }
 
 void press(mlx_key_data_t keydata, void *ml)
@@ -94,6 +121,8 @@ void press(mlx_key_data_t keydata, void *ml)
 		mlx->player->is_moving_sides = 1;
 	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
 		mlx->player->is_moving_sides = -1;
+	if (keydata.key == MLX_KEY_LEFT_SHIFT && keydata.action == MLX_PRESS)
+		mlx->player->is_sprinting = 1;
 	release(keydata, mlx);
 }
 void move_dude(t_mlx *mlx, double move_x, double move_y)
@@ -107,7 +136,7 @@ void move_dude(t_mlx *mlx, double move_x, double move_y)
 	new_y = roundf(mlx->player->player_y + move_y);
 	map_grid_x = (new_x / TILE_SIZE);
 	map_grid_y = (new_y / TILE_SIZE);
-	if (mlx->data->map[map_grid_y][map_grid_x] != '1' && 
+	if (mlx->data->map[map_grid_y][map_grid_x] != '1' && mlx->data->map[map_grid_y][map_grid_x] != 'D' && 
 	(mlx->data->map[map_grid_y][mlx->player->player_x / TILE_SIZE] != '1' &&
 	mlx->data->map[mlx->player->player_y / TILE_SIZE][map_grid_x] != '1'))
 	{
@@ -148,6 +177,7 @@ void move(t_mlx *mlx, double move_x, double move_y)
 void loop(void *ml)
 {
 	t_mlx *mlx;
+	//int i;
 
 	mlx = ml;
 	mlx_delete_image(mlx->mlx_p, mlx->img);
@@ -157,6 +187,12 @@ void loop(void *ml)
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
 	minimap_background(mlx);
 	draw_minimap(mlx);
+	if (mlx->player->held_item == 1)
+		draw_lantern(mlx);
+	//usleep(200);
+	/*i = 0;
+	while (i < 1000000)
+		i++;*/
 }
 
 void	init_player(t_mlx mlx)
@@ -180,7 +216,8 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->c = mlx_load_png("images/map.png");
 	mlx->data->tex->f = mlx_load_png("images/map.png");
 	mlx->data->tex->mapi = mlx_texture_to_image(mlx->mlx_p, mlx->data->tex->map);
-	ft_printf("size : w=%d, h=%d\n", mlx->data->tex->mapi->width, mlx->data->tex->mapi->height);
+	mlx->data->tex->lantern = mlx_load_png("images/Hand.png");
+	mlx->data->tex->lanterni = mlx_texture_to_image(mlx->mlx_p, mlx->data->tex->lantern);
 }
 
 void	super_mega_init(t_mlx *mlx)
@@ -188,6 +225,8 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->player->player_x = mlx->data->player_x;
         mlx->player->player_y = mlx->data->player_y;
 	mlx->player->light_radius = DRAW_DISTANCE;
+	mlx->player->held_item = 0;
+	mlx->player->is_sprinting = 0;
         mlx->player->angle = 0;
         mlx->player->fov = 60;
 		mlx->player->is_rotating = 0;

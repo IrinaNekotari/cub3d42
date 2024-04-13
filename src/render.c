@@ -50,6 +50,26 @@ void	draw_square2(t_mlx *mlx, int x, int y, int c)
 	}
 }
 
+void	draw_square3(t_mlx *mlx, int x, int y, int c)
+{
+	int i;
+	int j;
+
+	if (!c)
+		return ;
+	i = 0;
+	while (i < 3)
+	{
+		j = 0;
+		while (j < 3)
+		{
+			mlx_put_pixel_screen(mlx, j + x, i + y, c);
+			j++;
+		}
+		i++;
+	}
+}
+
 void	draw_square(t_mlx *mlx, int x, int y, int c)
 {
 	int i;
@@ -78,6 +98,25 @@ int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y)
 	return (0x00000000);
   return get_rgba(*(pixelstart), *(pixelstart + 1),
     * (pixelstart + 2), *(pixelstart + 3));
+}
+
+void draw_lantern(t_mlx *mlx)
+{
+	int i;
+	int j;
+
+	i = HEIGHT / 2 - mlx->data->tex->lanterni->height / 2;
+	i = 0;
+	while (i < (int)mlx->data->tex->lanterni->height)
+	{
+		j = 0;
+		while (j < (int)mlx->data->tex->lanterni->width)
+		{
+			draw_square2(mlx, j * 2 + WIDTH - mlx->data->tex->lanterni->width * 2, i * 2 + HEIGHT / 2 - mlx->data->tex->lanterni->height / 2, mlx_get_pixel(mlx->data->tex->lanterni, j, i));
+			j++;
+		}
+		i++;
+	}
 }
 
 void minimap_background(t_mlx *mlx)
@@ -191,13 +230,19 @@ void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 	int	c;
 
 	i = bottom_pixel;
-	c = mlx->data->img->ceiling_color;
-	while (i < HEIGHT)
-		mlx_put_pixel_screen(mlx, ray, i++, c);
 	c = mlx->data->img->floor_color;
+	while (i < HEIGHT)
+	{
+		mlx_put_pixel_screen(mlx, ray, i, darken(c, HEIGHT - i - 45, mlx));
+		i++;
+	}
+	c = mlx->data->img->ceiling_color;
 	i = 0;
 	while (i < top_pixel)
-		mlx_put_pixel_screen(mlx, ray, i++, c);
+		{
+		mlx_put_pixel_screen(mlx, ray, i, darken(c, i - 45, mlx));
+		i++;
+	}
 }
 
 mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
@@ -242,17 +287,27 @@ int	reverse_bytes(int c)
 	return (b);
 }
 
-void	draw_darkness(t_mlx *mlx, int ray)
-{	
-	int i;
+int	darken(int c, double dist, t_mlx *mlx)
+{
+	int r;
+	int g;
+	int b;
 
-	i = 0;
-	while (i < HEIGHT - (mlx->ray->rayon / HEIGHT))
-	{
-		if (mlx->ray->distance > DRAW_DISTANCE)
-			mlx_put_pixel_screen(mlx, ray, i, 0x000000FF);
-		i++;
-	}
+	if (dist < mlx->player->light_radius)
+		return (c);
+	r = (c & 0xFF000000) >> 24;
+	g = (c & 0x00FF0000) >> 16;
+	b = (c & 0x0000FF00) >> 8;
+	r -= ((dist - mlx->player->light_radius) / (mlx->player->light_radius)) * r;
+	g -= ((dist - mlx->player->light_radius) / (mlx->player->light_radius)) * g;
+	b -= ((dist - mlx->player->light_radius) / (mlx->player->light_radius)) * b;
+	if (r < 0)
+		r = 0;
+	if (g < 0)
+		g = 0;
+	if (b < 0)
+		b = 0;
+	return (colorpicker(r, g, b));
 }
 
 void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
@@ -270,7 +325,7 @@ void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 		y_wall = 0;
 	while (top_pixel < bottom_pixel)
 	{
-		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]));
+		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, darken(reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]), mlx->ray->distance, mlx));
 		y_wall +=(texture->height / wall_height);
 		top_pixel++;
 	}
@@ -291,10 +346,7 @@ void	draw_door(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 		y_wall = 0;
 	while (top_pixel < bottom_pixel)
 	{
-		//if (mlx->ray->distance < DRAW_DISTANCE)
-			mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]));
-		//else
-		//	mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, 0x000000FF);
+		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, darken(reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]), mlx->ray->distance, mlx));
 		y_wall +=(texture->height / wall_height);
 		top_pixel++;
 	}

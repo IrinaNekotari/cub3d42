@@ -31,7 +31,7 @@
 #define FOV 75
 #define ROTATION_SPEED 0.5
 #define PLAYER_SPEED 10
-# define DRAW_DISTANCE 120
+# define DRAW_DISTANCE 60
 # define MINIMAP_SIZE 4
 # define MINIMAP_MAX_X 12
 # define MINIMAP_MAX_Y 8
@@ -66,7 +66,9 @@ typedef struct s_player
 		int is_rotating;
 		int is_moving_forward;
 		int is_moving_sides;
+		int is_sprinting;
 		int light_radius;
+		int held_item;
 } t_player;
 
 typedef struct s_ray
@@ -95,6 +97,8 @@ typedef struct s_texset
 	mlx_texture_t	*evil;
 	mlx_texture_t	*map;
 	mlx_image_t		*mapi;
+	mlx_texture_t	*lantern;
+	mlx_image_t		*lanterni;
 }	t_texset;
 
 typedef struct s_imgset
@@ -168,12 +172,15 @@ int	touch_wall_x(t_mlx *mlx);
 int	touch_wall_y(t_mlx *mlx);
 int	choose_display(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height);
 void	render_door(t_mlx *mlx, int ray);
+void draw_lantern(t_mlx *mlx);
 
 int		ft_equals(char *s1, char *s2);
 int		is_whitespace(char c);
 int		is_rgb(char *a);
 int		is_line_map(char *l);
 int		is_map_element(char c);
+int	darken(int c, double dist, t_mlx* mlx);
+int	colorpicker(int r, int g, int b);
 int		get_rgb(char *a);
 int		emptyline(char *c);
 int		check_map(t_data *d);
