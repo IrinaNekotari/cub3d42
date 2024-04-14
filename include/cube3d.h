@@ -30,11 +30,13 @@
 #define TILE_SIZE 64
 #define FOV 75
 #define ROTATION_SPEED 0.5
-#define PLAYER_SPEED 10
+#define PLAYER_SPEED 3
 # define DRAW_DISTANCE 60
 # define MINIMAP_SIZE 4
 # define MINIMAP_MAX_X 12
 # define MINIMAP_MAX_Y 8
+# define TEXT_Y 700
+# define TEXT_X 200
 
 # define NB_ELEMENTS 6
 
@@ -53,6 +55,8 @@
 # define ERR_FILE_NOT_FOUND 404
 
 # define M_PI 3.14159265358979323846
+# define M_PI_ON_TWO 1.570796
+# define M_THREE_PI_ON_TWO 4.71238898
 
 typedef struct s_player
 {
@@ -67,6 +71,7 @@ typedef struct s_player
 		int is_moving_forward;
 		int is_moving_sides;
 		int is_sprinting;
+		int has_key;
 		int light_radius;
 		int held_item;
 } t_player;
@@ -96,9 +101,11 @@ typedef struct s_texset
 	mlx_texture_t	*barrel;
 	mlx_texture_t	*evil;
 	mlx_texture_t	*map;
-	mlx_image_t		*mapi;
 	mlx_texture_t	*lantern;
+	mlx_texture_t	*handkey;
+	mlx_image_t		*mapi;
 	mlx_image_t		*lanterni;
+	mlx_image_t		*handkeyi;
 }	t_texset;
 
 typedef struct s_imgset
@@ -134,6 +141,8 @@ typedef struct s_mlx
         t_ray   *ray;
         t_data  *data;
         t_player       *player;
+		mlx_image_t		*msg;
+		int			msg_counter;
 } t_mlx;
 
 typedef struct s_chain
@@ -173,6 +182,9 @@ int	touch_wall_y(t_mlx *mlx);
 int	choose_display(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height);
 void	render_door(t_mlx *mlx, int ray);
 void draw_lantern(t_mlx *mlx);
+void draw_key(t_mlx *mlx);
+void	redisplay_message(t_mlx *mlx);
+void	display_message(t_mlx *mlx, char *msg);
 
 int		ft_equals(char *s1, char *s2);
 int		is_whitespace(char c);

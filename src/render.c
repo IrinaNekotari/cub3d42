@@ -100,6 +100,44 @@ int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y)
     * (pixelstart + 2), *(pixelstart + 3));
 }
 
+void	redisplay_message(t_mlx *mlx)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (i < (int)mlx->msg->height)
+	{
+		j = 0;
+		while (j < (int)mlx->msg->width)
+		{
+			mlx_put_pixel_screen(mlx, j + TEXT_X, i + TEXT_Y, mlx_get_pixel(mlx->msg, i, j));
+			j++;
+		}
+		i++;
+	}
+}
+
+void draw_key(t_mlx *mlx)
+{
+	int i;
+	int j;
+
+	i = HEIGHT / 2 - mlx->data->tex->handkeyi->height / 2;
+	i = 0;
+	while (i < (int)mlx->data->tex->handkeyi->height)
+	{
+		j = 0;
+		while (j < (int)mlx->data->tex->handkeyi->width)
+		{
+			draw_square2(mlx, j * 2 + WIDTH - mlx->data->tex->handkeyi->width * 2, i * 2 + HEIGHT / 2 - mlx->data->tex->handkeyi->height / 2, mlx_get_pixel(mlx->data->tex->handkeyi, j, i));
+			j++;
+		}
+		i++;
+	}
+}
+
 void draw_lantern(t_mlx *mlx)
 {
 	int i;
