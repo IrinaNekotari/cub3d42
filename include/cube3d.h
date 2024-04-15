@@ -38,8 +38,8 @@
 # define TEXT_Y 700
 # define TEXT_X 200
 
-# define MIN_END_TO_RUN 30
 # define MAX_ENDURANCE 100
+# define MIN_END_TO_RUN 30
 # define ENDURANCE_POS_X 22
 # define ENDURANCE_POS_Y 242
 # define ENDURANCE_WIDTH 16
