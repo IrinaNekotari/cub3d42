@@ -32,11 +32,27 @@
 #define ROTATION_SPEED 0.5
 #define PLAYER_SPEED 3
 # define DRAW_DISTANCE 60
-# define MINIMAP_SIZE 4
+# define MINIMAP_SIZE 8
 # define MINIMAP_MAX_X 12
 # define MINIMAP_MAX_Y 8
 # define TEXT_Y 700
 # define TEXT_X 200
+
+# define MIN_END_TO_RUN 30
+# define MAX_ENDURANCE 100
+# define ENDURANCE_POS_X 22
+# define ENDURANCE_POS_Y 242
+# define ENDURANCE_WIDTH 16
+# define ENDURANCE_MAX_LEN 400
+# define ENDURANCE_COLOR 0x34ebb4FF
+# define ENDURANCE_SPENT 0x8a1c37FF
+
+# define MAX_FUEL 1000
+# define FUEL_POS_X 68
+# define FUEL_POS_Y 242
+# define FUEL_WIDTH 16
+# define FUEL_MAX_LEN 400
+# define FUEL_COLOR 0xc9a616FF
 
 # define NB_ELEMENTS 6
 
@@ -70,10 +86,13 @@ typedef struct s_player
 		int is_rotating;
 		int is_moving_forward;
 		int is_moving_sides;
-		int is_sprinting;
+		double is_sprinting;
 		int has_key;
 		int light_radius;
 		int held_item;
+		double fuel;
+		double endurance;
+		int can_run;
 } t_player;
 
 typedef struct s_ray
@@ -102,9 +121,11 @@ typedef struct s_texset
 	mlx_texture_t	*evil;
 	mlx_texture_t	*map;
 	mlx_texture_t	*lantern;
+	mlx_texture_t	*lanternempty;
 	mlx_texture_t	*handkey;
 	mlx_image_t		*mapi;
 	mlx_image_t		*lanterni;
+	mlx_image_t		*lanternemptyi;
 	mlx_image_t		*handkeyi;
 }	t_texset;
 
@@ -185,6 +206,7 @@ void draw_lantern(t_mlx *mlx);
 void draw_key(t_mlx *mlx);
 void	redisplay_message(t_mlx *mlx);
 void	display_message(t_mlx *mlx, char *msg);
+void draw_unlit_lantern(t_mlx *mlx);
 
 int		ft_equals(char *s1, char *s2);
 int		is_whitespace(char c);

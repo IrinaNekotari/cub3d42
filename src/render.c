@@ -88,16 +88,17 @@ void	draw_square(t_mlx *mlx, int x, int y, int c)
 	}
 }
 
-//Copiée ...
-int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y) 
+int32_t mlx_get_pixel(mlx_image_t *image, uint32_t x, uint32_t y) 
 {
-  if (x > image->width || y > image->height)
-    return 0xFF000000;
-  uint8_t* pixelstart = image->pixels + (y * image->width + x) * sizeof(int32_t);
-  if (*(pixelstart + 3) == 0)
-	return (0x00000000);
-  return get_rgba(*(pixelstart), *(pixelstart + 1),
-    * (pixelstart + 2), *(pixelstart + 3));
+	uint8_t *pixelstart;
+
+	if (x > image->width || y > image->height)
+		return 0xFF000000;
+	pixelstart = image->pixels + (y * image->width + x) * sizeof(int32_t);
+	if (*(pixelstart + 3) == 0)
+		return (0x00000000);
+	return get_rgba(*(pixelstart), *(pixelstart + 1),
+		* (pixelstart + 2), *(pixelstart + 3));
 }
 
 void	redisplay_message(t_mlx *mlx)
@@ -138,6 +139,25 @@ void draw_key(t_mlx *mlx)
 	}
 }
 
+void draw_unlit_lantern(t_mlx *mlx)
+{
+	int i;
+	int j;
+
+	i = HEIGHT / 2 - mlx->data->tex->lanternemptyi->height / 2;
+	i = 0;
+	while (i < (int)mlx->data->tex->lanternemptyi->height)
+	{
+		j = 0;
+		while (j < (int)mlx->data->tex->lanternemptyi->width)
+		{
+			draw_square2(mlx, j * 2 + WIDTH - mlx->data->tex->lanternemptyi->width * 2, i * 2 + HEIGHT / 2 - mlx->data->tex->lanternemptyi->height / 2, mlx_get_pixel(mlx->data->tex->lanternemptyi, j, i));
+			j++;
+		}
+		i++;
+	}
+}
+
 void draw_lantern(t_mlx *mlx)
 {
 	int i;
@@ -168,7 +188,7 @@ void minimap_background(t_mlx *mlx)
 		j = 0;
 		while (j < (int)mlx->data->tex->map->width)
 		{
-			draw_square2(mlx, j, i, mlx_get_pixel(mlx->data->tex->mapi, j, i));
+			draw_square2(mlx, j * 2, i * 2, mlx_get_pixel(mlx->data->tex->mapi, j, i));
 			j++;
 		}
 		i++;

@@ -28,8 +28,10 @@ void free_texture(t_mlx *mlx)
 	mlx_delete_image(mlx->mlx_p, mlx->data->tex->mapi);
 	mlx_delete_image(mlx->mlx_p, mlx->data->tex->lanterni);
 	mlx_delete_image(mlx->mlx_p, mlx->data->tex->handkeyi);
+	mlx_delete_image(mlx->mlx_p, mlx->data->tex->lanternemptyi);
 	mlx_delete_texture(mlx->data->tex->map);
 	mlx_delete_texture(mlx->data->tex->lantern);
+	mlx_delete_texture(mlx->data->tex->lanternempty);
 	mlx_delete_texture(mlx->data->tex->handkey);
 	mlx_delete_image(mlx->mlx_p, mlx->msg);
 	free(mlx->data->tex);
@@ -125,7 +127,12 @@ void release(mlx_key_data_t keydata, t_mlx *mlx)
 	if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
 		mlx->player->is_moving_sides = 0;
 	if (keydata.key == MLX_KEY_LEFT_SHIFT && keydata.action == MLX_RELEASE)
-		mlx->player->is_sprinting = 1;
+	{
+		if (mlx->player->can_run)
+			mlx->player->is_sprinting = 1;
+		else 
+			mlx->player->is_sprinting = 0.5;
+	}
 	if (keydata.key == MLX_KEY_E && keydata.action == MLX_RELEASE)
 		open_doors(mlx);
 	if (keydata.key == MLX_KEY_1 && keydata.action == MLX_PRESS)
@@ -138,7 +145,10 @@ void release(mlx_key_data_t keydata, t_mlx *mlx)
 		else
 		{
 			mlx->player->held_item = 1;
-			mlx->player->light_radius = DRAW_DISTANCE * 2;
+			if (mlx->player->fuel > 0)
+				mlx->player->light_radius = DRAW_DISTANCE * 2;
+			else 
+				mlx->player->light_radius = DRAW_DISTANCE;
 		}
 	}
 	if (keydata.key == MLX_KEY_2 && keydata.action == MLX_PRESS )
@@ -172,7 +182,7 @@ void press(mlx_key_data_t keydata, void *ml)
 		mlx->player->is_moving_sides = 1;
 	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
 		mlx->player->is_moving_sides = -1;
-	if (keydata.key == MLX_KEY_LEFT_SHIFT && keydata.action == MLX_PRESS)
+	if (keydata.key == MLX_KEY_LEFT_SHIFT && keydata.action == MLX_PRESS && mlx->player->can_run)
 		mlx->player->is_sprinting = 2;
 	release(keydata, mlx);
 }
@@ -243,10 +253,48 @@ void	grab_key(t_mlx *mlx)
 	}
 }
 
+void	display_fuel(t_mlx *mlx)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < (int)((mlx->player->fuel / MAX_FUEL) * FUEL_MAX_LEN))
+	{
+		j = 0;
+		while (j < FUEL_WIDTH)
+		{
+			mlx_put_pixel_screen(mlx, j + FUEL_POS_X, i + FUEL_POS_Y, FUEL_COLOR);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	display_endurance(t_mlx *mlx)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < (int)((mlx->player->endurance / MAX_ENDURANCE) * ENDURANCE_MAX_LEN))
+	{
+		j = 0;
+		while (j < ENDURANCE_WIDTH)
+		{
+			if (mlx->player->can_run)
+				mlx_put_pixel_screen(mlx, j + ENDURANCE_POS_X, i + ENDURANCE_POS_Y, ENDURANCE_COLOR);
+			else 
+				mlx_put_pixel_screen(mlx, j + ENDURANCE_POS_X, i + ENDURANCE_POS_Y, ENDURANCE_SPENT);
+			j++;
+		}
+		i++;
+	}
+}
+
 void loop(void *ml)
 {
 	t_mlx *mlx;
-	//int i;
 
 	mlx = ml;
 	mlx_delete_image(mlx->mlx_p, mlx->img);
@@ -256,11 +304,15 @@ void loop(void *ml)
 	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
 	minimap_background(mlx);
 	draw_minimap(mlx);
-	if (mlx->player->held_item == 1)
+	if (mlx->player->held_item == 1 && mlx->player->fuel > 0)
 		draw_lantern(mlx);
+	else if (mlx->player->held_item == 1)
+		draw_unlit_lantern(mlx);
 	else if (mlx->player->held_item == 2)
 		draw_key(mlx);
 	grab_key(mlx);
+	display_endurance(mlx);
+	display_fuel(mlx);
 	if (mlx->msg_counter > 0)
 	{
 		mlx->msg_counter--;
@@ -271,6 +323,29 @@ void loop(void *ml)
 		mlx->msg_counter = -1;
 		mlx_delete_image(mlx->mlx_p, mlx->msg);
 		mlx->msg = NULL;
+	}
+	if (mlx->player->is_sprinting == 2)
+		mlx->player->endurance--;
+	else 
+		mlx->player->endurance++;
+	if (mlx->player->endurance <= 0)
+	{
+		mlx->player->can_run = 0;
+		mlx->player->is_sprinting = 0.5;
+	}
+	if (mlx->player->endurance >= MIN_END_TO_RUN && mlx->player->can_run == 0)
+	{
+		mlx->player->can_run = 1;
+		mlx->player->is_sprinting = 1;	
+	}
+	if (mlx->player->endurance >= MAX_ENDURANCE)
+		mlx->player->endurance = MAX_ENDURANCE;
+	if (mlx->player->held_item == 1)
+		mlx->player->fuel--;
+	if (mlx->player->fuel <= 0)
+	{
+		mlx->player->fuel = 0;
+		mlx->player->light_radius = DRAW_DISTANCE;
 	}
 }
 
@@ -304,6 +379,8 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->mapi = mlx_texture_to_image(mlx->mlx_p, mlx->data->tex->map);
 	mlx->data->tex->lantern = mlx_load_png("images/Hand.png");
 	mlx->data->tex->lanterni = mlx_texture_to_image(mlx->mlx_p, mlx->data->tex->lantern);
+	mlx->data->tex->lanternempty = mlx_load_png("images/HandEmpty.png");
+	mlx->data->tex->lanternemptyi = mlx_texture_to_image(mlx->mlx_p, mlx->data->tex->lanternempty);
 	mlx->data->tex->handkey = mlx_load_png("images/key.png");
 	mlx->data->tex->handkeyi = mlx_texture_to_image(mlx->mlx_p, mlx->data->tex->handkey);
 }
@@ -316,6 +393,9 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->player->held_item = 0;
 	mlx->player->is_sprinting = 1;
 	mlx->player->has_key = 0;
+	mlx->player->endurance = MAX_ENDURANCE;
+	mlx->player->can_run = 1;
+	mlx->player->fuel = MAX_FUEL;
         mlx->player->fov = 60;
 		mlx->player->is_rotating = 0;
 		mlx->player->is_moving_sides = 0;
