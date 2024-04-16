@@ -187,27 +187,6 @@ void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 	}
 }
 
-void	draw_door(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
-{
-	double	x_wall;
-	double	y_wall;
-	uint32_t	*color;
-	mlx_texture_t	*texture;
-
-	texture = mlx->data->tex->door;
-	color = (uint32_t *)texture->pixels;
-	x_wall = get_x_wall(texture, mlx);
-	y_wall = (texture->height / wall_height) * (top_pixel - (HEIGHT / 2) + (wall_height / 2));
-	if (y_wall < 0)
-		y_wall = 0;
-	while (top_pixel < bottom_pixel)
-	{
-		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, darken(reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]), mlx->ray->distance, mlx));
-		y_wall +=(texture->height / wall_height);
-		top_pixel++;
-	}
-}
-
 //La ligne qui faisait planter etait la
 //La distance pouvait etre 0
 //Et comme on divisait par cette derniere ...
@@ -223,36 +202,13 @@ void	render_wall(t_mlx *mlx, int ray)
 	wall_height = (TILE_SIZE / mlx->ray->distance) * ((WIDTH / 2) / tan(mlx->player->fov / 2));
 	bottom_pixel = (HEIGHT / 2) + (wall_height / 2);
 	top_pixel = (HEIGHT / 2) - (wall_height / 2);
-	if (bottom_pixel > HEIGHT)
+	if (top_pixel > HEIGHT)
 		bottom_pixel = HEIGHT;
 	if (top_pixel < 0)
 		top_pixel = 0;
 	mlx->ray->rayon = ray;
 	draw_floor_ceiling(mlx, ray, top_pixel, bottom_pixel);
 	draw_wall(mlx, top_pixel, bottom_pixel, wall_height);
-	//choose_display(mlx, top_pixel, bottom_pixel, wall_height);
-	//draw_darkness(mlx, ray);
-}
-
-void	render_door(t_mlx *mlx, int ray)
-{
-	int	wall_height;
-	double	bottom_pixel;
-	double	top_pixel;	
-	
-	mlx->ray->distance *= cos(normalize_angle(mlx->ray->ray_angle - mlx->player->angle));
-	if (mlx->ray->distance == 0)
-		mlx->ray->distance = 0.001;
-	wall_height = (TILE_SIZE / mlx->ray->distance) * ((WIDTH / 2) / tan(mlx->player->fov / 2));
-	bottom_pixel = (HEIGHT / 2) + (wall_height / 2);
-	top_pixel = (HEIGHT / 2) - (wall_height / 2);
-	if (bottom_pixel > HEIGHT)
-		bottom_pixel = HEIGHT;
-	if (top_pixel < 0)
-		top_pixel = 0;
-	mlx->ray->rayon = ray;
-	draw_floor_ceiling(mlx, ray, top_pixel, bottom_pixel);
-	draw_door(mlx, top_pixel, bottom_pixel, wall_height);
 	//choose_display(mlx, top_pixel, bottom_pixel, wall_height);
 	//draw_darkness(mlx, ray);
 }

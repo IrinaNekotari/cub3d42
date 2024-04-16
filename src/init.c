@@ -17,10 +17,10 @@ void	init_player(t_mlx mlx)
 	mlx.player->player_x = mlx.data->player_x * TILE_SIZE + TILE_SIZE / 2;
 	mlx.player->player_y = mlx.data->player_y * TILE_SIZE + TILE_SIZE / 2;
 	mlx.player->fov = (FOV * M_PI) / 180;
-	if (mlx.data->player_orientation == 'N')
+	if (mlx.data->player_orientation == 'S')
 		mlx.player->angle = M_PI / 2;
-	else if (mlx.data->player_orientation == 'S')
-		mlx.player->angle = (3 / M_PI) / 2;
+	else if (mlx.data->player_orientation == 'N')
+		mlx.player->angle = (3 * M_PI) / 2;
 	else if (mlx.data->player_orientation == 'W')
 		mlx.player->angle = M_PI;
 	else
@@ -71,7 +71,7 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->player->endurance = MAX_ENDURANCE;
 	mlx->player->can_run = 1;
 	mlx->player->fuel = MAX_FUEL;
-	mlx->player->fov = 60;
+	mlx->player->fov = FOV;
 	mlx->player->is_rotating = 0;
 	mlx->player->is_moving_sides = 0;
 	mlx->player->is_moving_forward = 0;
@@ -82,6 +82,7 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->ray->ray_angle = 0;
 	mlx->ray->distance = 0;
 	mlx->ray->flag = 0;
+	mlx->ray->wall_type = 0;
 	mlx->ray->horiz_x = 0;
 	mlx->ray->vert_y = 0;
 	mlx->msg_counter = 250;
