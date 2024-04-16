@@ -32,10 +32,7 @@ void	raycasting(t_mlx *mlx)
 			mlx->ray->distance = h_inter;
 			mlx->ray->flag = 1;
 		}
-		if (mlx->ray->wall_type == 'D')
-			render_door(mlx, rayon);
-		else if (mlx->ray->wall_type == '1')
-			render_wall(mlx, rayon);
+		render_wall(mlx, rayon);
 		rayon++;
 		mlx->ray->ray_angle += (mlx->player->fov / WIDTH);
 	}

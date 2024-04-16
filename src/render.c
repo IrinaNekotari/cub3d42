@@ -102,6 +102,8 @@ void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
 {
 	mlx->ray->ray_angle = normalize_angle(mlx->ray->ray_angle);
+	if (mlx->ray->wall_type == 'D')
+			return (mlx->data->tex->door);
 	if (flag == 0)
 	{
 		if (mlx->ray->ray_angle > M_PI / 2 && mlx->ray->ray_angle < 3 * (M_PI / 2))
