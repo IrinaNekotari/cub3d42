@@ -33,7 +33,8 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->so = mlx_load_png(mlx->data->img->so);
 	mlx->data->tex->ea = mlx_load_png(mlx->data->img->ea);
 	mlx->data->tex->we = mlx_load_png(mlx->data->img->we);
-	mlx->data->tex->barrel = mlx_load_png("images/map.png");
+	mlx->data->tex->barrel = mlx_load_png("images/Barrel.png");
+	mlx->data->tex->key = mlx_load_png("images/Scroll.png");
 	mlx->data->tex->evil = mlx_load_png("images/map.png");
 	mlx->data->tex->door = mlx_load_png("images/DOOR.png");
 	mlx->data->tex->map = mlx_load_png("images/map.png");
@@ -51,6 +52,12 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->handkey = mlx_load_png("images/key.png");
 	mlx->data->tex->handkeyi = mlx_texture_to_image
 		(mlx->mlx_p, mlx->data->tex->handkey);
+	mlx->data->tex->victory = mlx_load_png("images/victory.png");
+	mlx->data->tex->victoryi = mlx_texture_to_image
+		(mlx->mlx_p, mlx->data->tex->victory);
+	mlx->data->tex->defeat = mlx_load_png("images/died.png");
+	mlx->data->tex->defeati = mlx_texture_to_image
+		(mlx->mlx_p, mlx->data->tex->defeat);
 }
 
 void	super_mega_init(t_mlx *mlx)
@@ -78,4 +85,7 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->ray->horiz_x = 0;
 	mlx->ray->vert_y = 0;
 	mlx->msg_counter = 250;
+	mlx->data->victory = 0;
+	mlx->data->evil_x = -1;
+	mlx->data->evil_y = -1;
 }

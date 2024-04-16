@@ -56,6 +56,8 @@
 
 # define NB_ELEMENTS 6
 
+# define TIME_TO_END 125
+
 # define LINE_INTRO "This place is cursed. I must find the MAGIC SCROLL to open the barriers and get away !"
 
 # define ERR_NOT_ENOUGH_HEADERS 1
@@ -121,14 +123,19 @@ typedef struct s_texset
 	mlx_texture_t	*door;
 	mlx_texture_t	*barrel;
 	mlx_texture_t	*evil;
+	mlx_texture_t	*key;
 	mlx_texture_t	*map;
 	mlx_texture_t	*lantern;
 	mlx_texture_t	*lanternempty;
 	mlx_texture_t	*handkey;
+	mlx_texture_t	*victory;
+	mlx_texture_t	*defeat;
 	mlx_image_t		*mapi;
 	mlx_image_t		*lanterni;
 	mlx_image_t		*lanternemptyi;
 	mlx_image_t		*handkeyi;
+	mlx_image_t		*victoryi;
+	mlx_image_t		*defeati;
 }	t_texset;
 
 typedef struct s_imgset
@@ -148,8 +155,12 @@ typedef struct s_data
 {
 	int			player_x;
 	int			player_y;
+	int			evil_x;
+	int			evil_y;
+	double			x;
 	int			map_width;
 	int			map_height;
+	int			victory;
 	char		player_orientation;
 	char		**map;
 	t_imgset	*img;
@@ -219,6 +230,9 @@ void	grab_key(t_mlx *mlx);
 void	display_fuel(t_mlx *mlx);
 void	display_endurance(t_mlx *mlx);
 int	get_rgba(int r, int g, int b, int a);
+void	victory(t_mlx *mlx);
+void	defeat(t_mlx *mlx);
+void	mlx_put_pixel_screen_alt(t_mlx *mlx, int x, int y, int color);
 
 void	draw_square(t_mlx *mlx, int x, int y, int c);
 void	draw_square2(t_mlx *mlx, int x, int y, int c);

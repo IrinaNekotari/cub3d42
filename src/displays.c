@@ -17,13 +17,15 @@ void	redisplay_message(t_mlx *mlx)
 	int	i;
 	int	j;
 
-	i = mlx->msg->instances[0].y;
+	i = 0;
+	if (!mlx->msg)
+		return ;
 	while (i < mlx->msg->instances[0].y + (int)mlx->msg->height)
 	{
-		j = mlx->msg->instances[0].x;
+		j = 0;
 		while (j < mlx->msg->instances[0].x + (int)mlx->msg->width)
 		{
-			mlx_put_pixel_screen(mlx, j, i, mlx_get_pixel(mlx->msg, i, j));
+			mlx_put_pixel_screen(mlx, j + TEXT_X, i + TEXT_Y, mlx_get_pixel(mlx->msg, j, i));
 			j++;
 		}
 		i++;

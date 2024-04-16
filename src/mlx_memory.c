@@ -29,10 +29,14 @@ void	free_texture(t_mlx *mlx)
 	mlx_delete_image(mlx->mlx_p, mlx->data->tex->lanterni);
 	mlx_delete_image(mlx->mlx_p, mlx->data->tex->handkeyi);
 	mlx_delete_image(mlx->mlx_p, mlx->data->tex->lanternemptyi);
+	mlx_delete_image(mlx->mlx_p, mlx->data->tex->defeati);
+	mlx_delete_image(mlx->mlx_p, mlx->data->tex->victoryi);
 	mlx_delete_texture(mlx->data->tex->map);
 	mlx_delete_texture(mlx->data->tex->lantern);
 	mlx_delete_texture(mlx->data->tex->lanternempty);
 	mlx_delete_texture(mlx->data->tex->handkey);
+	mlx_delete_texture(mlx->data->tex->defeat);
+	mlx_delete_texture(mlx->data->tex->victory);
 	mlx_delete_image(mlx->mlx_p, mlx->msg);
 	free(mlx->data->tex);
 }

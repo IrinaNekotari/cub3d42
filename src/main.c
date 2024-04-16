@@ -57,29 +57,87 @@ void	tick2(t_mlx *mlx)
 	}
 }
 
+void	victory_screen(t_mlx *mlx)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < (int)mlx->data->tex->victoryi->height)
+	{
+		j = 0;
+		while (j < (int)mlx->data->tex->victoryi->width)
+		{
+			mlx_put_pixel_screen(mlx, j + (WIDTH / 2 - mlx->data->tex->victoryi->width / 2),
+				i + (HEIGHT / 2 - (int)mlx->data->tex->victoryi->height / 2), mlx_get_pixel(mlx->data->tex->victoryi, j, i));
+			j++;
+		}
+		i++;
+	}
+}
+
+void	defeat_screen(t_mlx *mlx)
+{
+	int	i;
+	int	j;
+ 
+	i = 0;
+	while (i < (int)mlx->data->tex->defeati->height)
+	{
+		j = 0;
+		while (j < (int)mlx->data->tex->defeati->width)
+		{
+			mlx_put_pixel_screen(mlx, j + (WIDTH / 2 - mlx->data->tex->defeati->width / 2),
+					i + (HEIGHT / 2 - (int)mlx->data->tex->defeati->height / 2), mlx_get_pixel(mlx->data->tex->defeati, j, i));
+			j++;
+		}
+		i++;
+	}
+}
+
 void	loop(void *ml)
 {
 	t_mlx	*mlx;
 
 	mlx = ml;
-	mlx_delete_image(mlx->mlx_p, mlx->img);
-	mlx->img = mlx_new_image(mlx->mlx_p, WIDTH, HEIGHT);
-	move(mlx, 0, 0);
-	raycasting(mlx);
-	mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
-	minimap_background(mlx);
-	draw_minimap(mlx);
-	if (mlx->player->held_item == 1 && mlx->player->fuel > 0)
-		draw_lantern(mlx);
-	else if (mlx->player->held_item == 1)
-		draw_unlit_lantern(mlx);
-	else if (mlx->player->held_item == 2)
+	if (!mlx->data->victory)
+	{
+		mlx_delete_image(mlx->mlx_p, mlx->img);
+		mlx->img = mlx_new_image(mlx->mlx_p, WIDTH, HEIGHT);
+		mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
+		redisplay_message(mlx);
+		move(mlx, 0, 0);
+		raycasting(mlx);
+		minimap_background(mlx);
+		draw_minimap(mlx);
+		if (mlx->player->held_item == 1 && mlx->player->fuel > 0)
+			draw_lantern(mlx);
+		else if (mlx->player->held_item == 1)
+			draw_unlit_lantern(mlx);
+		else if (mlx->player->held_item == 2)
 		draw_key(mlx);
-	grab_key(mlx);
-	display_endurance(mlx);
-	display_fuel(mlx);
-	tick1(mlx);
-	tick2(mlx);
+		grab_key(mlx);
+		display_endurance(mlx);
+		display_fuel(mlx);
+		tick1(mlx);
+		tick2(mlx);
+	}
+	else if (mlx->data->victory == 1)
+	{
+		mlx->data->x++;
+		if (mlx->data->x >= TIME_TO_END * 2)
+			ft_exit(mlx);
+		victory(mlx);
+		victory_screen(mlx);
+	}
+	else 
+	{
+		mlx->data->x++;
+		if (mlx->data->x >= (TIME_TO_END * 2))
+			ft_exit(mlx);
+		defeat(mlx);
+		defeat_screen(mlx);
+	}
 }
 
 void	start(t_data *data)
@@ -95,6 +153,7 @@ void	start(t_data *data)
 	load_img(&mlx);
 	init_player(mlx);
 	mlx.msg = mlx_put_string(mlx.mlx_p, LINE_INTRO, TEXT_X, TEXT_Y);
+	//display_message(&mlx, LINE_INTRO);
 	mlx_key_hook(mlx.mlx_p, &press, &mlx);
 	mlx_loop_hook(mlx.mlx_p, &loop, &mlx);
 	mlx_loop(mlx.mlx_p);

@@ -22,6 +22,8 @@ void	mlx_put_pixel_screen(t_mlx *mlx, int x, int y, int color)
 		return ;
 	else if (y >= HEIGHT)
 		return ;
+	if (color == 0x00000000)
+		return ;
 	mlx_put_pixel(mlx->img, x , y, color);
 }
 
@@ -68,7 +70,7 @@ int32_t mlx_get_pixel(mlx_image_t *image, uint32_t x, uint32_t y)
 	uint8_t *pixelstart;
 
 	if (x > image->width || y > image->height)
-		return (0xFF000000);
+		return (0x00000000);
 	pixelstart = image->pixels + (y * image->width + x) * sizeof(int32_t);
 	if (*(pixelstart + 3) == 0)
 		return (0x00000000);
