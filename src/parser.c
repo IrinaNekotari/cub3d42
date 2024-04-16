@@ -22,8 +22,9 @@ static int	epure_line(int *in_map, int *nb_tete, t_chain **c)
 		if ((*c)->previous)
 			(*c) = (*c)->previous;
 	}
-	else if ( ((*c)->line[0] == 'W') || ((*c)->line[0] == 'E')
-		|| ((*c)->line[0] == 'N') || ((*c)->line[0] == 'S') || !is_line_map((*c)->line))
+	else if (((*c)->line[0] == 'W') || ((*c)->line[0] == 'E')
+		|| ((*c)->line[0] == 'N') || ((*c)->line[0] == 'S')
+		|| !is_line_map((*c)->line))
 	{
 		if (*in_map)
 			return (ERR_HEADER_IN_MAP);

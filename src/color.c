@@ -12,6 +12,11 @@
 
 #include "../include/cube3d.h"
 
+int	get_rgba(int r, int g, int b, int a)
+{
+	return (r << 24 | g << 16 | b << 8 | a << 0);
+}
+
 /**
  * Retourne une valeur hexa en fonction des trois valeurs de rouge, vert et bleus
  * Retourne -1 si l'une des valeurs entrées est invalide
@@ -91,6 +96,5 @@ int	get_rgb(char *a)
 	color = colorpicker(ft_atoi(split[0]),
 			ft_atoi(split[1]), ft_atoi(split[2]));
 	free_split(split);
-	ft_printf("Found color : %x\n", color);
 	return (color);
 }

@@ -25,11 +25,6 @@ void	mlx_put_pixel_screen(t_mlx *mlx, int x, int y, int color)
 	mlx_put_pixel(mlx->img, x , y, color);
 }
 
-int	get_rgba(int r, int g, int b, int a)
-{
-	return (r << 24 | g << 16 | b << 8 | a << 0);
-}
-
 void	draw_square2(t_mlx *mlx, int x, int y, int c)
 {
 	int i;
@@ -42,26 +37,6 @@ void	draw_square2(t_mlx *mlx, int x, int y, int c)
 	{
 		j = 0;
 		while (j < 2)
-		{
-			mlx_put_pixel_screen(mlx, j + x, i + y, c);
-			j++;
-		}
-		i++;
-	}
-}
-
-void	draw_square3(t_mlx *mlx, int x, int y, int c)
-{
-	int i;
-	int j;
-
-	if (!c)
-		return ;
-	i = 0;
-	while (i < 3)
-	{
-		j = 0;
-		while (j < 3)
 		{
 			mlx_put_pixel_screen(mlx, j + x, i + y, c);
 			j++;
@@ -93,193 +68,12 @@ int32_t mlx_get_pixel(mlx_image_t *image, uint32_t x, uint32_t y)
 	uint8_t *pixelstart;
 
 	if (x > image->width || y > image->height)
-		return 0xFF000000;
+		return (0xFF000000);
 	pixelstart = image->pixels + (y * image->width + x) * sizeof(int32_t);
 	if (*(pixelstart + 3) == 0)
 		return (0x00000000);
 	return get_rgba(*(pixelstart), *(pixelstart + 1),
 		* (pixelstart + 2), *(pixelstart + 3));
-}
-
-void	redisplay_message(t_mlx *mlx)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	while (i < (int)mlx->msg->height)
-	{
-		j = 0;
-		while (j < (int)mlx->msg->width)
-		{
-			mlx_put_pixel_screen(mlx, j + TEXT_X, i + TEXT_Y, mlx_get_pixel(mlx->msg, i, j));
-			j++;
-		}
-		i++;
-	}
-}
-
-void draw_key(t_mlx *mlx)
-{
-	int i;
-	int j;
-
-	i = HEIGHT / 2 - mlx->data->tex->handkeyi->height / 2;
-	i = 0;
-	while (i < (int)mlx->data->tex->handkeyi->height)
-	{
-		j = 0;
-		while (j < (int)mlx->data->tex->handkeyi->width)
-		{
-			draw_square2(mlx, j * 2 + WIDTH - mlx->data->tex->handkeyi->width * 2, i * 2 + HEIGHT / 2 - mlx->data->tex->handkeyi->height / 2, mlx_get_pixel(mlx->data->tex->handkeyi, j, i));
-			j++;
-		}
-		i++;
-	}
-}
-
-void draw_unlit_lantern(t_mlx *mlx)
-{
-	int i;
-	int j;
-
-	i = HEIGHT / 2 - mlx->data->tex->lanternemptyi->height / 2;
-	i = 0;
-	while (i < (int)mlx->data->tex->lanternemptyi->height)
-	{
-		j = 0;
-		while (j < (int)mlx->data->tex->lanternemptyi->width)
-		{
-			draw_square2(mlx, j * 2 + WIDTH - mlx->data->tex->lanternemptyi->width * 2, i * 2 + HEIGHT / 2 - mlx->data->tex->lanternemptyi->height / 2, mlx_get_pixel(mlx->data->tex->lanternemptyi, j, i));
-			j++;
-		}
-		i++;
-	}
-}
-
-void draw_lantern(t_mlx *mlx)
-{
-	int i;
-	int j;
-
-	i = HEIGHT / 2 - mlx->data->tex->lanterni->height / 2;
-	i = 0;
-	while (i < (int)mlx->data->tex->lanterni->height)
-	{
-		j = 0;
-		while (j < (int)mlx->data->tex->lanterni->width)
-		{
-			draw_square2(mlx, j * 2 + WIDTH - mlx->data->tex->lanterni->width * 2, i * 2 + HEIGHT / 2 - mlx->data->tex->lanterni->height / 2, mlx_get_pixel(mlx->data->tex->lanterni, j, i));
-			j++;
-		}
-		i++;
-	}
-}
-
-void minimap_background(t_mlx *mlx)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (i < (int)mlx->data->tex->map->height)
-	{
-		j = 0;
-		while (j < (int)mlx->data->tex->map->width)
-		{
-			draw_square2(mlx, j * 2, i * 2, mlx_get_pixel(mlx->data->tex->mapi, j, i));
-			j++;
-		}
-		i++;
-	}
-}
-
-void minimap_draw_square(t_mlx *mlx, int *i, int *j, int x, int y)
-{
-	if (y == mlx->player->player_y / TILE_SIZE && x == mlx->player->player_x / TILE_SIZE )
-		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0x940007FF);
-	else if (mlx->data->map[y][x] == '1')
-		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xc5885cFF);
-	else if (mlx->data->map[y][x] == 'K')
-		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xffe600FF);
-	else if (mlx->data->map[y][x] == 'D')
-		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0x1c080fFF);
-	else if (mlx->data->map[y][x] == 'X')
-		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0x05a81eFF);
-	else if (is_whitespace(mlx->data->map[y][x]))
-	{
-		*j += 1;
-		return ;
-	}
-	else 
-		draw_square(mlx, *j * MINIMAP_SIZE, *i * MINIMAP_SIZE, 0xe4ab68FF);
-	*j += 1;
-}
-
-void	draw_minimap(t_mlx *mlx)
-{
-	int	i;
-	int j;
-	int x;
-	int y;
-
-	i = 0;
-	y = 0;
-	while (mlx->data->map[i])
-	{
-		j = 0;
-		x = 0;
-		if (mlx->player->player_y / TILE_SIZE < MINIMAP_MAX_Y)
-		{
-			if (abs(i - mlx->player->player_y / TILE_SIZE) > MINIMAP_MAX_Y * 2 - mlx->player->player_y / TILE_SIZE)
-			{
-				i++;
-				continue ;
-			}
-		}
-		else if (mlx->player->player_y / TILE_SIZE + MINIMAP_MAX_Y > mlx->data->map_height)
-		{
-			if (abs(i - mlx->player->player_y / TILE_SIZE) > MINIMAP_MAX_Y * 2 - abs(mlx->data->map_height - mlx->player->player_y / TILE_SIZE))
-			{
-				i++;
-				continue ;
-			}
-		}
-		else if (abs(i - mlx->player->player_y / TILE_SIZE) > MINIMAP_MAX_Y)
-			{
-				i++;
-				continue ;
-			}
-		while (mlx->data->map[i][j])
-		{
-			if (mlx->player->player_x / TILE_SIZE < MINIMAP_MAX_X)
-			{
-				if (abs(j - mlx->player->player_x / TILE_SIZE) > MINIMAP_MAX_X * 2 - mlx->player->player_x / TILE_SIZE)
-				{
-					j++;
-					continue ;
-				}
-			}
-			else if (mlx->player->player_x / TILE_SIZE + MINIMAP_MAX_X > mlx->data->map_width)
-			{
-				if (abs(j - mlx->player->player_x / TILE_SIZE) > MINIMAP_MAX_X * 2 - abs(mlx->data->map_width - mlx->player->player_x / TILE_SIZE))
-				{
-					j++;
-					continue ;
-				}
-			}
-			else if (abs(j - mlx->player->player_x / TILE_SIZE) > MINIMAP_MAX_X)
-				{
-					j++;
-					continue ;
-				}
-			minimap_draw_square(mlx, &y, &x, j, i);
-			j++;
-		}
-		y++;
-		i++;
-	}
 }
 
 void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)

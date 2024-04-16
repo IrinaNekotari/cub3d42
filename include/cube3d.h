@@ -23,14 +23,14 @@
 # include "../MLX42/MLX42.h"
 # include "parser.h"
 # include "libft.h"
-# include <GLFW/glfw3.h>
+//# include <GLFW/glfw3.h>
 
 #define WIDTH 1400
 #define HEIGHT 800
 #define TILE_SIZE 64
 #define FOV 75
-#define ROTATION_SPEED 0.5
-#define PLAYER_SPEED 3
+#define ROTATION_SPEED 0.4
+#define PLAYER_SPEED 2
 # define DRAW_DISTANCE 60
 # define MINIMAP_SIZE 8
 # define MINIMAP_MAX_X 12
@@ -38,8 +38,8 @@
 # define TEXT_Y 700
 # define TEXT_X 200
 
-# define MAX_ENDURANCE 100
-# define MIN_END_TO_RUN 30
+# define MAX_ENDURANCE 120
+# define MIN_END_TO_RUN 70
 # define ENDURANCE_POS_X 22
 # define ENDURANCE_POS_Y 242
 # define ENDURANCE_WIDTH 16
@@ -55,6 +55,8 @@
 # define FUEL_COLOR 0xc9a616FF
 
 # define NB_ELEMENTS 6
+
+# define LINE_INTRO "This place is cursed. I must find the MAGIC SCROLL to open the barriers and get away !"
 
 # define ERR_NOT_ENOUGH_HEADERS 1
 # define ERR_TOO_MUCH_HEADERS 2
@@ -78,21 +80,21 @@ typedef struct s_player
 {
         int player_x;
         int player_y;
-        double angle;
-        float fov;
         int rotation;
         int left_right;
         int up_down;
 		int is_rotating;
 		int is_moving_forward;
 		int is_moving_sides;
-		double is_sprinting;
 		int has_key;
 		int light_radius;
 		int held_item;
+		int can_run;
+		double is_sprinting;
+        double angle;
 		double fuel;
 		double endurance;
-		int can_run;
+        float fov;
 } t_player;
 
 typedef struct s_ray
@@ -173,6 +175,11 @@ typedef struct s_chain
 	struct s_chain	*previous;
 }	t_chain;
 
+typedef struct s_tuple
+{
+	int	x;
+	int y;
+} t_tuple;
 
 void	ft_exit(t_mlx *mlx);
 void	loop(void *ml);
@@ -206,15 +213,30 @@ void draw_lantern(t_mlx *mlx);
 void draw_key(t_mlx *mlx);
 void	redisplay_message(t_mlx *mlx);
 void	display_message(t_mlx *mlx, char *msg);
-void draw_unlit_lantern(t_mlx *mlx);
+void	draw_unlit_lantern(t_mlx *mlx);
+void	press(mlx_key_data_t keydata, void *ml);
+void	grab_key(t_mlx *mlx);
+void	display_fuel(t_mlx *mlx);
+void	display_endurance(t_mlx *mlx);
+int	get_rgba(int r, int g, int b, int a);
+
+void	draw_square(t_mlx *mlx, int x, int y, int c);
+void	draw_square2(t_mlx *mlx, int x, int y, int c);
+
+int32_t mlx_get_pixel(mlx_image_t *image, uint32_t x, uint32_t y) ;
+
+void open_doors(t_mlx *mlx);
+void	super_mega_init(t_mlx *mlx);
+void	load_img(t_mlx *mlx);
+void	init_player(t_mlx mlx);
 
 int		ft_equals(char *s1, char *s2);
 int		is_whitespace(char c);
 int		is_rgb(char *a);
 int		is_line_map(char *l);
 int		is_map_element(char c);
-int	darken(int c, double dist, t_mlx* mlx);
-int	colorpicker(int r, int g, int b);
+int		darken(int c, double dist, t_mlx* mlx);
+int		colorpicker(int r, int g, int b);
 int		get_rgb(char *a);
 int		emptyline(char *c);
 int		check_map(t_data *d);
@@ -240,6 +262,9 @@ void	free_split(char **a);
 void	null_values(t_imgset **img);
 
 char	**generate_map(t_chain *c, int x, int y);
+
+void move_dude(t_mlx *mlx, double move_x, double move_y);
+void move(t_mlx *mlx, double move_x, double move_y);
 
 t_data	*generate_data(char *path);
 t_data	*data_error(int code, t_data *data, t_chain *values);

@@ -30,8 +30,6 @@ void	free_chain(t_chain *chain)
 		chain = chain->next;
 		free(chain->previous);
 	}
-	//if (chain->line)
-	//	free(chain->line);
 	free(chain);
 }
 
