@@ -108,6 +108,7 @@ void	loop(void *ml)
 		redisplay_message(mlx);
 		move(mlx, 0, 0);
 		raycasting(mlx);
+		raycasting_door(mlx);
 		minimap_background(mlx);
 		draw_minimap(mlx);
 		if (mlx->player->held_item == 1 && mlx->player->fuel > 0)

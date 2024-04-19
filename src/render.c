@@ -182,7 +182,7 @@ void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 	while (top_pixel < bottom_pixel)
 	{
 		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, darken(reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]), mlx->ray->distance, mlx));
-		y_wall +=(texture->height / wall_height);
+		y_wall += (texture->height / wall_height);
 		top_pixel++;
 	}
 }
