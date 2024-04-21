@@ -102,10 +102,10 @@ void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
 {
 	mlx->ray->ray_angle = normalize_angle(mlx->ray->ray_angle);
-	if (mlx->ray->wall_type == 'D')
-			return (mlx->data->tex->door);
 	if (flag == 0)
 	{
+		if (mlx->ray->wall_type == 'D')
+			return (mlx->data->tex->door);
 		if (mlx->ray->ray_angle > M_PI / 2 && mlx->ray->ray_angle < 3 * (M_PI / 2))
 			return (mlx->data->tex->ea);
 		else
@@ -113,6 +113,8 @@ mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
 	}
 	else
 	{
+		if (mlx->ray->wall_type2 == 'D')
+			return (mlx->data->tex->door);
 		if (mlx->ray->ray_angle > 0 && mlx->ray->ray_angle < M_PI)
 			return (mlx->data->tex->so);
 		else
@@ -209,6 +211,4 @@ void	render_wall(t_mlx *mlx, int ray)
 	mlx->ray->rayon = ray;
 	draw_floor_ceiling(mlx, ray, top_pixel, bottom_pixel);
 	draw_wall(mlx, top_pixel, bottom_pixel, wall_height);
-	//choose_display(mlx, top_pixel, bottom_pixel, wall_height);
-	//draw_darkness(mlx, ray);
 }

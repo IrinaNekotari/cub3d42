@@ -105,10 +105,10 @@ void	loop(void *ml)
 		mlx_delete_image(mlx->mlx_p, mlx->img);
 		mlx->img = mlx_new_image(mlx->mlx_p, WIDTH, HEIGHT);
 		mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
+		raycasting(mlx);
+		//raycasting_door(mlx);
 		redisplay_message(mlx);
 		move(mlx, 0, 0);
-		raycasting(mlx);
-		raycasting_door(mlx);
 		minimap_background(mlx);
 		draw_minimap(mlx);
 		if (mlx->player->held_item == 1 && mlx->player->fuel > 0)
@@ -116,7 +116,7 @@ void	loop(void *ml)
 		else if (mlx->player->held_item == 1)
 			draw_unlit_lantern(mlx);
 		else if (mlx->player->held_item == 2)
-		draw_key(mlx);
+			draw_key(mlx);
 		grab_key(mlx);
 		display_endurance(mlx);
 		display_fuel(mlx);

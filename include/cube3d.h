@@ -110,6 +110,7 @@ typedef struct s_ray
         int vert_x;
         int vert_y;
         char wall_type;
+		char wall_type2;
 } t_ray;
 
 typedef struct s_texset
@@ -202,7 +203,7 @@ float   get_v_inter(t_mlx *mlx, float angle);
 float   get_h_inter(t_mlx *mlx, float angle);
 float	get_v_inter_door(t_mlx *mlx, float angle);
 float   get_h_inter_door(t_mlx *mlx, float angle);
-int	wall_hit(float x, float y, t_mlx *mlx);
+int	wall_hit(float x, float y, t_mlx *mlx, int method);
 int	door_hit(float x, float y, t_mlx *mlx);
 int     inter_check(float angle, float *inter, float *step, int is_border_wall);
 int     unit_circle(float angle, char c);
