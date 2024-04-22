@@ -127,9 +127,19 @@ double get_x_wall(mlx_texture_t	*texture, t_mlx *mlx)
 	double	x_wall;
 	
 	if (mlx->ray->flag == 1)
-		x_wall = (int)fmodf((mlx->ray->horiz_x * (texture->width / TILE_SIZE)), texture->width);
+	{
+		if (mlx->ray->ray_angle > 0 && mlx->ray->ray_angle < M_PI)
+			x_wall = texture->width - (int)fmod((mlx->ray->horiz_x * (texture->width / TILE_SIZE)), texture->width);
+		else 
+			x_wall = (int)fmodf((mlx->ray->horiz_x * (texture->width / TILE_SIZE)), texture->width);
+	}
 	else
-		x_wall = (int)fmodf((mlx->ray->vert_y * (texture->width / TILE_SIZE)), texture->width);
+	{
+		if (mlx->ray->ray_angle > M_PI / 2 && mlx->ray->ray_angle < 3 * (M_PI / 2) && mlx->ray->wall_type != 'D')
+			x_wall = texture->width - (int)fmod((mlx->ray->vert_y * (texture->width / TILE_SIZE)), texture->width);
+		else
+			x_wall = (int)fmodf((mlx->ray->vert_y * (texture->width / TILE_SIZE)), texture->width);
+	}
 	return (x_wall);
 }
 
