@@ -20,10 +20,10 @@ void	redisplay_message(t_mlx *mlx)
 	i = 0;
 	if (!mlx->msg)
 		return ;
-	while (i < mlx->msg->instances[0].y + (int)mlx->msg->height)
+	while (i < mlx->msg->instances[0].y + (int)mlx->msg->height - 1)
 	{
 		j = 0;
-		while (j < mlx->msg->instances[0].x + (int)mlx->msg->width)
+		while (j < mlx->msg->instances[0].x + (int)mlx->msg->width - 1)
 		{
 			mlx_put_pixel_screen(mlx, j + TEXT_X, i + TEXT_Y, mlx_get_pixel(mlx->msg, j, i));
 			j++;

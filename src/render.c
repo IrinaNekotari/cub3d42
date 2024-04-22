@@ -105,7 +105,7 @@ mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
 	if (flag == 0)
 	{
 		if (mlx->ray->wall_type == 'D')
-			return (mlx->data->tex->door);
+			return (mlx->data->tex->door->current);
 		if (mlx->ray->ray_angle > M_PI / 2 && mlx->ray->ray_angle < 3 * (M_PI / 2))
 			return (mlx->data->tex->ea);
 		else
@@ -114,7 +114,7 @@ mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
 	else
 	{
 		if (mlx->ray->wall_type2 == 'D')
-			return (mlx->data->tex->door);
+			return (mlx->data->tex->door->current);
 		if (mlx->ray->ray_angle > 0 && mlx->ray->ray_angle < M_PI)
 			return (mlx->data->tex->so);
 		else

@@ -122,6 +122,7 @@ void	loop(void *ml)
 		display_fuel(mlx);
 		tick1(mlx);
 		tick2(mlx);
+		tick_sprites(mlx->controller);
 	}
 	else if (mlx->data->victory == 1)
 	{
@@ -153,7 +154,7 @@ void	start(t_data *data)
 	mlx.img = NULL;
 	load_img(&mlx);
 	init_player(mlx);
-	mlx.msg = mlx_put_string(mlx.mlx_p, LINE_INTRO, TEXT_X, TEXT_Y);
+	mlx.msg = mlx_put_string(mlx.mlx_p, LINE_INTRO, 0, 0);
 	//display_message(&mlx, LINE_INTRO);
 	mlx_key_hook(mlx.mlx_p, &press, &mlx);
 	mlx_loop_hook(mlx.mlx_p, &loop, &mlx);

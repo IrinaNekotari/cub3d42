@@ -18,8 +18,9 @@ void	free_texture(t_mlx *mlx)
 	mlx_delete_texture(mlx->data->tex->so);
 	mlx_delete_texture(mlx->data->tex->we);
 	mlx_delete_texture(mlx->data->tex->ea);
-	mlx_delete_texture(mlx->data->tex->door);
+	//mlx_delete_texture(mlx->data->tex->door);
 	mlx_delete_texture(mlx->data->tex->barrel);
+	//mlx_delete_texture(mlx->data->tex->key);
 	mlx_delete_texture(mlx->data->tex->evil);
 	if (mlx->data->tex->f)
 		mlx_delete_texture(mlx->data->tex->f);
@@ -41,6 +42,13 @@ void	free_texture(t_mlx *mlx)
 	free(mlx->data->tex);
 }
 
+void	free_sprites(t_mlx *mlx)
+{
+	free_sprite(mlx->data->tex->door);
+	free_sprite(mlx->data->tex->key);
+	free(mlx->controller);
+}
+
 void	ft_exit(t_mlx *mlx)
 {
 	free(mlx->ray);
@@ -48,6 +56,7 @@ void	ft_exit(t_mlx *mlx)
 	mlx_delete_image(mlx->mlx_p, mlx->img);
 	mlx_close_window(mlx->mlx_p);
 	free_texture(mlx);
+	free_sprites(mlx);
 	free_data(mlx->data, NULL);
 	mlx_terminate(mlx->mlx_p);
 	printf("Closed\n");

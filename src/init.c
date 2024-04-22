@@ -27,6 +27,44 @@ void	init_player(t_mlx mlx)
 		mlx.player->angle = 0;
 }
 
+void	free_sprite(t_sprite *s)
+{
+	int	i;
+
+	i = 0;
+	while (i < IMAGES_IN_SPRITES)
+	{
+		if (s->sprites[i])
+			mlx_delete_texture(s->sprites[i]);
+		i++;
+	}
+	free(s);
+}
+
+void	load_sprites(t_mlx **mlx)
+{
+	(*mlx)->data->tex->door = create_sprite(4);
+	(*mlx)->data->tex->key = create_sprite(4);
+	add_to_set((*mlx)->data->tex->door, "images/doorA.png");
+	add_to_set((*mlx)->data->tex->door, "images/doorB.png");
+	add_to_set((*mlx)->data->tex->door, "images/doorC.png");
+	add_to_set((*mlx)->data->tex->door, "images/doorD.png");
+	add_to_set((*mlx)->data->tex->door, "images/doorE.png");
+	add_to_set((*mlx)->data->tex->door, "images/doorF.png");
+	add_to_set((*mlx)->data->tex->key, "images/Scroll.png");
+	add_to_set((*mlx)->data->tex->key, "images/ScrollB.png");
+	add_to_set((*mlx)->data->tex->key, "images/ScrollC.png");
+	add_to_set((*mlx)->data->tex->key, "images/ScrollD.png");
+	add_to_set((*mlx)->data->tex->key, "images/ScrollE.png");
+	add_to_set((*mlx)->data->tex->key, "images/ScrollD.png");
+	add_to_set((*mlx)->data->tex->key, "images/ScrollC.png");
+	add_to_set((*mlx)->data->tex->key, "images/ScrollB.png");
+	add_to_set((*mlx)->data->tex->key, "images/Scroll.png");
+	add_to_set((*mlx)->data->tex->key, "images/ScrollF.png");
+	add_to_control((*mlx)->controller, (*mlx)->data->tex->door);
+	add_to_control((*mlx)->controller, (*mlx)->data->tex->key);
+}
+
 void	load_img(t_mlx *mlx)
 {
 	mlx->data->tex->no = mlx_load_png(mlx->data->img->no);
@@ -34,9 +72,7 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->ea = mlx_load_png(mlx->data->img->ea);
 	mlx->data->tex->we = mlx_load_png(mlx->data->img->we);
 	mlx->data->tex->barrel = mlx_load_png("images/Barrel.png");
-	mlx->data->tex->key = mlx_load_png("images/Scroll.png");
 	mlx->data->tex->evil = mlx_load_png("images/map.png");
-	mlx->data->tex->door = mlx_load_png("images/DOOR.png");
 	mlx->data->tex->map = mlx_load_png("images/map.png");
 	mlx->data->tex->c = mlx_load_png("images/map.png");
 	mlx->data->tex->f = mlx_load_png("images/map.png");
@@ -58,6 +94,7 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->defeat = mlx_load_png("images/died.png");
 	mlx->data->tex->defeati = mlx_texture_to_image
 		(mlx->mlx_p, mlx->data->tex->defeat);
+	load_sprites(&mlx);
 }
 
 void	super_mega_init(t_mlx *mlx)
@@ -89,4 +126,5 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->data->victory = 0;
 	mlx->data->evil_x = -1;
 	mlx->data->evil_y = -1;
+	mlx->controller = init_controller();
 }

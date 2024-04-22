@@ -113,6 +113,23 @@ typedef struct s_ray
 		char wall_type2;
 } t_ray;
 
+# define IMAGES_IN_SPRITES 10
+# define MAX_ANIMATIONS 10
+
+typedef struct s_sprite
+{
+	mlx_texture_t *sprites[IMAGES_IN_SPRITES];
+	mlx_texture_t *current;
+	int	index;
+	int delay;
+}	t_sprite;
+typedef struct s_animation_controller
+{
+	t_sprite	*sprite_set[MAX_ANIMATIONS];
+	int		frame;
+	int		frame_max;
+} t_animation_controller;
+
 typedef struct s_texset
 {
 	mlx_texture_t	*no;
@@ -121,10 +138,8 @@ typedef struct s_texset
 	mlx_texture_t	*ea;
 	mlx_texture_t	*c;
 	mlx_texture_t	*f;
-	mlx_texture_t	*door;
 	mlx_texture_t	*barrel;
 	mlx_texture_t	*evil;
-	mlx_texture_t	*key;
 	mlx_texture_t	*map;
 	mlx_texture_t	*lantern;
 	mlx_texture_t	*lanternempty;
@@ -137,6 +152,8 @@ typedef struct s_texset
 	mlx_image_t		*handkeyi;
 	mlx_image_t		*victoryi;
 	mlx_image_t		*defeati;
+	t_sprite		*key;
+	t_sprite		*door;
 }	t_texset;
 
 typedef struct s_imgset
@@ -177,6 +194,7 @@ typedef struct s_mlx
         t_data  *data;
         t_player       *player;
 		mlx_image_t		*msg;
+		t_animation_controller *controller;
 		int			msg_counter;
 } t_mlx;
 
@@ -248,7 +266,24 @@ void open_doors(t_mlx *mlx);
 void	super_mega_init(t_mlx *mlx);
 void	load_img(t_mlx *mlx);
 void	init_player(t_mlx mlx);
+void move_dude(t_mlx *mlx, double move_x, double move_y);
+void move(t_mlx *mlx, double move_x, double move_y);
 
+/**
+ * Gestion des animations
+*/
+void	load_sprites(t_mlx **mlx);
+t_sprite *create_sprite(int delay);
+void    add_to_set(t_sprite *s, char *tex);
+t_animation_controller    *init_controller(void);
+void    tick_sprites(t_animation_controller *a);
+void	free_sprite(t_sprite *s);
+void    add_to_control(t_animation_controller *a, t_sprite *s);
+
+
+/**
+ * Gestion du parser
+*/
 int		ft_equals(char *s1, char *s2);
 int		is_whitespace(char c);
 int		is_rgb(char *a);
@@ -281,9 +316,6 @@ void	free_split(char **a);
 void	null_values(t_imgset **img);
 
 char	**generate_map(t_chain *c, int x, int y);
-
-void move_dude(t_mlx *mlx, double move_x, double move_y);
-void move(t_mlx *mlx, double move_x, double move_y);
 
 t_data	*generate_data(char *path);
 t_data	*data_error(int code, t_data *data, t_chain *values);
