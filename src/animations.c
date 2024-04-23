@@ -12,13 +12,13 @@
 
 #include "../include/cube3d.h"
 
-t_sprite *create_sprite(int delay)
+t_anim *create_sprite(int delay)
 {
-    t_sprite    *sprite;
+    t_anim    *sprite;
     int         i;
 
     i = 0;
-    sprite = ft_calloc(1, sizeof(t_sprite));
+    sprite = ft_calloc(1, sizeof(t_anim));
     while (i < IMAGES_IN_SPRITES)
         sprite->sprites[i++] = NULL;
     sprite->current = NULL;
@@ -27,7 +27,7 @@ t_sprite *create_sprite(int delay)
     return (sprite);
 }
 
-void    add_to_set(t_sprite *s, char *tex)
+void    add_to_set(t_anim *s, char *tex)
 {
     int i;
 
@@ -43,7 +43,7 @@ void    add_to_set(t_sprite *s, char *tex)
         s->current = s->sprites[0];
 }
 
-void    tick_sprite(t_sprite *s)
+void    tick_sprite(t_anim *s)
 {
     if (s->index + 1 > 9 || !s->sprites[s->index + 1])
         s->index = 0;
@@ -85,7 +85,7 @@ int ppcm(int a, int b)
     return (a);
 }
 
-void    add_to_control(t_animation_controller *a, t_sprite *s)
+void    add_to_control(t_animation_controller *a, t_anim *s)
 {
     int i;
 

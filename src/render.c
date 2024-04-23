@@ -106,6 +106,8 @@ mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
 	{
 		if (mlx->ray->wall_type == 'D')
 			return (mlx->data->tex->door->current);
+		if (mlx->ray->wall_type == 'X')
+			return (mlx->data->tex->exit);
 		if (mlx->ray->ray_angle > M_PI / 2 && mlx->ray->ray_angle < 3 * (M_PI / 2))
 			return (mlx->data->tex->ea);
 		else
@@ -115,6 +117,8 @@ mlx_texture_t	*get_texture(t_mlx *mlx, int flag)
 	{
 		if (mlx->ray->wall_type2 == 'D')
 			return (mlx->data->tex->door->current);
+		if (mlx->ray->wall_type2 == 'X')
+			return (mlx->data->tex->exit);
 		if (mlx->ray->ray_angle > 0 && mlx->ray->ray_angle < M_PI)
 			return (mlx->data->tex->so);
 		else
@@ -193,7 +197,7 @@ void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel, double wall_height)
 		y_wall = 0;
 	while (top_pixel < bottom_pixel)
 	{
-		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, darken(reverse_bytes(color[(int)y_wall * texture->width + (int)x_wall]), mlx->ray->distance, mlx));
+		mlx_put_pixel_screen(mlx, mlx->ray->rayon, top_pixel, darken(reverse_bytes(color[((int)y_wall * texture->width) + ((int)x_wall) % texture->width]), mlx->ray->distance, mlx));
 		y_wall += (texture->height / wall_height);
 		top_pixel++;
 	}
@@ -212,6 +216,8 @@ void	render_wall(t_mlx *mlx, int ray)
 	if (mlx->ray->distance == 0)
 		mlx->ray->distance = 0.001;
 	wall_height = (TILE_SIZE / mlx->ray->distance) * ((WIDTH / 2) / tan(mlx->player->fov / 2));
+	if (wall_height == 0)
+		wall_height = 1;
 	bottom_pixel = (HEIGHT / 2) + (wall_height / 2);
 	top_pixel = (HEIGHT / 2) - (wall_height / 2);
 	if (top_pixel > HEIGHT)

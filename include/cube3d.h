@@ -116,16 +116,16 @@ typedef struct s_ray
 # define IMAGES_IN_SPRITES 10
 # define MAX_ANIMATIONS 10
 
-typedef struct s_sprite
+typedef struct s_anim
 {
 	mlx_texture_t *sprites[IMAGES_IN_SPRITES];
 	mlx_texture_t *current;
 	int	index;
 	int delay;
-}	t_sprite;
+}	t_anim;
 typedef struct s_animation_controller
 {
-	t_sprite	*sprite_set[MAX_ANIMATIONS];
+	t_anim	*sprite_set[MAX_ANIMATIONS];
 	int		frame;
 	int		frame_max;
 } t_animation_controller;
@@ -140,6 +140,7 @@ typedef struct s_texset
 	mlx_texture_t	*f;
 	mlx_texture_t	*barrel;
 	mlx_texture_t	*evil;
+	mlx_texture_t	*exit;
 	mlx_texture_t	*map;
 	mlx_texture_t	*lantern;
 	mlx_texture_t	*lanternempty;
@@ -152,8 +153,8 @@ typedef struct s_texset
 	mlx_image_t		*handkeyi;
 	mlx_image_t		*victoryi;
 	mlx_image_t		*defeati;
-	t_sprite		*key;
-	t_sprite		*door;
+	t_anim		*key;
+	t_anim		*door;
 }	t_texset;
 
 typedef struct s_imgset
@@ -273,12 +274,12 @@ void move(t_mlx *mlx, double move_x, double move_y);
  * Gestion des animations
 */
 void	load_sprites(t_mlx **mlx);
-t_sprite *create_sprite(int delay);
-void    add_to_set(t_sprite *s, char *tex);
+t_anim *create_sprite(int delay);
+void    add_to_set(t_anim *s, char *tex);
 t_animation_controller    *init_controller(void);
 void    tick_sprites(t_animation_controller *a);
-void	free_sprite(t_sprite *s);
-void    add_to_control(t_animation_controller *a, t_sprite *s);
+void	free_sprite(t_anim *s);
+void    add_to_control(t_animation_controller *a, t_anim *s);
 
 
 /**

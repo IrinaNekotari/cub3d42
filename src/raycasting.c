@@ -75,7 +75,10 @@ float   get_h_inter(t_mlx *mlx, float angle)
         int     pixel;
 
         y_step = TILE_SIZE;
-        x_step = TILE_SIZE / tan(angle);
+		if (tan(angle) != 0)
+        	x_step = TILE_SIZE / tan(angle);
+		else
+			x_step = TILE_SIZE / 0.1;
         h_y = floor(mlx->player->player_y / TILE_SIZE) * TILE_SIZE;
         pixel = inter_check(angle, &h_y, &y_step, 1);
         h_x = mlx->player->player_x + (h_y - mlx->player->player_y) / tan(angle);
@@ -115,6 +118,14 @@ int wall_hit(float x, float y, t_mlx *mlx, int method)
 				mlx->ray->wall_type = 'D';
 			else
 				mlx->ray->wall_type2 = 'D';
+			return (0);
+		}
+		if (mlx->data->map[y_m][x_m] == 'X')
+		{
+			if (!method)
+				mlx->ray->wall_type = 'X';
+			else
+				mlx->ray->wall_type2 = 'X';
 			return (0);
 		}
 	}

@@ -27,7 +27,7 @@ void	init_player(t_mlx mlx)
 		mlx.player->angle = 0;
 }
 
-void	free_sprite(t_sprite *s)
+void	free_sprite(t_anim *s)
 {
 	int	i;
 
@@ -43,8 +43,8 @@ void	free_sprite(t_sprite *s)
 
 void	load_sprites(t_mlx **mlx)
 {
-	(*mlx)->data->tex->door = create_sprite(4);
-	(*mlx)->data->tex->key = create_sprite(4);
+	(*mlx)->data->tex->door = create_sprite(10);
+	(*mlx)->data->tex->key = create_sprite(10);
 	add_to_set((*mlx)->data->tex->door, "images/doorA.png");
 	add_to_set((*mlx)->data->tex->door, "images/doorB.png");
 	add_to_set((*mlx)->data->tex->door, "images/doorC.png");
@@ -76,6 +76,7 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->map = mlx_load_png("images/map.png");
 	mlx->data->tex->c = mlx_load_png("images/map.png");
 	mlx->data->tex->f = mlx_load_png("images/map.png");
+	mlx->data->tex->exit = mlx_load_png("images/exit.png");
 	mlx->data->tex->mapi = mlx_texture_to_image
 		(mlx->mlx_p, mlx->data->tex->map);
 	mlx->data->tex->lantern = mlx_load_png("images/Hand.png");
