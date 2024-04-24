@@ -52,13 +52,13 @@ void    tick_sprite(t_anim *s)
     s->current = s->sprites[s->index];
 }
 
-t_animation_controller    *init_controller(void)
+t_contr    *init_controller(void)
 {
-    t_animation_controller  *contr;
+    t_contr  *contr;
     int                     i;
 
     i = 0;
-    contr = ft_calloc(1, sizeof(t_animation_controller));
+    contr = ft_calloc(1, sizeof(t_contr));
     while (i < MAX_ANIMATIONS)
         contr->sprite_set[i++] = NULL;
     contr->frame = 0;
@@ -85,7 +85,7 @@ int ppcm(int a, int b)
     return (a);
 }
 
-void    add_to_control(t_animation_controller *a, t_anim *s)
+void    add_to_control(t_contr *a, t_anim *s)
 {
     int i;
 
@@ -101,7 +101,7 @@ void    add_to_control(t_animation_controller *a, t_anim *s)
         a->frame_max = ppcm(s->delay, a->frame_max);
 }
 
-void    tick_sprites(t_animation_controller *a)
+void    tick_sprites(t_contr *a)
 {
     int i;
 

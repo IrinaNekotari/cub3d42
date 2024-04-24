@@ -54,8 +54,7 @@ void	grab_key(t_mlx *mlx)
 	if (mlx->data->map[mlx->player->player_y / TILE_SIZE]
 		[mlx->player->player_x / TILE_SIZE] == 'K')
 	{
-		display_message(mlx,
-			"I found the MAGIC SCROLL ! I can use it to break the barriers.");
+		display_message(mlx, LINE_KEY);
 		mlx->player->has_key = 1;
 		mlx->data->map[mlx->player->player_y / TILE_SIZE]
 		[mlx->player->player_x / TILE_SIZE] = '0';
@@ -63,7 +62,7 @@ void	grab_key(t_mlx *mlx)
 	if (mlx->data->map[mlx->player->player_y / TILE_SIZE]
 		[mlx->player->player_x / TILE_SIZE] == 'X')
 	{
-		display_message(mlx, "I did it !");
+		display_message(mlx, LINE_VICTORY);
 		mlx->data->victory = 1;
 		mlx->data->x = 0;
 	}
@@ -107,8 +106,7 @@ static void	open_2(t_mlx *mlx, double dir)
 		mlx->data->map[mlx->player->player_y / TILE_SIZE - 1]
 		[mlx->player->player_x / TILE_SIZE] = '0';
 	else
-		display_message(mlx,
-			"I need the MAGIC SCROLL to destroy this barrier !");
+		display_message(mlx, LINE_LOCKED);
 }
 
 void	open_doors(t_mlx *mlx)

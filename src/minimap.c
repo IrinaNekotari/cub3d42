@@ -16,15 +16,15 @@ void	minimap_draw_square(t_mlx *mlx, t_tuple *t, int x, int y)
 {
 	if (y == mlx->player->player_y / TILE_SIZE
 		&& x == mlx->player->player_x / TILE_SIZE)
-		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, 0x940007FF);
+		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, MINIMAP_COLOR_PLAYER);
 	else if (mlx->data->map[y][x] == '1')
-		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, 0xc5885cFF);
+		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, MINIMAP_COLOR_WALL);
 	else if (mlx->data->map[y][x] == 'K')
-		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, 0xffe600FF);
+		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, MINIMAP_COLOR_KEY);
 	else if (mlx->data->map[y][x] == 'D')
-		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, 0x1c080fFF);
+		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, MINIMAP_COLOR_DOOR);
 	else if (mlx->data->map[y][x] == 'X')
-		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, 0x05a81eFF);
+		draw_square(mlx, t->x * MINIMAP_SIZE, t->y * MINIMAP_SIZE, MINIMAP_COLOR_EXIT);
 	else if (is_whitespace(mlx->data->map[y][x]))
 	{
 		t->x += 1;

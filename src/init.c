@@ -113,7 +113,6 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->player->is_rotating = 0;
 	mlx->player->is_moving_sides = 0;
 	mlx->player->is_moving_forward = 0;
-	mlx->player->rotation = 0;
 	mlx->player->left_right = 0;
 	mlx->player->up_down = 0;
 	mlx->ray->rayon = 0;

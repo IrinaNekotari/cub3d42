@@ -37,7 +37,7 @@ void	display_message(t_mlx *mlx, char *msg)
 	if (mlx->msg)
 		mlx_delete_image(mlx->mlx_p, mlx->msg);
 	mlx->msg_counter = 250;
-	mlx->msg = mlx_put_string(mlx->mlx_p, msg, TEXT_X, TEXT_Y);
+	mlx->msg = mlx_put_string(mlx->mlx_p, msg, 0, 0);
 }
 
 void	display_fuel(t_mlx *mlx)
