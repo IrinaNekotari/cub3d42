@@ -91,6 +91,8 @@ typedef struct s_player
 {
 	int		player_x;
 	int		player_y;
+	int		evil_x;
+	int		evil_y;
 	int		left_right;
 	int		up_down;
 	int		is_rotating;
@@ -326,6 +328,7 @@ int		part_three_img(t_imgset **img, char **li);
 int		part_four_img(t_imgset **img, char **li);
 
 void	get_positions(t_data *data);
+void	get_position_evil(t_data *data);
 void	remove_tail(t_chain *c);
 void	cut_ligne(t_chain **c);
 void	free_chain(t_chain *chain);

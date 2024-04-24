@@ -131,5 +131,6 @@ int	check_map(t_data *d)
 	if (map_isnt_close(d->map))
 		return (ERR_UNCLOSED_MAP);
 	get_positions(d);
+	get_position_evil(d);
 	return (0);
 }

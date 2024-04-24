@@ -12,11 +12,6 @@
 
 #include "../include/cube3d.h"
 
-int	get_rgba(int r, int g, int b, int a)
-{
-	return (r << 24 | g << 16 | b << 8 | a << 0);
-}
-
 /**
  * Retourne une valeur hexa en fonction des trois valeurs de rouge, vert et bleus
  * Retourne -1 si l'une des valeurs entrées est invalide
@@ -33,6 +28,14 @@ int	colorpicker(int r, int g, int b)
 	color = color | (g << 16);
 	color = color | (r << 24);
 	return (color);
+}
+
+/**
+ * Version de colorpicker prenant en compte le cannal alpha (transparence)
+*/
+int	get_rgba(int r, int g, int b, int a)
+{
+	return (r << 24 | g << 16 | b << 8 | a << 0);
 }
 
 /**

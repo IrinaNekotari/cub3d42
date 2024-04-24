@@ -66,9 +66,10 @@ void	grab_key(t_mlx *mlx)
 		mlx->data->victory = 1;
 		mlx->data->x = 0;
 	}
-	if (mlx->player->player_x / TILE_SIZE == mlx->data->evil_x / TILE_SIZE
-		&& mlx->player->player_y / TILE_SIZE == mlx->data->evil_y / TILE_SIZE)
+	if (mlx->player->player_x / TILE_SIZE == mlx->player->evil_x / TILE_SIZE
+		&& mlx->player->player_y / TILE_SIZE == mlx->player->evil_y / TILE_SIZE)
 	{
+		printf("Player touched evil\n");
 		mlx->data->victory = -1;
 		mlx->data->x = 0;
 	}

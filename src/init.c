@@ -124,7 +124,7 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->ray->vert_y = 0;
 	mlx->msg_counter = 250;
 	mlx->data->victory = 0;
-	mlx->data->evil_x = -1;
-	mlx->data->evil_y = -1;
+	mlx->player->evil_x = mlx->data->evil_x;
+	mlx->player->evil_y = mlx->data->evil_y;
 	mlx->controller = init_controller();
 }
