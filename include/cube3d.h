@@ -249,7 +249,7 @@ int		door_hit(float x, float y, t_mlx *mlx);
 int32_t	mlx_get_pixel(mlx_image_t *image, uint32_t x, uint32_t y);
 
 void	raycasting(t_mlx *mlx);
-void	raycasting_door(t_mlx *mlx);
+void	raycastingFloor(t_mlx *mlx);
 void	mlx_put_pixel_screen(t_mlx *mlx, int x, int y, int color);
 void	draw_square(t_mlx *mlx, int x, int y, int c);
 void	draw_square2(t_mlx *mlx, int x, int y, int c);

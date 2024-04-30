@@ -14,21 +14,33 @@
 
 void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 {
-	int	i;
-	int	c;
+	int				i;
+	int				c;
+	uint32_t		*color;
+	mlx_texture_t	*texture;
 
 	i = bottom_pixel;
 	c = mlx->data->img->floor_color;
 	while (i < HEIGHT)
 	{
-		mlx_put_pixel_screen(mlx, ray, i, darken(c, HEIGHT - i - 45, mlx));
+		if (!mlx->data->img->floor_img)
+			mlx_put_pixel_screen(mlx, ray, i, darken(c, HEIGHT - i - 45, mlx));
 		i++;
 	}
+	texture = mlx->data->tex->c;
+	if (texture)
+		color = (uint32_t *)texture->pixels;
 	c = mlx->data->img->ceiling_color;
 	i = 0;
 	while (i < top_pixel)
 	{
-		mlx_put_pixel_screen(mlx, ray, i, darken(c, i - 45, mlx));
+		if (!mlx->data->img->ceiling_img)
+			mlx_put_pixel_screen(mlx, ray, i, darken(c, i - 45, mlx));
+		else
+			mlx_put_pixel_screen(mlx, ray, i,
+				darken(reverse_bytes(color[(i % texture->width * texture->width)
+						+ (ray) % texture->width]),
+					i - 45, mlx));
 		i++;
 	}
 }

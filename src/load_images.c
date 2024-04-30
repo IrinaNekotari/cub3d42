@@ -65,8 +65,10 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->barrel = mlx_load_png("images/Barrel.png");
 	mlx->data->tex->evil = mlx_load_png("images/map.png");
 	mlx->data->tex->map = mlx_load_png("images/map.png");
-	mlx->data->tex->c = mlx_load_png("images/map.png");
-	mlx->data->tex->f = mlx_load_png("images/map.png");
+	if (mlx->data->img->floor_img)
+		mlx->data->tex->f = mlx_load_png(mlx->data->img->floor_img);
+	if (mlx->data->img->ceiling_img)
+		mlx->data->tex->c = mlx_load_png(mlx->data->img->ceiling_img);
 	mlx->data->tex->exit = mlx_load_png("images/exit.png");
 	mlx->data->tex->mapi = mlx_texture_to_image
 		(mlx->mlx_p, mlx->data->tex->map);

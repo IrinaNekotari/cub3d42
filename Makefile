@@ -26,7 +26,8 @@ SRC = src/raycasting.c \
 	src/parse_memory.c src/get_position.c src/errors.c src/color.c src/checks.c src/parser.c src/utils.c \
 	src/size_utils.c src/list.c src/file_open.c src/map.c src/imgset.c src/imgset_utils.c src/main.c src/render.c \
 	src/movement.c src/input.c src/mlx_memory.c src/event.c src/init.c src/displays.c src/UI.c src/minimap.c \
-	src/raycasting2.c src/maths.c src/animations.c src/ticks.c src/load_images.c src/end.c src/pixel.c src/game.c
+	src/raycasting2.c src/maths.c src/animations.c src/ticks.c src/load_images.c src/end.c src/pixel.c src/game.c \
+	src/floor.c
 	
 INC	= ./include/
 OBJ = $(SRC:.c=.o)
