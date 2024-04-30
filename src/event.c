@@ -12,43 +12,6 @@
 
 #include "../include/cube3d.h"
 
-void	victory(t_mlx *mlx)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < (int)((mlx->data->x / TIME_TO_END) * HEIGHT))
-	{
-		j = 0;
-		while (j < WIDTH)
-		{
-			mlx_put_pixel_screen(mlx, j, i, 0x000000FF);
-			j++;
-		}
-		i++;
-	}
-}
-
-void	defeat(t_mlx *mlx)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < (int)((mlx->data->x / TIME_TO_END) * HEIGHT))
-	{
-		j = 0;
-		while (j < WIDTH)
-		{
-			mlx_put_pixel_screen(mlx, j, HEIGHT / 2 - i, 0x000000FF);
-			mlx_put_pixel_screen(mlx, j, HEIGHT / 2 + i, 0x000000FF);
-			j++;
-		}
-		i++;
-	}
-}
-
 void	grab_key(t_mlx *mlx)
 {
 	if (mlx->data->map[mlx->player->player_y / TILE_SIZE]

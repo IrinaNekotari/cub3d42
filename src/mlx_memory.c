@@ -40,6 +40,20 @@ void	free_texture(t_mlx *mlx)
 	mlx_delete_image(mlx->mlx_p, mlx->msg);
 }
 
+void	free_sprite(t_anim *s)
+{
+	int	i;
+
+	i = 0;
+	while (i < IMAGES_IN_SPRITES)
+	{
+		if (s->sprites[i])
+			mlx_delete_texture(s->sprites[i]);
+		i++;
+	}
+	free(s);
+}
+
 void	free_sprites(t_mlx *mlx)
 {
 	free_sprite(mlx->data->tex->door);

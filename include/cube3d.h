@@ -215,9 +215,12 @@ typedef struct s_mlx
 void	start(t_data *data);
 void	loop(void *ml);
 void	load_img(t_mlx *mlx);
-void	init_player(t_mlx mlx);
+void	load_img2(t_mlx *mlx);
+void	init_player(t_mlx *mlx);
 void	super_mega_init(t_mlx *mlx);
 void	ft_exit(t_mlx *mlx);
+void	defeat_screen(t_mlx *mlx);
+void	victory_screen(t_mlx *mlx);
 
 /**
  * Trucs de maths pas beau
@@ -228,6 +231,7 @@ int		inter_check(float angle, float *inter, float *step, int is_border_wall);
 int		unit_circle(float angle, char c);
 int		get_rgba(int r, int g, int b, int a);
 int		reverse_bytes(int c);
+int		ppcm(int a, int b);
 
 /**
  * Raycast et render
@@ -265,6 +269,9 @@ void	display_fuel(t_mlx *mlx);
 void	display_endurance(t_mlx *mlx);
 void	victory(t_mlx *mlx);
 void	defeat(t_mlx *mlx);
+
+void	tick_sprite(t_anim *s);
+void	tick_sprites(t_contr *a);
 
 /**
  * Gestion des events

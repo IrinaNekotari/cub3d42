@@ -58,3 +58,34 @@ float	normalize_angle(float angle)
 		angle -= (2 * M_PI);
 	return (angle);
 }
+
+int	reverse_bytes(int c)
+{
+	unsigned int	b;
+
+	b = 0;
+	b |= (c & 0xFF) << 24;
+	b |= (c & 0xFF00) << 8;
+	b |= (c & 0xFF0000) >> 8;
+	b |= (c & 0xFF000000) >> 24;
+	return (b);
+}
+
+int	ppcm(int a, int b)
+{
+	int	i;
+	int	j;
+
+	if (!a || !b)
+		return (0);
+	i = a;
+	j = b;
+	while (a != b)
+	{
+		if (a > b)
+			b += j;
+		else if (a < b)
+			a += i;
+	}
+	return (a);
+}
