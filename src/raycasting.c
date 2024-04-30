@@ -17,6 +17,7 @@ void	raycasting(t_mlx *mlx)
 	double	h_inter;
 	double	v_inter;
 	int	rayon;
+	double	ZBuffer;
 
 	rayon = 0;
 	mlx->ray->ray_angle = mlx->player->angle - (mlx->player->fov / 2);
@@ -36,7 +37,7 @@ void	raycasting(t_mlx *mlx)
 			render_wall(mlx, rayon);
 		rayon++;
 		mlx->ray->ray_angle += (mlx->player->fov / WIDTH);
-		
+		ZBuffer = mlx->ray->distance;
 	}
 }
 

@@ -175,6 +175,7 @@ typedef struct s_mlx
         t_ray   *ray;
         t_data  *data;
         t_player       *player;
+        t_sprite	*sprite;
 		mlx_image_t		*msg;
 		int			msg_counter;
 } t_mlx;
@@ -191,6 +192,26 @@ typedef struct s_tuple
 	int	x;
 	int y;
 } t_tuple;
+
+typedef struct s_sprite
+{
+	int	nb_sprite;
+	int	*order;
+	double	*dist;
+	double x;
+	double y;
+	double	invdet;
+	double transformx;
+	double transformy
+	int	sprite_x;
+	int	sprite_height;
+	int	sprite_width;
+	int	draw_start_x;
+	int	draw_start_y;
+	int	draw_end_x;
+	int	draw_end_y;
+	double	ZBuffer[HEIGHT];
+} t_sprite
 
 void	ft_exit(t_mlx *mlx);
 void	loop(void *ml);
