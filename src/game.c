@@ -93,6 +93,7 @@ void	loop(void *ml)
 		mlx_delete_image(mlx->mlx_p, mlx->img);
 		mlx->img = mlx_new_image(mlx->mlx_p, WIDTH, HEIGHT);
 		mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
+		//raycastingFloor(mlx);
 		raycasting(mlx);
 		//raycasting_door(mlx);
 		//render_sprite(mlx);

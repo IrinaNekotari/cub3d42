@@ -290,7 +290,7 @@ void	ft_exit(t_mlx *mlx);
 void	loop(void *ml);
 void	start(t_data *data);
 void	raycasting(t_mlx *mlx);
-void	raycasting_door(t_mlx *mlx);
+void	raycastingFloor(t_mlx *mlx);
 void	mlx_put_pixel_screen(t_mlx *mlx, int x, int y, int color);
 void	draw_square(t_mlx *mlx, int x, int y, int c);
 void	draw_square2(t_mlx *mlx, int x, int y, int c);
