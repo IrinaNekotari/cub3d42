@@ -48,6 +48,7 @@ void	move_dude(t_mlx *mlx, double move_x, double move_y)
 		mlx->player->player_x = new_x;
 		mlx->player->player_y = new_y;
 	}
+	grab_key(mlx);
 }
 
 static void	move2(t_mlx *mlx, double *move_x, double *move_y)

@@ -12,52 +12,56 @@
 
 #include "../include/cube3d.h"
 
-void	init_player(t_mlx mlx)
+void	init_player(t_mlx *mlx)
 {
-	mlx.player->player_x = mlx.data->player_x * TILE_SIZE + TILE_SIZE / 2;
-	mlx.player->player_y = mlx.data->player_y * TILE_SIZE + TILE_SIZE / 2;
-	mlx.player->fov = (FOV * M_PI) / 180;
-	if (mlx.data->player_orientation == 'S')
-		mlx.player->angle = M_PI / 2;
-	else if (mlx.data->player_orientation == 'N')
-		mlx.player->angle = (3 * M_PI) / 2;
-	else if (mlx.data->player_orientation == 'W')
-		mlx.player->angle = M_PI;
+	mlx->player->player_x = mlx->data->player_x * TILE_SIZE + TILE_SIZE / 2;
+	mlx->player->player_y = mlx->data->player_y * TILE_SIZE + TILE_SIZE / 2;
+	mlx->player->fov = (FOV * M_PI) / 180;
+	if (mlx->data->player_orientation == 'S')
+	{
+		mlx->ray->dirx = 1;
+		mlx->ray->plany = -0.66;
+		mlx->player->angle = M_PI / 2;
+	}
+	else if (mlx->data->player_orientation == 'N')
+	{
+		mlx->ray->dirx = -1;
+		mlx->player->angle = (3 * M_PI) / 2;
+		mlx->ray->plany = 0.66;
+	}
+	else if (mlx->data->player_orientation == 'W')
+	{
+		mlx->ray->diry = -1;
+		mlx->player->angle = M_PI;
+		mlx->ray->planx = -0.66;
+	}
 	else
-		mlx.player->angle = 0;
+	{
+		mlx->ray->diry = 1;
+		mlx->ray->planx = 0.66;
+		mlx->player->angle = 0;
+	}
 }
 
-void	load_img(t_mlx *mlx)
+void	init_2(t_mlx *mlx)
 {
-	mlx->data->tex->no = mlx_load_png(mlx->data->img->no);
-	mlx->data->tex->so = mlx_load_png(mlx->data->img->so);
-	mlx->data->tex->ea = mlx_load_png(mlx->data->img->ea);
-	mlx->data->tex->we = mlx_load_png(mlx->data->img->we);
-	mlx->data->tex->barrel = mlx_load_png("images/Barrel.png");
-	mlx->data->tex->key = mlx_load_png("images/Scroll.png");
-	mlx->data->tex->evil = mlx_load_png("images/map.png");
-	mlx->data->tex->door = mlx_load_png("images/DOOR.png");
-	mlx->data->tex->map = mlx_load_png("images/map.png");
-	mlx->data->tex->c = mlx_load_png("images/map.png");
-	mlx->data->tex->f = mlx_load_png("images/map.png");
-	mlx->data->tex->mapi = mlx_texture_to_image
-		(mlx->mlx_p, mlx->data->tex->map);
-	mlx->data->tex->lantern = mlx_load_png("images/Hand.png");
-	mlx->data->tex->lanterni = mlx_texture_to_image
-		(mlx->mlx_p, mlx->data->tex->lantern);
-	mlx->data->tex->lanternempty = mlx_load_png
-		("images/HandEmpty.png");
-	mlx->data->tex->lanternemptyi = mlx_texture_to_image
-		(mlx->mlx_p, mlx->data->tex->lanternempty);
-	mlx->data->tex->handkey = mlx_load_png("images/key.png");
-	mlx->data->tex->handkeyi = mlx_texture_to_image
-		(mlx->mlx_p, mlx->data->tex->handkey);
-	mlx->data->tex->victory = mlx_load_png("images/victory.png");
-	mlx->data->tex->victoryi = mlx_texture_to_image
-		(mlx->mlx_p, mlx->data->tex->victory);
-	mlx->data->tex->defeat = mlx_load_png("images/died.png");
-	mlx->data->tex->defeati = mlx_texture_to_image
-		(mlx->mlx_p, mlx->data->tex->defeat);
+	mlx->player->is_rotating = 0;
+	mlx->player->is_moving_sides = 0;
+	mlx->player->is_moving_forward = 0;
+	mlx->player->left_right = 0;
+	mlx->player->up_down = 0;
+	mlx->ray->rayon = 0;
+	mlx->ray->ray_angle = 0;
+	mlx->ray->distance = 0;
+	mlx->ray->flag = 0;
+	mlx->ray->wall_type = 0;
+	mlx->ray->horiz_x = 0;
+	mlx->ray->vert_y = 0;
+	mlx->msg_counter = 250;
+	mlx->data->victory = 0;
+	mlx->player->evil_x = mlx->data->evil_x * TILE_SIZE + TILE_SIZE / 2;
+	mlx->player->evil_y = mlx->data->evil_y * TILE_SIZE + TILE_SIZE / 2;
+	mlx->controller = init_controller();
 }
 
 void	super_mega_init(t_mlx *mlx)
@@ -72,21 +76,6 @@ void	super_mega_init(t_mlx *mlx)
 	mlx->player->can_run = 1;
 	mlx->player->fuel = MAX_FUEL;
 	mlx->player->fov = FOV;
-	mlx->player->is_rotating = 0;
-	mlx->player->is_moving_sides = 0;
-	mlx->player->is_moving_forward = 0;
-	mlx->player->rotation = 0;
-	mlx->player->left_right = 0;
-	mlx->player->up_down = 0;
-	mlx->ray->rayon = 0;
-	mlx->ray->ray_angle = 0;
-	mlx->ray->distance = 0;
-	mlx->ray->flag = 0;
-	mlx->ray->wall_type = 0;
-	mlx->ray->horiz_x = 0;
-	mlx->ray->vert_y = 0;
-	mlx->msg_counter = 250;
-	mlx->data->victory = 0;
-	mlx->data->evil_x = -1;
-	mlx->data->evil_y = -1;
+	init_2(mlx);
+	init_player(mlx);
 }
