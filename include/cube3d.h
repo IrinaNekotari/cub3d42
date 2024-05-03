@@ -290,7 +290,7 @@ void	ft_exit(t_mlx *mlx);
 void	loop(void *ml);
 void	start(t_data *data);
 void	raycasting(t_mlx *mlx);
-void	raycastingFloor(t_mlx *mlx);
+void	raycasting_door(t_mlx *mlx);
 void	mlx_put_pixel_screen(t_mlx *mlx, int x, int y, int color);
 void	draw_square(t_mlx *mlx, int x, int y, int c);
 void	draw_square2(t_mlx *mlx, int x, int y, int c);
@@ -314,6 +314,8 @@ void	defeat(t_mlx *mlx);
 void	tick_sprite(t_anim *s);
 void	tick_sprites(t_contr *a);
 
+mlx_texture_t	*get_texture(t_mlx *mlx, int flag);
+
 /**
  * Gestion des events
 */
@@ -331,6 +333,7 @@ void	add_to_set(t_anim *s, char *tex);
 void	tick_sprites(t_contr *a);
 void	free_sprite(t_anim *s);
 void	add_to_control(t_contr *a, t_anim *s);
+
 
 t_anim	*create_sprite(int delay);
 
@@ -387,7 +390,10 @@ void	null_values(t_imgset **img);
 
 char	**generate_map(t_chain *c, int x, int y);
 
-void	render_sprite(t_mlx *mlx);
+void	render_sprite(t_mlx *mlx, int ray);
+void	raycasting_sprites(t_mlx *mlx);
+float	do_sprite_stuff(t_mlx *mlx, float angle, int rayon);
+int	sprite_hit(float x, float y, t_mlx *mlx, int method);
 
 t_data	*generate_data(char *path);
 t_data	*data_error(int code, t_data *data, t_chain *values);
