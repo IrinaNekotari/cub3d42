@@ -276,15 +276,10 @@ double	get_x_wall(mlx_texture_t *texture, t_mlx *mlx);
 
 float	get_v_inter(t_mlx *mlx, float angle);
 float	get_h_inter(t_mlx *mlx, float angle);
-float	get_v_inter_door(t_mlx *mlx, float angle);
-float	get_h_inter_door(t_mlx *mlx, float angle);
 
 int		wall_hit(float x, float y, t_mlx *mlx, int method);
-int		door_hit(float x, float y, t_mlx *mlx);
 
 int32_t	mlx_get_pixel(mlx_image_t *image, uint32_t x, uint32_t y);
-
-
 
 void	ft_exit(t_mlx *mlx);
 void	loop(void *ml);
@@ -333,7 +328,6 @@ void	add_to_set(t_anim *s, char *tex);
 void	tick_sprites(t_contr *a);
 void	free_sprite(t_anim *s);
 void	add_to_control(t_contr *a, t_anim *s);
-
 
 t_anim	*create_sprite(int delay);
 
@@ -392,8 +386,8 @@ char	**generate_map(t_chain *c, int x, int y);
 
 void	render_sprite(t_mlx *mlx, int ray);
 void	raycasting_sprites(t_mlx *mlx);
-float	do_sprite_stuff(t_mlx *mlx, float angle, int rayon);
-int	sprite_hit(float x, float y, t_mlx *mlx, int method);
+void	do_sprite_stuff(t_mlx *mlx, float angle, int rayon);
+int		sprite_hit(float x, float y, t_mlx *mlx);
 
 t_data	*generate_data(char *path);
 t_data	*data_error(int code, t_data *data, t_chain *values);

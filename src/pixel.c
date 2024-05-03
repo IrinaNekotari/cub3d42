@@ -88,6 +88,8 @@ int	darken(int c, double dist, t_mlx *mlx)
 
 	if (dist < mlx->player->light_radius)
 		return (c);
+	if ((c & 0x000000FF) == 0)
+		return (c);
 	r = (c & 0xFF000000) >> 24;
 	g = (c & 0x00FF0000) >> 16;
 	b = (c & 0x0000FF00) >> 8;

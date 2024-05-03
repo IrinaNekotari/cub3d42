@@ -125,11 +125,6 @@ int	wall_hit(float x, float y, t_mlx *mlx, int method)
 				mlx->ray->wall_type2 = mlx->data->map[y_m][x_m];
 			return (0);
 		}
-		if (mlx->data->map[y_m][x_m] == 'B')
-		{
-			mlx->ray->wall_type = mlx->data->map[y_m][x_m];
-			return (0);
-		}
 	}
 	return (1);
 }
