@@ -123,37 +123,9 @@ typedef struct s_ray
 	int		horiz_y;
 	int		vert_x;
 	int		vert_y;
-	
 	char	wall_type;
 	char	wall_type2;
 }	t_ray;
-
-typedef struct s_sprite
-{
-	int	nb_sprite;
-	int	*order;
-	double	*dist;
-	double x;
-	double y;
-	double	invdet;
-	double transformx;
-	double transformy;
-	int	sprite_x;
-	int	sprite_y;
-	int	sprite_height;
-	int	sprite_width;
-	int	draw_start_x;
-	int	draw_start_y;
-	int	draw_end_x;
-	int	draw_end_y;
-	double	zBuffer[WIDTH];
-} t_sprite;
-
-typedef struct		s_sprxy
-{
-	double			x;
-	double			y;
-}			t_sprxy;
 
 # define IMAGES_IN_SPRITES 10
 # define MAX_ANIMATIONS 10
@@ -237,12 +209,9 @@ typedef struct s_mlx
 	t_ray					*ray;
 	t_data					*data;
 	t_player				*player;
-	t_sprite				*sprite;
 	mlx_image_t				*msg;
 	t_contr					*controller;
 	int						msg_counter;
-	int					h[WIDTH];
-	t_sprxy				*sxy;
 }	t_mlx;
 
 /**
@@ -384,7 +353,7 @@ void	null_values(t_imgset **img);
 
 char	**generate_map(t_chain *c, int x, int y);
 
-void	render_sprite(t_mlx *mlx, int ray);
+void	render_sprite(t_mlx *mlx, int ray, char method);
 void	raycasting_sprites(t_mlx *mlx);
 void	do_sprite_stuff(t_mlx *mlx, float angle, int rayon);
 int		sprite_hit(float x, float y, t_mlx *mlx);

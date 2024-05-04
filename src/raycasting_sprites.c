@@ -12,6 +12,26 @@
 
 #include "../include/cube3d.h"
 
+void	get_sprite_id(t_mlx *mlx, float x, float y, int rayon)
+{
+	if (mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)] == 'B'
+		|| mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)] == 'K')
+    {
+		mlx->ray->horiz_x = x;
+		mlx->ray->horiz_y = y;
+    	mlx->ray->distance = sqrt(pow(((int)(x / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_x, 2) + pow(((int)(y / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_y, 2));
+		render_sprite(mlx, rayon, mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)]);
+	}
+	if ((int)floor(y / TILE_SIZE) == (int)floor(mlx->player->evil_y / TILE_SIZE)
+		&& (int)floor(x / TILE_SIZE) == (int)floor(mlx->player->evil_x / TILE_SIZE))
+    {
+		mlx->ray->horiz_x = x;
+		mlx->ray->horiz_y = y;
+    	mlx->ray->distance = sqrt(pow(mlx->player->evil_x - mlx->player->player_x, 2) + pow(mlx->player->evil_y - mlx->player->player_y, 2));
+		render_sprite(mlx, rayon, 'V');
+	}
+}
+
 void	do_sprite_stuff2(t_mlx *mlx, float angle, int rayon)
 {
 	float	h_x;
@@ -25,6 +45,7 @@ void	do_sprite_stuff2(t_mlx *mlx, float angle, int rayon)
 	h_y = floor(mlx->player->player_y / TILE_SIZE) * TILE_SIZE;
 	pixel = inter_check(angle, &h_y, &y_step, 1);
 	h_x = mlx->player->player_x + (h_y - mlx->player->player_y) / tan(angle);
+	mlx->ray->flag = 0;
 	if ((unit_circle(angle, 'y') && x_step > 0)
 		|| (!unit_circle(angle, 'y') && x_step < 0))
 		x_step *= -1;
@@ -37,13 +58,7 @@ void	do_sprite_stuff2(t_mlx *mlx, float angle, int rayon)
     {
     	if (h_x < 0 || h_y < 0)
 			break ;
-		if (mlx->data->map[(int)floor(h_y / TILE_SIZE)][(int)floor(h_x / TILE_SIZE)] == 'B')
-    	{
-    		mlx->ray->horiz_x = h_x;
-			mlx->ray->horiz_y = h_y;
-			mlx->ray->distance = sqrt(pow(((int)(h_x / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_x, 2) + pow(((int)(h_y / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_y, 2));
-			render_sprite(mlx, rayon);
-		}
+		get_sprite_id(mlx, h_x, h_y, rayon);
 		h_x -= x_step;
        	h_y -= y_step;
     }
@@ -57,7 +72,7 @@ void	raycasting_sprites(t_mlx *mlx)
 	mlx->ray->ray_angle = mlx->player->angle - (mlx->player->fov / 2);
 	while (rayon < WIDTH)
 	{
-		if (get_h_inter(mlx, normalize_angle(mlx->ray->ray_angle)) > get_v_inter(mlx, normalize_angle(mlx->ray->ray_angle)))
+		if (get_h_inter(mlx, normalize_angle(mlx->ray->ray_angle)) >= get_v_inter(mlx, normalize_angle(mlx->ray->ray_angle)))
 			do_sprite_stuff(mlx, normalize_angle(mlx->ray->ray_angle), rayon);
 		else
 			do_sprite_stuff2(mlx, normalize_angle(mlx->ray->ray_angle), rayon);
@@ -78,6 +93,7 @@ void	do_sprite_stuff(t_mlx *mlx, float angle, int rayon)
 	y_step = TILE_SIZE * tan(angle);
 	v_x = floor(mlx->player->player_x / TILE_SIZE) * TILE_SIZE;
 	pixel = inter_check(angle, &v_x, &x_step, 0);
+	mlx->ray->flag = 1;
 	v_y = mlx->player->player_y + (v_x - mlx->player->player_x) * tan(angle);
 	if ((unit_circle(angle, 'x') && y_step < 0)
 		|| (!unit_circle(angle, 'x') && y_step > 0))
@@ -91,13 +107,7 @@ void	do_sprite_stuff(t_mlx *mlx, float angle, int rayon)
     {
     	if (v_x < 0 || v_y < 0)
 			break ;
-		if (mlx->data->map[(int)floor(v_y / TILE_SIZE)][(int)floor(v_x / TILE_SIZE)] == 'B')
-    	{
-			mlx->ray->horiz_x = v_x;
-			mlx->ray->horiz_y = v_y;
-    		mlx->ray->distance = sqrt(pow(((int)(v_x / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_x, 2) + pow(((int)(v_y / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_y, 2));
-			render_sprite(mlx, rayon);
-		}
+		get_sprite_id(mlx, v_x, v_y, rayon);
 		v_x -= x_step;
        	v_y -= y_step;
     }

@@ -5,13 +5,13 @@ WE images/wallB.png
 
 EA images/wallC.png
 
-F images/floor.png
+F 31,20,18
 C images/roof.png
 
    111
 1111X1111
-10D0V0001
-10B0K0B01
+10D0V0BB1
+10B0K0BB1
 100000001
 1000N0001
 111111111

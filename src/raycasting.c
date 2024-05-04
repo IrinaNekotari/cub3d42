@@ -29,20 +29,13 @@ void	raycasting(t_mlx *mlx)
 		h_inter = get_h_inter(mlx, normalize_angle(mlx->ray->ray_angle));
 		v_inter = get_v_inter(mlx, normalize_angle(mlx->ray->ray_angle));
 		if (v_inter <= h_inter)
-		{
 			mlx->ray->distance = v_inter;
-			mlx->sprite->zBuffer[rayon] = v_inter;
-		}
 		else
 		{
 			mlx->ray->distance = h_inter;
 			mlx->ray->flag = 1;
-			mlx->sprite->zBuffer[rayon] = h_inter;
 		}
-		if (mlx->ray->wall_type == 'B')
-			render_sprite(mlx, rayon);
-		else
-			render_wall(mlx, rayon);
+		render_wall(mlx, rayon);
 		rayon++;
 		mlx->ray->ray_angle += (mlx->player->fov / WIDTH);
 	}

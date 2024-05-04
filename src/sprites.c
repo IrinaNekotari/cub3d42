@@ -52,9 +52,13 @@ void	draw_sprite(t_mlx *mlx, int top_pixel, int bottom_pixel,
 	uint32_t		*color;
 	mlx_texture_t	*texture;
 
-	texture = mlx->data->tex->barrel;
+	if (mlx->ray->wall_type == 'B')
+		texture = mlx->data->tex->barrel;
+	else if (mlx->ray->wall_type == 'K')
+		texture = mlx->data->tex->key->current;
+	else if (mlx->ray->wall_type == 'V')
+		texture = mlx->data->tex->evil;
 	color = (uint32_t *)texture->pixels;
-	//Le milieu de la texture est toujours au milieu de la case
 	x_wall = get_x_sprite(texture, mlx);
 	y_wall = (texture->height / sprite_height) * (top_pixel - (HEIGHT / 2)
 			+ (sprite_height / 2));
@@ -71,7 +75,7 @@ void	draw_sprite(t_mlx *mlx, int top_pixel, int bottom_pixel,
 	}
 }
 
-void	render_sprite(t_mlx *mlx, int ray)
+void	render_sprite(t_mlx *mlx, int ray, char method)
 {
 	int		wall_height;
 	double	bottom_pixel;
@@ -90,6 +94,7 @@ void	render_sprite(t_mlx *mlx, int ray)
 	if (top_pixel < 0)
 		top_pixel = 0;
 	mlx->ray->rayon = ray;
+	mlx->ray->wall_type = method;
 	draw_sprite(mlx, top_pixel, bottom_pixel, wall_height);
 }
 

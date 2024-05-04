@@ -15,7 +15,7 @@
 void	load_sprites(t_mlx **mlx)
 {
 	(*mlx)->data->tex->door = create_sprite(10);
-	(*mlx)->data->tex->key = create_sprite(10);
+	(*mlx)->data->tex->key = create_sprite(2);
 	add_to_set((*mlx)->data->tex->door, "images/doorA.png");
 	add_to_set((*mlx)->data->tex->door, "images/doorB.png");
 	add_to_set((*mlx)->data->tex->door, "images/doorC.png");
@@ -63,7 +63,7 @@ void	load_img(t_mlx *mlx)
 	mlx->data->tex->ea = mlx_load_png(mlx->data->img->ea);
 	mlx->data->tex->we = mlx_load_png(mlx->data->img->we);
 	mlx->data->tex->barrel = mlx_load_png("images/Barrel.png");
-	mlx->data->tex->evil = mlx_load_png("images/map.png");
+	mlx->data->tex->evil = mlx_load_png("images/evil.png");
 	mlx->data->tex->map = mlx_load_png("images/map.png");
 	if (mlx->data->img->floor_img)
 		mlx->data->tex->f = mlx_load_png(mlx->data->img->floor_img);

@@ -19,8 +19,6 @@ void	start(t_data *data)
 	mlx.data = data;
 	mlx.player = ft_calloc(1, sizeof(t_player));
 	mlx.ray = ft_calloc(1, sizeof(t_ray));
-	mlx.sprite = ft_calloc(1, sizeof(t_sprite));
-	mlx.sxy = ft_calloc(1, sizeof(t_sprxy));
 	mlx.mlx_p = mlx_init(WIDTH, HEIGHT, "Cube3D", 0);
 	mlx.img = NULL;
 	super_mega_init(&mlx);

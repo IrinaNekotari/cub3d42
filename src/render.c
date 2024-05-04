@@ -139,7 +139,6 @@ void	render_wall(t_mlx *mlx, int ray)
 		mlx->ray->distance = 0.001;
 	wall_height = (TILE_SIZE / mlx->ray->distance)
 		* ((WIDTH / 2) / tan(mlx->player->fov / 2));
-	mlx->h[ray] = wall_height;
 	if (wall_height == 0)
 		wall_height = 1;
 	bottom_pixel = (HEIGHT / 2) + (wall_height / 2);
