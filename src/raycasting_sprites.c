@@ -14,19 +14,26 @@
 
 void	get_sprite_id(t_mlx *mlx, float x, float y, int rayon)
 {
+	//Couillage en cours
+	if (!mlx->ray->flag)
+	{
+		mlx->ray->horiz_x = x;
+		mlx->ray->horiz_y = y;
+	}
+	else
+	{
+		mlx->ray->vert_x = x;
+		mlx->ray->vert_y = y;
+	}
 	if (mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)] == 'B'
 		|| mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)] == 'K')
     {
-		mlx->ray->horiz_x = x;
-		mlx->ray->horiz_y = y;
     	mlx->ray->distance = sqrt(pow(((int)(x / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_x, 2) + pow(((int)(y / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_y, 2));
 		render_sprite(mlx, rayon, mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)]);
 	}
 	if ((int)floor(y / TILE_SIZE) == (int)floor(mlx->player->evil_y / TILE_SIZE)
 		&& (int)floor(x / TILE_SIZE) == (int)floor(mlx->player->evil_x / TILE_SIZE))
     {
-		mlx->ray->horiz_x = x;
-		mlx->ray->horiz_y = y;
     	mlx->ray->distance = sqrt(pow(mlx->player->evil_x - mlx->player->player_x, 2) + pow(mlx->player->evil_y - mlx->player->player_y, 2));
 		render_sprite(mlx, rayon, 'V');
 	}

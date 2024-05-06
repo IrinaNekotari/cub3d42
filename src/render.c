@@ -85,7 +85,6 @@ double	get_x_wall(mlx_texture_t	*texture, t_mlx *mlx)
 		else
 			x_wall = (int)fmodf((mlx->ray->horiz_x
 						* (texture->width / TILE_SIZE)), texture->width);
-		mlx->data->perp_wall_dist = (mlx->ray->horiz_y - mlx->ray->vert_y);
 	}
 	else
 	{
@@ -96,7 +95,6 @@ double	get_x_wall(mlx_texture_t	*texture, t_mlx *mlx)
 		else
 			x_wall = (int)fmodf((mlx->ray->vert_y
 						* (texture->width / TILE_SIZE)), texture->width);
-		mlx->data->perp_wall_dist = (mlx->ray->horiz_x - mlx->ray->vert_x);
 	}
 	return (x_wall);
 }

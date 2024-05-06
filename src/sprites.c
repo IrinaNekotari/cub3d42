@@ -31,14 +31,24 @@ double	get_x_sprite(mlx_texture_t	*texture, t_mlx *mlx)
 {
 	double	x_wall;
 
+	//Nord et sud : marche a peu près comme il faut
 	if (mlx->ray->flag == 1)
 	{
-		x_wall = (int)fmodf((mlx->ray->vert_x
+		if ((mlx->ray->ray_angle > 0 && mlx->ray->ray_angle < M_PI))
+			x_wall = texture->width - (int)fmodf((mlx->ray->vert_x
 						* (texture->width / TILE_SIZE)), texture->width);
+		else
+			x_wall = (int)fmodf((mlx->ray->vert_x
+						* (texture->width / TILE_SIZE)), texture->width); 
 	}
-	else
+	else //c'est la que ça couille - est/ouest
 	{
-		x_wall = (int)fmodf((mlx->ray->horiz_x
+		if (mlx->ray->ray_angle > M_PI / 2 && mlx->ray->ray_angle < 3
+			* (M_PI / 2))
+			x_wall = texture->width - (int)fmodf((mlx->ray->horiz_x
+						* (texture->width / TILE_SIZE)), texture->width);
+		else 
+			x_wall = (int)fmodf((mlx->ray->horiz_x
 						* (texture->width / TILE_SIZE)), texture->width);
 	}
 	return (x_wall);
@@ -67,7 +77,7 @@ void	draw_sprite(t_mlx *mlx, int top_pixel, int bottom_pixel,
 	while (top_pixel < bottom_pixel)
 	{
 		mlx_put_pixel_screen2(mlx, mlx->ray->rayon, top_pixel,
-			darken(reverse_bytes(color[((int)y_wall * texture->width)
+			darken(reverse_bytes(color[(((int)y_wall) * texture->width)
 					+ ((int)x_wall) % texture->width]),
 				mlx->ray->distance, mlx));
 		y_wall += (texture->height / sprite_height);
