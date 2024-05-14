@@ -19,26 +19,18 @@ void	init_player(t_mlx *mlx)
 	mlx->player->fov = (FOV * M_PI) / 180;
 	if (mlx->data->player_orientation == 'S')
 	{
-		mlx->ray->dirx = 1;
-		mlx->ray->plany = -0.66;
 		mlx->player->angle = M_PI / 2;
 	}
 	else if (mlx->data->player_orientation == 'N')
 	{
-		mlx->ray->dirx = -1;
-		mlx->player->angle = (3 * M_PI) / 2;
 		mlx->ray->plany = 0.66;
 	}
 	else if (mlx->data->player_orientation == 'W')
 	{
-		mlx->ray->diry = -1;
-		mlx->player->angle = M_PI;
 		mlx->ray->planx = -0.66;
 	}
 	else
 	{
-		mlx->ray->diry = 1;
-		mlx->ray->planx = 0.66;
 		mlx->player->angle = 0;
 	}
 }

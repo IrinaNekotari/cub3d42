@@ -14,10 +14,9 @@
 
 void	raycasting(t_mlx *mlx)
 {
+	int		rayon;
 	double	h_inter;
-	double	v_inter;
-
-	int	rayon;
+	double	v_inter;	
 
 	rayon = 0;
 	mlx->ray->ray_angle = mlx->player->angle - (mlx->player->fov / 2);
@@ -68,7 +67,7 @@ float	get_v_inter(t_mlx *mlx, float angle)
 			+ pow(v_y - mlx->player->player_y, 2)));
 }
 
-float tan2(float val)
+float	tan2(float val)
 {
 	if (tan(val) == 0)
 		return (0.01);
