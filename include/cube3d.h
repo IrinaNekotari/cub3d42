@@ -294,6 +294,16 @@ void	open_exit(t_mlx *mlx);
 void	grab_key(t_mlx *mlx);
 
 /**
+ * Gestion des sprites
+*/
+void	render_sprite(t_mlx *mlx, int ray, char method);
+void	get_sprite_id(t_mlx *mlx, float x, float y, int rayon);
+void	raycasting_sprites(t_mlx *mlx);
+void	do_sprite_stuff(t_mlx *mlx, float angle, int rayon);
+void	do_sprite_stuff2(t_mlx *mlx, float angle, int rayon);
+int		sprite_hit(float x, float y, t_mlx *mlx);
+
+/**
  * Gestion des animations
 */
 void	load_sprites(t_mlx **mlx);
@@ -356,11 +366,6 @@ void	free_split(char **a);
 void	null_values(t_imgset **img);
 
 char	**generate_map(t_chain *c, int x, int y);
-
-void	render_sprite(t_mlx *mlx, int ray, char method);
-void	raycasting_sprites(t_mlx *mlx);
-void	do_sprite_stuff(t_mlx *mlx, float angle, int rayon);
-int		sprite_hit(float x, float y, t_mlx *mlx);
 
 t_data	*generate_data(char *path);
 t_data	*data_error(int code, t_data *data, t_chain *values);
