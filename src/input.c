@@ -68,10 +68,7 @@ void	release(mlx_key_data_t keydata, t_mlx *mlx)
 			mlx->player->is_sprinting = 0.5;
 	}
 	if (keydata.key == MLX_KEY_E && keydata.action == MLX_RELEASE)
-	{
 		open_doors(mlx);
-		open_exit(mlx);
-	}
 	release2(keydata, mlx);
 	release3(keydata, mlx);
 }

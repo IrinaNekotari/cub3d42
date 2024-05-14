@@ -74,7 +74,6 @@ void	do_things(t_chain **a, char **tmp, int fd)
 	(*tmp) = get_next_line(fd);
 }
 
-
 /**
  * Teste si le fichier ne contient que des lignes vides
 */
