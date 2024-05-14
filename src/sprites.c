@@ -38,7 +38,7 @@ double	get_x_sprite(mlx_texture_t	*texture, t_mlx *mlx)
 						* (texture->width / TILE_SIZE)), texture->width);
 		else
 			x_wall = (int)fmodf((mlx->ray->vert_x
-						* (texture->width / TILE_SIZE)), texture->width); 
+						* (texture->width / TILE_SIZE)), texture->width);
 	}
 	else
 	{
@@ -46,11 +46,21 @@ double	get_x_sprite(mlx_texture_t	*texture, t_mlx *mlx)
 			* (M_PI / 2))
 			x_wall = texture->width - (int)fmodf((mlx->ray->horiz_x
 						* (texture->width / TILE_SIZE)), texture->width);
-		else 
+		else
 			x_wall = (int)fmodf((mlx->ray->horiz_x
 						* (texture->width / TILE_SIZE)), texture->width);
 	}
 	return (x_wall);
+}
+
+mlx_texture_t	*get_texture_sprite(t_mlx *mlx)
+{
+	if (mlx->ray->wall_type == 'B')
+		return (mlx->data->tex->barrel);
+	else if (mlx->ray->wall_type == 'K')
+		return (mlx->data->tex->key->current);
+	else
+		return (mlx->data->tex->evil);
 }
 
 void	draw_sprite(t_mlx *mlx, int top_pixel, int bottom_pixel,
@@ -61,12 +71,7 @@ void	draw_sprite(t_mlx *mlx, int top_pixel, int bottom_pixel,
 	uint32_t		*color;
 	mlx_texture_t	*texture;
 
-	if (mlx->ray->wall_type == 'B')
-		texture = mlx->data->tex->barrel;
-	else if (mlx->ray->wall_type == 'K')
-		texture = mlx->data->tex->key->current;
-	else
-		texture = mlx->data->tex->evil;
+	texture = get_texture_sprite(mlx);
 	color = (uint32_t *)texture->pixels;
 	x_wall = get_x_sprite(texture, mlx);
 	y_wall = (texture->height / sprite_height) * (top_pixel - (HEIGHT / 2)
@@ -106,4 +111,3 @@ void	render_sprite(t_mlx *mlx, int ray, char method)
 	mlx->ray->wall_type = method;
 	draw_sprite(mlx, top_pixel, bottom_pixel, wall_height);
 }
-
