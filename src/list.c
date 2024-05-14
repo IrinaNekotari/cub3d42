@@ -75,6 +75,20 @@ void	do_things(t_chain **a, char **tmp, int fd)
 }
 
 /**
+ * Teste si le fichier ne contient que des lignes vides
+*/
+int	is_empty_file(t_chain *a)
+{
+	while (a->next)
+	{
+		if (!emptyline(a->line))
+			return (1);
+		a = a->next;
+	}
+	return (0);
+}
+
+/**
  * Convertis un fichier ouvert en liste chainée
  * Supprime les \n a la fin de chaque ligne
 */
@@ -99,5 +113,10 @@ t_chain	*to_chain(char *path)
 	a->next = NULL;
 	cut_ligne(&a);
 	close (fd);
+	if (!is_empty_file(b))
+	{
+		free_chain(b);
+		return (ft_errmsg("Empty file !"));
+	}
 	return (b);
 }

@@ -102,6 +102,7 @@ void	open_doors(t_mlx *mlx)
 {
 	double	dir;
 
+	open_exit(mlx);
 	if (mlx->data->map[mlx->player->player_y / TILE_SIZE - 1]
 		[mlx->player->player_x / TILE_SIZE] == 'D')
 		dir = M_PI_ON_TWO;
