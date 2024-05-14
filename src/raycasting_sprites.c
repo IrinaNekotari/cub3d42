@@ -14,16 +14,10 @@
 
 void	get_sprite_id(t_mlx *mlx, float x, float y, int rayon)
 {
-	if (!mlx->ray->flag)
-	{
-		mlx->ray->horiz_x = x;
-		mlx->ray->horiz_y = y;
-	}
-	else
-	{
-		mlx->ray->vert_x = x;
-		mlx->ray->vert_y = y;
-	}
+	mlx->ray->horiz_x = x;
+	mlx->ray->horiz_y = y;
+	mlx->ray->vert_x = x;
+	mlx->ray->vert_y = y;
 	if (mlx->data->map[(int)floor(y / TILE_SIZE)]
 		[(int)floor(x / TILE_SIZE)] == 'B'
 		|| mlx->data->map[(int)floor(y / TILE_SIZE)]
