@@ -72,6 +72,32 @@ static void	open_2(t_mlx *mlx, double dir)
 		display_message(mlx, LINE_LOCKED);
 }
 
+void	open_exit(t_mlx *mlx)
+{
+	double	dir;
+
+	if (mlx->data->map[mlx->player->player_y / TILE_SIZE - 1]
+		[mlx->player->player_x / TILE_SIZE] == 'X')
+		dir = M_PI_ON_TWO;
+	else if (mlx->data->map[mlx->player->player_y / TILE_SIZE + 1]
+		[mlx->player->player_x / TILE_SIZE] == 'X')
+		dir = M_THREE_PI_ON_TWO;
+	else if (mlx->data->map[mlx->player->player_y / TILE_SIZE]
+		[mlx->player->player_x / TILE_SIZE - 1] == 'X')
+		dir = M_PI;
+	else if (mlx->data->map[mlx->player->player_y / TILE_SIZE]
+		[mlx->player->player_x / TILE_SIZE + 1] == 'X')
+		dir = 0;
+	else
+		return ;
+	if (is_looking_at_door(mlx->player->angle, dir))
+	{
+		display_message(mlx, LINE_VICTORY);
+		mlx->data->victory = 1;
+		mlx->data->x = 0;
+	}
+}
+
 void	open_doors(t_mlx *mlx)
 {
 	double	dir;

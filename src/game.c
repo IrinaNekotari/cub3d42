@@ -83,6 +83,10 @@ void	victory_condition(t_mlx *mlx)
 	}
 }
 
+/**
+* Appeler apres raycasting
+* raycasting_sprites(mlx);
+*/
 void	loop(void *ml)
 {
 	t_mlx	*mlx;
@@ -94,8 +98,6 @@ void	loop(void *ml)
 		mlx->img = mlx_new_image(mlx->mlx_p, WIDTH, HEIGHT);
 		mlx_image_to_window(mlx->mlx_p, mlx->img, 0, 0);
 		raycasting(mlx);
-		raycasting_sprites(mlx);
-		//render_sprite(mlx);
 		redisplay_message(mlx);
 		move(mlx, 0, 0);
 		minimap_background(mlx);

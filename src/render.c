@@ -133,8 +133,8 @@ void	render_wall(t_mlx *mlx, int ray)
 
 	mlx->ray->distance *= cos(normalize_angle
 			(mlx->ray->ray_angle - mlx->player->angle));
-	if (mlx->ray->distance == 0)
-		mlx->ray->distance = 0.001;
+	if (mlx->ray->distance <= 0)
+		mlx->ray->distance = 0.01;
 	wall_height = (TILE_SIZE / mlx->ray->distance)
 		* ((WIDTH / 2) / tan(mlx->player->fov / 2));
 	if (wall_height == 0)

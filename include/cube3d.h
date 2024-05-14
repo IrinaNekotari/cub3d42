@@ -287,6 +287,7 @@ void	press(mlx_key_data_t keydata, void *ml);
 void	move_dude(t_mlx *mlx, double move_x, double move_y);
 void	move(t_mlx *mlx, double move_x, double move_y);
 void	open_doors(t_mlx *mlx);
+void	open_exit(t_mlx *mlx);
 void	grab_key(t_mlx *mlx);
 
 /**

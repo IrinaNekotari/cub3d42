@@ -37,10 +37,11 @@ void	move_dude(t_mlx *mlx, double move_x, double move_y)
 
 	new_x = roundf(mlx->player->player_x + move_x);
 	new_y = roundf(mlx->player->player_y + move_y);
-	map_grid_x = (new_x / TILE_SIZE);
-	map_grid_y = (new_y / TILE_SIZE);
+	map_grid_x = ((new_x + move_x * 5) / TILE_SIZE);
+	map_grid_y = ((new_y + move_y * 5) / TILE_SIZE);
 	if (mlx->data->map[map_grid_y][map_grid_x] != '1'
 		&& mlx->data->map[map_grid_y][map_grid_x] != 'D'
+		&& mlx->data->map[map_grid_y][map_grid_x] != 'X'
 		&& (mlx->data->map[map_grid_y][mlx->player->player_x / TILE_SIZE] != '1'
 		&& mlx->data->map
 			[mlx->player->player_y / TILE_SIZE][map_grid_x] != '1'))

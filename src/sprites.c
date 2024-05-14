@@ -31,7 +31,6 @@ double	get_x_sprite(mlx_texture_t	*texture, t_mlx *mlx)
 {
 	double	x_wall;
 
-	//Nord et sud : marche a peu près comme il faut
 	if (mlx->ray->flag == 1)
 	{
 		if ((mlx->ray->ray_angle > 0 && mlx->ray->ray_angle < M_PI))
@@ -41,7 +40,7 @@ double	get_x_sprite(mlx_texture_t	*texture, t_mlx *mlx)
 			x_wall = (int)fmodf((mlx->ray->vert_x
 						* (texture->width / TILE_SIZE)), texture->width); 
 	}
-	else //c'est la que ça couille - est/ouest
+	else
 	{
 		if (mlx->ray->ray_angle > M_PI / 2 && mlx->ray->ray_angle < 3
 			* (M_PI / 2))
@@ -66,7 +65,7 @@ void	draw_sprite(t_mlx *mlx, int top_pixel, int bottom_pixel,
 		texture = mlx->data->tex->barrel;
 	else if (mlx->ray->wall_type == 'K')
 		texture = mlx->data->tex->key->current;
-	else if (mlx->ray->wall_type == 'V')
+	else
 		texture = mlx->data->tex->evil;
 	color = (uint32_t *)texture->pixels;
 	x_wall = get_x_sprite(texture, mlx);

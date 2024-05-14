@@ -68,6 +68,14 @@ float	get_v_inter(t_mlx *mlx, float angle)
 			+ pow(v_y - mlx->player->player_y, 2)));
 }
 
+float tan2(float val)
+{
+	if (tan(val) == 0)
+		return (0.01);
+	else
+		return (tan(val));
+}
+
 float	get_h_inter(t_mlx *mlx, float angle)
 {
 	float	h_x;
@@ -77,7 +85,7 @@ float	get_h_inter(t_mlx *mlx, float angle)
 	int		pixel;
 
 	y_step = TILE_SIZE;
-	x_step = TILE_SIZE / tan(angle);
+	x_step = TILE_SIZE / tan2(angle);
 	h_y = floor(mlx->player->player_y / TILE_SIZE) * TILE_SIZE;
 	pixel = inter_check(angle, &h_y, &y_step, 1);
 	h_x = mlx->player->player_x + (h_y - mlx->player->player_y) / tan(angle);
