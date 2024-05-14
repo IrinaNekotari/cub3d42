@@ -14,7 +14,6 @@
 
 void	get_sprite_id(t_mlx *mlx, float x, float y, int rayon)
 {
-	//Couillage en cours
 	if (!mlx->ray->flag)
 	{
 		mlx->ray->horiz_x = x;
@@ -25,31 +24,25 @@ void	get_sprite_id(t_mlx *mlx, float x, float y, int rayon)
 		mlx->ray->vert_x = x;
 		mlx->ray->vert_y = y;
 	}
-	//LE PROBLEME VIENT DU CALCUL DE LA DISTANCE
-	//IL NE FAUT PAS ENVOYER LE MILIEU DE LA CASE
-	//MAIS DECALLER CE-DIT POINT PAR RAPPORT AU RAYON
-	//L'IMAGE DOIT ÊTRE PERPENDICULAIRE AU RAYON
-	//LA QUESTION EST, COMMENT CALCULER CETTE MERDE
-	//TU PEUX LE FAIRE EN UNE LIGNE SI T'ARRIVES A TROUVER LA FORMULE
-	//SINON IL VA FALLOIR REECRIRE TOUS LE RENDER+RAYCASTING POUR FAIRE CA D'UNE AUTRE FACON
-	//ET HONNETEMENT FLEMME
-	//RESUMONS
-	//SI LE RAYON EST AVANT LE CENTRE DE LA CASE
-	//DIMINUE LA DISTANCE
-	//SINON AUGMENTE LA
-	//PLUS LE RAYON EST LOIN DU CENTRE, PLUS LA DIMINUTION/AUGMEntATION SERA CONSEQUENTE
-	//DOIT Y'AVOIR UNE FORMULE POUR CA QUELQUE PART
-	//UNE TOUCHE DE PYTHAGORE SUREMENT VU QU'ON CREE DES TRIANGLES RECTANGLES ?
-	if (mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)] == 'B'
-		|| mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)] == 'K')
-    {
-    	mlx->ray->distance = sqrt(pow(((int)(x / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_x, 2) + pow(((int)(y / TILE_SIZE) + 0.5) * TILE_SIZE - mlx->player->player_y, 2));
-		render_sprite(mlx, rayon, mlx->data->map[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)]);
+	if (mlx->data->map[(int)floor(y / TILE_SIZE)]
+		[(int)floor(x / TILE_SIZE)] == 'B'
+		|| mlx->data->map[(int)floor(y / TILE_SIZE)]
+		[(int)floor(x / TILE_SIZE)] == 'K')
+	{
+		mlx->ray->distance = sqrt(pow(((int)(x / TILE_SIZE) + 0.5) * TILE_SIZE
+					- mlx->player->player_x, 2)
+				+ pow(((int)(y / TILE_SIZE) + 0.5)
+					* TILE_SIZE - mlx->player->player_y, 2));
+		render_sprite(mlx, rayon, mlx->data->map
+		[(int)floor(y / TILE_SIZE)][(int)floor(x / TILE_SIZE)]);
 	}
 	if ((int)floor(y / TILE_SIZE) == (int)floor(mlx->player->evil_y / TILE_SIZE)
-		&& (int)floor(x / TILE_SIZE) == (int)floor(mlx->player->evil_x / TILE_SIZE))
-    {
-    	mlx->ray->distance = sqrt(pow(mlx->player->evil_x - mlx->player->player_x, 2) + pow(mlx->player->evil_y - mlx->player->player_y, 2));
+		&& (int)floor(x / TILE_SIZE) == (int)floor(
+			mlx->player->evil_x / TILE_SIZE))
+	{
+		mlx->ray->distance = sqrt(pow(mlx->player->evil_x
+					- mlx->player->player_x, 2)
+				+ pow(mlx->player->evil_y - mlx->player->player_y, 2));
 		render_sprite(mlx, rayon, 'V');
 	}
 }
@@ -76,14 +69,15 @@ void	do_sprite_stuff2(t_mlx *mlx, float angle, int rayon)
 		h_x += x_step;
 		h_y += y_step;
 	}
-	while ((h_x / TILE_SIZE) != mlx->player->player_x / TILE_SIZE && (h_y / TILE_SIZE) != mlx->player->player_y / TILE_SIZE)
-    {
-    	if (h_x < 0 || h_y < 0)
+	while ((h_x / TILE_SIZE) != mlx->player->player_x / TILE_SIZE
+		&& (h_y / TILE_SIZE) != mlx->player->player_y / TILE_SIZE)
+	{
+		if (h_x < 0 || h_y < 0)
 			break ;
 		get_sprite_id(mlx, h_x, h_y, rayon);
 		h_x -= x_step;
-       	h_y -= y_step;
-    }
+		h_y -= y_step;
+	}
 }
 
 void	raycasting_sprites(t_mlx *mlx)
@@ -94,7 +88,8 @@ void	raycasting_sprites(t_mlx *mlx)
 	mlx->ray->ray_angle = mlx->player->angle - (mlx->player->fov / 2);
 	while (rayon < WIDTH)
 	{
-		if (get_h_inter(mlx, normalize_angle(mlx->ray->ray_angle)) >= get_v_inter(mlx, normalize_angle(mlx->ray->ray_angle)))
+		if (get_h_inter(mlx, normalize_angle(mlx->ray->ray_angle))
+			>= get_v_inter(mlx, normalize_angle(mlx->ray->ray_angle)))
 			do_sprite_stuff(mlx, normalize_angle(mlx->ray->ray_angle), rayon);
 		else
 			do_sprite_stuff2(mlx, normalize_angle(mlx->ray->ray_angle), rayon);
@@ -125,14 +120,15 @@ void	do_sprite_stuff(t_mlx *mlx, float angle, int rayon)
 		v_x += x_step;
 		v_y += y_step;
 	}
-	while ((v_x / TILE_SIZE) != mlx->player->player_x / TILE_SIZE && (v_y / TILE_SIZE) != mlx->player->player_y / TILE_SIZE)
-    {
-    	if (v_x < 0 || v_y < 0)
+	while ((v_x / TILE_SIZE) != mlx->player->player_x / TILE_SIZE
+		&& (v_y / TILE_SIZE) != mlx->player->player_y / TILE_SIZE)
+	{
+		if (v_x < 0 || v_y < 0)
 			break ;
 		get_sprite_id(mlx, v_x, v_y, rayon);
 		v_x -= x_step;
-       	v_y -= y_step;
-    }
+		v_y -= y_step;
+	}
 }
 
 int	sprite_hit(float x, float y, t_mlx *mlx)
