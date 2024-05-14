@@ -113,10 +113,6 @@ typedef struct s_ray
 {
 	double	ray_angle;
 	double	distance;
-	double			planx;
-	double			plany;
-	double			dirx;
-	double			diry;
 	int		rayon;
 	int		flag;
 	int		horiz_x;
@@ -281,8 +277,6 @@ void	defeat(t_mlx *mlx);
 void	tick_sprite(t_anim *s);
 void	tick_sprites(t_contr *a);
 
-mlx_texture_t	*get_texture(t_mlx *mlx, int flag);
-
 /**
  * Gestion des events
 */
@@ -372,5 +366,4 @@ t_data	*data_error(int code, t_data *data, t_chain *values);
 t_chain	*to_chain(char *path);
 
 t_chain	*ft_errmsg(char *msg);
-
 #endif
