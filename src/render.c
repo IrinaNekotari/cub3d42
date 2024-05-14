@@ -12,16 +12,6 @@
 
 #include "../include/cube3d.h"
 
-void	mlx_put_floor(t_mlx *mlx, int i, int ray, int c)
-{
-	while (i < HEIGHT)
-	{
-		if (!mlx->data->img->floor_img)
-			mlx_put_pixel_screen(mlx, ray, i, darken(c, HEIGHT - i - 45, mlx));
-		i++;
-	}
-}
-
 void	draw_floor_ceiling(t_mlx *mlx, int ray, int top_pixel, int bottom_pixel)
 {
 	int				i;

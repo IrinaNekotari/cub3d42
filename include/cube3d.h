@@ -258,6 +258,7 @@ void	start(t_data *data);
 void	raycasting(t_mlx *mlx);
 void	raycasting_door(t_mlx *mlx);
 void	mlx_put_pixel_screen(t_mlx *mlx, int x, int y, int color);
+void	mlx_put_floor(t_mlx *mlx, int i, int ray, int c);
 void	draw_square(t_mlx *mlx, int x, int y, int c);
 void	draw_square2(t_mlx *mlx, int x, int y, int c);
 void	draw_wall(t_mlx *mlx, int top_pixel, int bottom_pixel,
