@@ -212,6 +212,8 @@ typedef struct s_mlx
 	mlx_image_t				*msg;
 	t_contr					*controller;
 	int						msg_counter;
+	float					x_step;
+	float					y_step;
 }	t_mlx;
 
 /**
