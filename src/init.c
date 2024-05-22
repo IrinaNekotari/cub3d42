@@ -45,6 +45,8 @@ void	init_2(t_mlx *mlx)
 	mlx->data->victory = 0;
 	mlx->player->evil_x = mlx->data->evil_x * TILE_SIZE + TILE_SIZE / 2;
 	mlx->player->evil_y = mlx->data->evil_y * TILE_SIZE + TILE_SIZE / 2;
+	mlx->data->mouse_x = WIDTH / 2;
+	mlx->data->mouse_y = HEIGHT / 2;
 	mlx->controller = init_controller();
 }
 

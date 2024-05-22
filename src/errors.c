@@ -22,6 +22,8 @@ static void	handle_code1(int code)
 		ft_printf("Found empty line in map description !");
 	else if (code == ERR_HEADER_IN_MAP)
 		ft_printf("Found header in map description !");
+	else if (code == ERR_MAP_EMPTY)
+		ft_printf("Found header but no map !");
 }
 
 static void	handle_code2(int code)
@@ -29,7 +31,7 @@ static void	handle_code2(int code)
 	if (code == ERR_UNKNOWN_HEADER)
 		ft_printf("Found unknown header in description !");
 	else if (code == ERR_HEADER_TOO_LARGE)
-		ft_printf("Found too many arugments for header !");
+		ft_printf("Found too many arguments for header !");
 	else if (code == ERR_HEADER_TOO_THIN)
 		ft_printf("Found not enough arguments for header !");
 	else if (code == ERR_INVALID_RGB)
@@ -56,7 +58,7 @@ t_data	*data_error(int code, t_data *data, t_chain *values)
 	handle_code1(code);
 	handle_code2(code);
 	handle_code3(code);
-	ft_printf(" (error code : %d)\n", code);
+	ft_printf(" (error code : %p)\n", code);
 	free_data(data, values);
 	return (NULL);
 }

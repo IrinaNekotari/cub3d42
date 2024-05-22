@@ -76,6 +76,8 @@ static int	second_part(t_chain **values, t_data **data)
 	(*data)->map_width = map_length((*values));
 	(*data)->map = generate_map((*values),
 			(*data)->map_width, (*data)->map_height);
+	if (!(*data)->map)
+		return (ERR_MAP_EMPTY);
 	code = check_map((*data));
 	if (code)
 		return (code);
@@ -102,6 +104,8 @@ t_data	*generate_data(char *path)
 	remove_tail(values);
 	while (emptyline(values->line))
 		values = values->next;
+	if (!test_headers(values))
+		return (data_error(ERR_UNKNOWN_HEADER, data, values));
 	code = epure(values);
 	if (code)
 		return (data_error(code, data, values));

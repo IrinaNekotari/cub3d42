@@ -35,6 +35,7 @@
 # define MINIMAP_MAX_Y 8
 # define TEXT_Y 700
 # define TEXT_X 200
+# define SENSI_MOUSE 0.021
 
 # define MAX_ENDURANCE 150
 # define MIN_END_TO_RUN 90
@@ -82,6 +83,7 @@ I can use it to break the barriers."
 # define ERR_UNCLOSED_MAP 11
 # define ERR_NON_UNIQUE_HEADER 12
 # define ERR_FILE_NOT_FOUND 404
+# define ERR_MAP_EMPTY 666
 
 # define M_PI 3.14159265358979323846
 # define M_PI_ON_TWO 1.570796
@@ -187,6 +189,8 @@ typedef struct s_data
 	int			player_y;
 	int			evil_x;
 	int			evil_y;
+	int32_t		mouse_x;
+	int32_t		mouse_y;
 	int			map_width;
 	int			map_height;
 	int			victory;
@@ -286,6 +290,7 @@ void	move(t_mlx *mlx, double move_x, double move_y);
 void	open_doors(t_mlx *mlx);
 void	open_exit(t_mlx *mlx);
 void	grab_key(t_mlx *mlx);
+void	deal_mouse(double posx, double posy, void *param);
 
 /**
  * Gestion des sprites
@@ -348,6 +353,8 @@ int		part_one_img(t_imgset **img, char **li);
 int		part_two_img(t_imgset **img, char **li);
 int		part_three_img(t_imgset **img, char **li);
 int		part_four_img(t_imgset **img, char **li);
+int		not_header(char **li);
+int		test_headers(t_chain *c);
 
 void	get_positions(t_data *data);
 void	get_position_evil(t_data *data);

@@ -23,7 +23,9 @@ void	start(t_data *data)
 	mlx.img = NULL;
 	super_mega_init(&mlx);
 	load_img(&mlx);
+	mlx_set_cursor_mode(mlx.mlx_p, MLX_MOUSE_HIDDEN);
 	mlx.msg = mlx_put_string(mlx.mlx_p, LINE_INTRO, 0, 0);
+	mlx_cursor_hook(mlx.mlx_p, &deal_mouse, &mlx);
 	mlx_key_hook(mlx.mlx_p, &press, &mlx);
 	mlx_loop_hook(mlx.mlx_p, &loop, &mlx);
 	mlx_loop(mlx.mlx_p);

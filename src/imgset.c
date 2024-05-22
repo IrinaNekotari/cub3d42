@@ -38,6 +38,18 @@ int	samere(t_imgset **img, char ***li)
 	return (0);
 }
 
+int	not_header(char **li)
+{
+	if (!li || !li[0])
+		return (1);
+	if (ft_equals(li[0], "C") || ft_equals(li[0], "F"))
+		return (0);
+	if (ft_equals(li[0], "NO") || ft_equals(li[0], "SO")
+		|| ft_equals(li[0], "WE") || ft_equals(li[0], "EA"))
+		return (0);
+	return (1);
+}
+
 /**
  * Remplis l'imgset en fonction des premières lignes de la map
  * Retourne ERR_UNKNOWN_HEADER si l'une des entêtes n'est pas reconnue
@@ -65,8 +77,9 @@ int	generate_imgset(t_chain *c, t_imgset *img)
 		{
 			if (!part_three_img(&img, li) || !part_four_img(&img, li))
 				return (truc(ERR_INVALID_RGB, &li));
-			return (truc(ERR_UNKNOWN_HEADER, &li));
 		}
+		if (not_header(li))
+			return (truc(ERR_UNKNOWN_HEADER, &li));
 		move_up(&li, &i, &c);
 	}
 	if (has_null_values(img))
